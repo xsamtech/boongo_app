@@ -5,6 +5,7 @@
 export const COLORS = {
     danger: '#db3337',
     primary: '#3a7ced',
+    info: '#3dbced',
     success: '#2ba14d',
     warning: '#ecad26',
     light: '#f4f3f6',
