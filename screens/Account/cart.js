@@ -4,11 +4,12 @@
  */
 import { View, Text } from 'react-native';
 import React from 'react';
+import accountStyles from './style';
 
 const CartScreen = () => {
   return (
-    <View>
-      <Text>Account</Text>
+    <View style={accountStyles.view}>
+      <Text style={accountStyles.heading}>My orders</Text>
     </View>
   );
 };

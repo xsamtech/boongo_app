@@ -6,11 +6,11 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import React from 'react';
 import homeStyles from './style';
 
-const HomeScreen = () => {
+const HomeScreen = (props) => {
   return (
     <View style={homeStyles.view}>
       <Text style={homeStyles.heading}>Home</Text>
-      <TouchableOpacity style={homeStyles.button} onPress={() => this.props.navigation.navigate('Account', { name: 'Xanders' })}>
+      <TouchableOpacity style={homeStyles.button} onPress={() => props.navigation.navigate('Account', { name: 'Xanders' })}>
         <Text style={homeStyles.text}>View account</Text>
       </TouchableOpacity>
     </View>

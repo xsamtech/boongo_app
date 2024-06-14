@@ -5,7 +5,7 @@
 import { StyleSheet } from 'react-native';
 import { COLORS, PADDING } from '../../tools/constants';
 
-const homeStyles = StyleSheet.create({
+const accountStyles = StyleSheet.create({
     view: {
         display: 'flex',
         justifyContent: 'center',
@@ -29,9 +29,10 @@ const homeStyles = StyleSheet.create({
     button: {
         width: 140,
         backgroundColor: COLORS.primary,
-        paddingVertical: 5,
+        marginBottom: 7,
+        paddingVertical: 7,
         paddingHorizontal: PADDING.horizontal
     },
 });
 
-export default homeStyles;
+export default accountStyles;
