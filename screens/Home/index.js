@@ -2,7 +2,7 @@
  * @author Xanders
  * @see https://team.xsamtech.com/xanderssamoth
  */
-import { View, Text, TouchableOpacity, Modal, SafeAreaView } from 'react-native';
+import { View, Text, TouchableOpacity, Modal, SafeAreaView, FlatList } from 'react-native';
 import React, { useState } from 'react';
 import i18next, {languageResources} from '../../services/i18next';
 import languagesList from '../../services/languagesList.json'
