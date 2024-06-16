@@ -27,12 +27,12 @@ const HomeScreen = (props) => {
         </View>
       </Modal>
 
-      <Text style={homeStyles.heading}>Home</Text>
+      <Text style={homeStyles.heading}>{t('navigation.home')}</Text>
       <TouchableOpacity style={homeStyles.button} onPress={() => props.navigation.navigate('Account', { name: 'Xanders' })}>
-        <Text style={homeStyles.text}>View account</Text>
+        <Text style={homeStyles.text}>{t('navigation.account')}</Text>
       </TouchableOpacity>
       <TouchableOpacity style={homeStyles.button} onPress={() => setVisible(true)}>
-        <Text style={homeStyles.text}>View account</Text>
+        <Text style={homeStyles.text}>{t('change_lang')}</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
