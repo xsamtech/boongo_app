@@ -1,4 +1,19 @@
 {
     "welcome": "Bienvenue sur Boongo",
-    "change_lang": "Changer de langue"
+    "change_lang": "Changer de langue",
+
+    "navigation": {
+        "home": "Accueil",
+        "about": "A propos",
+        "terms": "Conditions d’utilisation",
+        "privacy": "Politique de confidentialité",
+        "book": "Ouvrages",
+        "magazine": "Mags, revues et journaux",
+        "mapping": "Cartograhie",
+        "media": "Médias",
+        "notification": "Notifications",
+        "account": "Mon compte",
+        "cart": "Mon panier",
+        "work": "Mes œuvres"
+    }
 }

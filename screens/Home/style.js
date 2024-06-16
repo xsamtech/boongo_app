@@ -13,6 +13,14 @@ const homeStyles = StyleSheet.create({
         flex: 1
     },
 
+    langView: {
+        display: 'flex',
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: COLORS.warning
+    },
+
     heading: {
         fontSize: 30,
         color: COLORS.black,
@@ -26,11 +34,23 @@ const homeStyles = StyleSheet.create({
         textAlign: 'center'
     },
 
+    langText: {
+        fontSize: 16,
+        color: COLORS.black,
+        textAlign: 'center'
+    },
+
     button: {
         width: 140,
         backgroundColor: COLORS.primary,
         paddingVertical: 5,
         paddingHorizontal: PADDING.horizontal
+    },
+
+    langButton: {
+        padding: 10,
+        borderBottomColor: COLORS.success,
+        borderBottomWidth: 1
     },
 });
 

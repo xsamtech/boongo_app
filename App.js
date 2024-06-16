@@ -3,7 +3,7 @@
  * @see https://team.xsamtech.com/xanderssamoth
  */
 import 'react-native-gesture-handler';
-import React from 'react';
+import React, { useState } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -58,7 +58,12 @@ const App = () => {
     return (
         <NavigationContainer>
             <Drawer.Navigator>
-                <Drawer.Screen name='Home' component={HomeScreen} />
+                <Drawer.Screen name='Home' component={HomeScreen} options={{ title: t('navigation.home') }} />
+                <Drawer.Screen name='About' component={AboutScreen} options={{ title: t('navigation.about') }} />
+                <Drawer.Screen name='Book' component={BookScreen} options={{ title: t('navigation.book') }} />
+                <Drawer.Screen name='Journal' component={JournalScreen} options={{ title: t('navigation.magazine') }} />
+                <Drawer.Screen name='Mapping' component={MappingScreen} options={{ title: t('navigation.mapping') }} />
+                <Drawer.Screen name='Media' component={MediaScreen} options={{ title: t('navigation.media') }} />
             </Drawer.Navigator>
         </NavigationContainer>
     );
