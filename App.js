@@ -21,7 +21,7 @@ import JournalScreen from './screens/Journal';
 import MappingScreen from './screens/Mapping';
 import MediaScreen from './screens/Media';
 import NotificationScreen from './screens/Account/notification';
-import i18next from '../../services/i18next';
+import i18next from './services/i18next';
 import { useTranslation } from 'react-i18next';
 
 const StackNav = () => {
