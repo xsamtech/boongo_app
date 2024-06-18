@@ -82,6 +82,16 @@ const homeStyles = StyleSheet.create({
         borderRadius: 5
     },
 
+    authTextarea: {
+        height: 70,
+        backgroundColor: 'rgba(255, 255, 255, 0)',
+        marginBottom: 10,
+        paddingHorizontal: 8,
+        borderWidth: 1,
+        borderColor: COLORS.secondary,
+        borderRadius: 5
+    },
+
     authButton: {
         backgroundColor: COLORS.primary
     },

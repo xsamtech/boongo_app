@@ -121,22 +121,34 @@ const RegisterScreen = () => {
         onChangeText={text => setCountry(text)} />
 
       {/* Address 1  */}
-      <RNTextArea
+      <TextInput
+        style={homeStyles.authInput}
+        value={address_1}
+        placeholder={t('auth.address_1')}
+        onChangeText={text => setAddress1(text)} />
+      {/* <RNTextArea
         maxCharLimit={100}
         placeholderTextColor={COLORS.black}
         exceedCharCountColor={COLORS.danger}
         value={address_1}
+        style={homeStyles.authTextarea}
         placeholder={t('auth.address_1')}
-        onChangeText={text => setAddress1(text)} />
+        onChangeText={text => setAddress1(text)} /> */}
 
       {/* Address 2  */}
-      <RNTextArea
+      <TextInput
+        style={homeStyles.authInput}
+        value={address_2}
+        placeholder={t('auth.address_2')}
+        onChangeText={text => setAddress2(text)} />
+      {/* <RNTextArea
         maxCharLimit={100}
         placeholderTextColor={COLORS.black}
         exceedCharCountColor={COLORS.danger}
         value={address_2}
+        style={homeStyles.authTextarea}
         placeholder={t('auth.address_2')}
-        onChangeText={text => setAddress2(text)} />
+        onChangeText={text => setAddress2(text)} /> */}
 
       {/* P.O. box */}
       <TextInput
