@@ -1,12 +1,27 @@
 {
-    "welcome": "Bienvenue sur Boongo",
+    "copyright": "Copyright (c) 2024 Reborn",
+    "all_rights_reserved": "Tous droits réservés",
+    "welcome_title": "Bienvenue sur Boongo",
+    "welcome_description": "Consultez des livres, des revues, des journaux, des cartes géogrpahiques, etc.",
+    "about_boongo": "A propos de l’appli Boongo",
+    "about_reborn": "A propos de l’entreprise Reborn",
     "change_lang": "Changer de langue",
+    "back_home": "Retour à l’accueil",
+    "back_list": "Retour à la liste",
+    "no_account": "Vous n’avez pas de compte ?",
+    "register": "Inscription",
+    "login": "Connexion",
+    "logout": "Déconnexion",
+    "subscribe": "S’abonner",
+    "addToCart": "Ajouter au panier",
+    "pay": "Payer maintenant",
 
     "navigation": {
         "home": "Accueil",
         "about": "A propos",
-        "terms": "Conditions d’utilisation",
-        "privacy": "Politique de confidentialité",
+        "terms": "Conditions",
+        "privacy": "Vie privée",
+        "contact": "Nous contacter",
         "book": "Ouvrages",
         "magazine": "Mags, revues et journaux",
         "mapping": "Cartograhie",
@@ -15,5 +30,44 @@
         "account": "Mon compte",
         "cart": "Mon panier",
         "work": "Mes œuvres"
+    },
+
+    "auth": {
+        "firstname": "Prénom",
+        "lastname": "Nom",
+        "surname": "Post-nom",
+        "gender": "Sexe",
+        "birthdate": "Date de naissance",
+        "city": "Ville",
+        "country": "Pays",
+        "address_1": "Adresse 1",
+        "address_2": "Adresse 2 (Facultative)",
+        "p_o_box": "Boite Postale",
+        "email": "E-mail",
+        "phone": "N° de téléphone",
+        "username": "Pseudo",
+        "login_username": "E-mail, n° de téléphone ou pseudo",
+        "password": {
+            "label": "Mot de passe",
+            "former": "Ancien mot de passe",
+            "new": "Nouveau mot de passe",
+            "error": "Le mot de passe est incorrect",
+            "forgotten": "Mot de passe oublié",
+            "reset": "Réinitialiser mot de passe"
+        },
+        "confirm_password": {
+            "label": "Confirmer mot de passe",
+            "new": "Confirmer nouveau mot de passe",
+            "error": "La confirmation ne correspond pas"
+        },
+        "avatar": {
+            "label": "Modifier votre avatar",
+            "upload": "Uploader une photo",
+            "camera": "Utiliser la caméra"
+        },
+        "status": {
+            "disable": "Désactiver mon compte",
+            "reactivate": "Réactivater mon compte"
+        }
     }
 }

@@ -4,7 +4,10 @@
  */
 export const COLORS = {
     danger: '#db3337',
+    dark_danger: '#b91115',
     primary: '#3a7ced',
+    dark_primary: '#185acb',
+    secondary: '#d3d3d3',
     info: '#3dbced',
     success: '#2ba14d',
     warning: '#ecad26',

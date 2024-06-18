@@ -1,12 +1,27 @@
 {
-    "welcome": "Welcome on Boongo",
+    "copyright": "Copyright (c) 2024 Reborn",
+    "all_rights_reserved": "All rights reserved",
+    "welcome_title": "Welcome on Boongo",
+    "welcome_description": "Check out books, magazines, newspapers, geographical maps, etc.",
+    "about_boongo": "About the Boongo app",
+    "about_reborn": "About the Reborn company",
     "change_lang": "Change language",
+    "back_home": "Back to home",
+    "back_list": "Back to the list",
+    "no_account": "Don’t have an account?",
+    "register": "Register",
+    "login": "Log in",
+    "logout": "Log out",
+    "subscribe": "Subscribe",
+    "addToCart": "Add to cart",
+    "pay": "Pay now",
 
     "navigation": {
         "home": "Home",
         "about": "About",
-        "terms": "Terms of use",
-        "privacy": "Privacy policy",
+        "terms": "Terms",
+        "privacy": "Privacy",
+        "contact": "Contact us",
         "book": "Books",
         "magazine": "Magazines & journals",
         "mapping": "Mapping",
@@ -15,5 +30,44 @@
         "account": "My account",
         "cart": "My cart",
         "work": "My works"
+    },
+
+    "auth": {
+        "firstname": "First name",
+        "lastname": "Last name",
+        "surname": "Surname",
+        "gender": "Gender",
+        "birthdate": "Date of birth",
+        "city": "City",
+        "country": "Country",
+        "address_1": "Address 1",
+        "address_2": "Address 2 (Optional)",
+        "p_o_box": "P.O. Box",
+        "email": "E-mail",
+        "phone": "Phone number",
+        "username": "Username",
+        "login_username": "E-mail, phone or username",
+        "password": {
+            "label": "Password",
+            "former": "Former password",
+            "new": "New password",
+            "error": "The password is incorrect",
+            "forgotten": "Forgotten password",
+            "reset": "Reset password"
+        },
+        "confirm_password": {
+            "label": "Confirm password",
+            "new": "Confirm new password",
+            "error": "The confirmation didn't match"
+        },
+        "avatar": {
+            "label": "Change your avatar",
+            "upload": "Upload a photo",
+            "camera": "Use the camera"
+        },
+        "status": {
+            "disable": "Disable my account",
+            "reactivate": "Reactivate my account"
+        }
     }
 }

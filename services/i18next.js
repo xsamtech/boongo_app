@@ -13,7 +13,7 @@ export const languageResources = {
 }
 
 i18next.use(initReactI18next).init({
-    compatibility: 'v3',
+    compatibilityJSON: 'v3',
     lng: 'fr',
     fallbackLng: 'en',
     resources: languageResources
