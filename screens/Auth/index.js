@@ -44,14 +44,25 @@ const LoginScreen = () => {
 
       {/* Register link */}
       <View>
-        <Text style={homeStyles.authText}>{t('no_account')}</Text>
+        <Text style={homeStyles.authText}>{t('no_account')} <Text style={homeStyles.authLink} onPress={() => navigation.navigate('Register')}>{t('register')}</Text></Text>
         <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-          <Text style={homeStyles.authLink}>{t('register')}</Text>
+          <Text style={homeStyles.authLink}>{t('auth.password.forgotten')}</Text>
         </TouchableOpacity>
       </View>
 
-      {/* Copyright */}
+      {/* Terms accept */}
       <Divider style={homeStyles.authDivider} />
+      <Text style={homeStyles.authTermsText}>
+        {t('terms_accept1')} <Text style={homeStyles.link} onPress={() => navigation.navigate('Terms')}>{t('navigation.terms')}</Text> 
+        {t('terms_accept2')} <Text style={homeStyles.link} onPress={() => navigation.navigate('Privacy')}>{t('navigation.privacy')}</Text>
+      </Text>
+
+      {/* Submit */}
+      <Button style={homeStyles.authCancel} onPress={() => navigation.navigate('Home_')}>
+        <Text style={homeStyles.authCancelText}>{t('back_home')}</Text>
+      </Button>
+
+      {/* Copyright */}
       <Text style={homeStyles.authBottomText}>{t('copyright')} | {t('all_rights_reserved')}</Text>
       <Text style={homeStyles.authBottomText}>
         Designed by <Text style={homeStyles.authBottomLink} onPress={() => Linking.openURL('https://xsamtech.com')}> Xsam Technologies</Text>

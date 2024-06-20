@@ -35,3 +35,7 @@ export const PADDING = {
     horizontal: 10,
     vertical: 10
 };
+
+export const API = {
+    url: 'https://192.168.42.231:1443/boongo/public/api/'
+};

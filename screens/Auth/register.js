@@ -4,47 +4,18 @@
  */
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { View, Text, TouchableOpacity, TextInput, Image, ScrollView, Linking } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, Image, ScrollView, Linking, Platform, NativeModules } from 'react-native';
 import { Button, Divider } from 'react-native-paper';
+import { DatePickerInput } from 'react-native-paper-dates';
 import { useTranslation } from 'react-i18next';
-import DatePicker from 'react-native-date-picker';
 import homeStyles from '../Home/style';
-import moment from 'moment';
-import RNTextArea from '@freakycoder/react-native-text-area';
-import { COLORS } from '../../tools/constants';
 
-const DatePickerField = ({ formik, name, title }) => {
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [birthdate, setBirthdate] = useState('');
-  const showDatePicker = () => setDatePickerVisibility(true);
-  const hideDatePicker = () => setDatePickerVisibility(false);
-  const { t } = useTranslation();
+const getDeviceLang = () => {
+  const appLanguage = Platform.OS === 'ios'
+                      ? NativeModules.SettingsManager.settings.AppleLocale || NativeModules.SettingsManager.settings.AppleLanguages[0]
+                      : NativeModules.I18nManager.localeIdentifier;
 
-  return (
-    <View>
-      <TouchableOpacity onPress={showDatePicker}>
-        <TextInput
-          numberOfLines={1}
-          editable={false}
-          placeholder={t('auth.birthdate')}
-          value={birthdate ? moment(birthdate).format('YYYY-MMMM-DD') : ''}
-          style={homeStyles.authInput} />
-        <Text style={homeStyles.buttonText}>{title}</Text>
-
-        <DatePicker modal open={isDatePickerVisible}
-          date={birthdate ? new Date(birthdate) : new Date()}
-          onConfirm={(date) => {
-            setDatePickerVisibility(false);
-            formik.setFieldValue(name, date);
-            setBirthdate(date);
-          }}
-          onCancel={hideDatePicker}
-          mode='date'
-          maximumDate={new Date(moment().subtract(1, 'days'))}
-        />
-      </TouchableOpacity>
-    </View>
-  );
+  return appLanguage.search(/-|_/g) !== -1 ? appLanguage.slice(0, 2) : appLanguage;
 };
 
 const RegisterScreen = () => {
@@ -104,7 +75,14 @@ const RegisterScreen = () => {
         onChangeText={text => setGender(text)} />
 
       {/* Birth date */}
-      <DatePickerField formik={text => setBirthdate(text)} name={birthdate} />
+      {/* <DatePickerField formik={text => setBirthdate(text)} name={birthdate} /> */}
+      <DatePickerInput
+        style={homeStyles.authInput}
+        locale={getDeviceLang()}
+        value={birthdate}
+        label={t('auth.birthdate')}
+        onChangeText={text => setBirthdate(text)}
+        inputMode='start' />
 
       {/* City  */}
       <TextInput
@@ -126,14 +104,6 @@ const RegisterScreen = () => {
         value={address_1}
         placeholder={t('auth.address_1')}
         onChangeText={text => setAddress1(text)} />
-      {/* <RNTextArea
-        maxCharLimit={100}
-        placeholderTextColor={COLORS.black}
-        exceedCharCountColor={COLORS.danger}
-        value={address_1}
-        style={homeStyles.authTextarea}
-        placeholder={t('auth.address_1')}
-        onChangeText={text => setAddress1(text)} /> */}
 
       {/* Address 2  */}
       <TextInput
@@ -141,14 +111,6 @@ const RegisterScreen = () => {
         value={address_2}
         placeholder={t('auth.address_2')}
         onChangeText={text => setAddress2(text)} />
-      {/* <RNTextArea
-        maxCharLimit={100}
-        placeholderTextColor={COLORS.black}
-        exceedCharCountColor={COLORS.danger}
-        value={address_2}
-        style={homeStyles.authTextarea}
-        placeholder={t('auth.address_2')}
-        onChangeText={text => setAddress2(text)} /> */}
 
       {/* P.O. box */}
       <TextInput
@@ -199,9 +161,9 @@ const RegisterScreen = () => {
 
       {/* Register link */}
       <View>
-        <Text style={homeStyles.authText}>{t('no_account')}</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-          <Text style={homeStyles.authLink}>{t('register')}</Text>
+        <Text style={homeStyles.authText}>{t('have_account')}</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+          <Text style={homeStyles.authLink}>{t('login')}</Text>
         </TouchableOpacity>
       </View>
 

@@ -26,6 +26,7 @@ import LanguageScreen from './screens/Language';
 import RegisterScreen from './screens/Auth/register';
 import LoginScreen from './screens/Auth';
 import PasswordResetScreen from './screens/Auth/password-reset';
+import { AuthProvider } from './contexts/AuthContext';
 
 const StackNav = () => {
     const Stack = createNativeStackNavigator();
@@ -124,9 +125,11 @@ const DrawerNav = () => {
 
 const App = () => {
     return (
-        <NavigationContainer>
-            <DrawerNav />
-        </NavigationContainer>
+        <AuthProvider>
+            <NavigationContainer>
+                <DrawerNav />
+            </NavigationContainer>
+        </AuthProvider>
     );
 };
 

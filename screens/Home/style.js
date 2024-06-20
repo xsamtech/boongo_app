@@ -96,11 +96,22 @@ const homeStyles = StyleSheet.create({
         backgroundColor: COLORS.primary
     },
 
+    authCancel: {
+        backgroundColor: COLORS.secondary,
+        marginVertical: 20
+    },
+
     authButtonText: {
         fontSize: 14,
         color: COLORS.white,
         textAlign: 'center',
         textTransform: 'uppercase'
+    },
+
+    authCancelText: {
+        fontSize: 14,
+        color: COLORS.black,
+        textAlign: 'center'
     },
 
     authDivider: {
@@ -109,13 +120,16 @@ const homeStyles = StyleSheet.create({
         marginBottom: 10,
     },
 
+    authTermsText: {
+        textAlign: 'center',
+        marginBottom: 10
+    },
+
     authBottomText: {
-        fontSize: 11,
         textAlign: 'center',
     },
 
     authBottomLink: {
-        fontSize: 11,
         color: COLORS.primary,
         textAlign: 'center'
     },

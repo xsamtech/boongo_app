@@ -1,5 +1,5 @@
 /**
- * @'author' Xanders
+ * @author Xanders
  * @see https://team.xsamtech.com/xanderssamoth
  */
 export const FakeWorks = [
