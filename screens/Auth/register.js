@@ -2,18 +2,19 @@
  * @author Xanders
  * @see https://team.xsamtech.com/xanderssamoth
  */
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { View, Text, TouchableOpacity, TextInput, Image, ScrollView, Linking, Platform, NativeModules } from 'react-native';
 import { Button, Divider } from 'react-native-paper';
 import { DatePickerInput } from 'react-native-paper-dates';
 import { useTranslation } from 'react-i18next';
 import homeStyles from '../Home/style';
+import { AuthContext } from '../../contexts/AuthContext';
 
 const getDeviceLang = () => {
   const appLanguage = Platform.OS === 'ios'
-                      ? NativeModules.SettingsManager.settings.AppleLocale || NativeModules.SettingsManager.settings.AppleLanguages[0]
-                      : NativeModules.I18nManager.localeIdentifier;
+    ? NativeModules.SettingsManager.settings.AppleLocale || NativeModules.SettingsManager.settings.AppleLanguages[0]
+    : NativeModules.I18nManager.localeIdentifier;
 
   return appLanguage.search(/-|_/g) !== -1 ? appLanguage.slice(0, 2) : appLanguage;
 };
@@ -35,8 +36,12 @@ const RegisterScreen = () => {
   const [username, setUsername] = useState(null);
   const [password, setPassword] = useState(null);
   const [confirm_password, setConfirmPassword] = useState(null);
+  // Navigation
   const navigation = useNavigation();
+  // Language
   const { t } = useTranslation();
+  // Authentication context
+  const { register } = useContext(AuthContext);
 
   return (
     <ScrollView style={{ flex: 1, paddingVertical: 50, paddingHorizontal: 30 }}>
@@ -44,7 +49,7 @@ const RegisterScreen = () => {
       <View style={homeStyles.authlogo}>
         <Image source={require('../../assets/img/brand.png')} />
       </View>
-      <Text style={homeStyles.authTitle}>{t('register')}</Text>
+      {/* <Text style={homeStyles.authTitle}>{t('register')}</Text> */}
 
       {/* First name */}
       <TextInput
@@ -155,7 +160,9 @@ const RegisterScreen = () => {
         onChangeText={text => setConfirmPassword(text)} secureTextEntry />
 
       {/* Submit */}
-      <Button style={homeStyles.authButton}>
+      <Button style={homeStyles.authButton} onPress={() => {
+        register(firstname, lastname, surname, gender, birthdate, city, country, address_1, address_2, p_o_box, email, phone, username, password, confirm_password);
+      }}>
         <Text style={homeStyles.authButtonText}>{t('login')}</Text>
       </Button>
 

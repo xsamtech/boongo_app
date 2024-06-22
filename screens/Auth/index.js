@@ -21,7 +21,7 @@ const LoginScreen = () => {
       <View style={homeStyles.authlogo}>
         <Image source={require('../../assets/img/brand.png')} />
       </View>
-      <Text style={homeStyles.authTitle}>{t('login')}</Text>
+      {/* <Text style={homeStyles.authTitle}>{t('login')}</Text> */}
 
       {/* Username */}
       <TextInput
@@ -45,7 +45,7 @@ const LoginScreen = () => {
       {/* Register link */}
       <View>
         <Text style={homeStyles.authText}>{t('no_account')} <Text style={homeStyles.authLink} onPress={() => navigation.navigate('Register')}>{t('register')}</Text></Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+        <TouchableOpacity onPress={() => navigation.navigate('PasswordReset')}>
           <Text style={homeStyles.authLink}>{t('auth.password.forgotten')}</Text>
         </TouchableOpacity>
       </View>
