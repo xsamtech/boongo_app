@@ -6,7 +6,6 @@ import React, { createContext } from 'react'
 import axios from 'axios';
 import { API } from '../tools/constants';
 import { useTranslation } from 'react-i18next';
-import { ToastAndroid } from 'react-native';
 
 export const AuthContext = createContext();
 
@@ -21,11 +20,9 @@ export const AuthProvider = ({ children }) => {
         .then(res => {
             let message = res.message;
 
-            ToastAndroid.show(message, ToastAndroid.LONG);
             console.log(message);
         })
         .catch(e => {
-            ToastAndroid.show(`${t.error}${e}`, ToastAndroid.LONG);
             console.log(`${t.error}${e}`);
         });
     };
