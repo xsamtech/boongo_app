@@ -75,6 +75,7 @@ const homeStyles = StyleSheet.create({
     },
 
     authInput: {
+        backgroundColor: 'rgba(255, 255, 255, 0)',
         marginBottom: 10,
         paddingHorizontal: 14,
         borderWidth: 1,

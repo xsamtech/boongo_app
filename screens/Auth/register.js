@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { View, Text, TouchableOpacity, TextInput, Image, ScrollView, Linking, Platform, NativeModules } from 'react-native';
 import { Button, Divider } from 'react-native-paper';
 import { DatePickerInput } from 'react-native-paper-dates';
+import DropDownPicker from 'react-native-dropdown-picker';
 import { useTranslation } from 'react-i18next';
 import homeStyles from '../Home/style';
 import { AuthContext } from '../../contexts/AuthContext';
@@ -20,11 +21,22 @@ const getDeviceLang = () => {
 };
 
 const RegisterScreen = () => {
+  // Language
+  const { t } = useTranslation();
+  // Navigation
+  const navigation = useNavigation();
+  // Authentication context
+  const { register } = useContext(AuthContext);
   // User data
   const [firstname, setFirstname] = useState(null);
   const [lastname, setLastname] = useState(null);
   const [surname, setSurname] = useState(null);
+  const [open, setOpen] = useState(false);          // Gender dropdown start
   const [gender, setGender] = useState(null);
+  const [items, setItems] = useState([
+    { label: t('auth.gender.male'), value: 'M' },
+    { label: t('auth.gender.female'), value: 'F' }
+  ]);                                               // Gender dropdown end
   const [birthdate, setBirthdate] = useState(null);
   const [city, setCity] = useState(null);
   const [country, setCountry] = useState(null);
@@ -36,15 +48,9 @@ const RegisterScreen = () => {
   const [username, setUsername] = useState(null);
   const [password, setPassword] = useState(null);
   const [confirm_password, setConfirmPassword] = useState(null);
-  // Navigation
-  const navigation = useNavigation();
-  // Language
-  const { t } = useTranslation();
-  // Authentication context
-  const { register } = useContext(AuthContext);
 
   return (
-    <ScrollView style={{ flex: 1, paddingVertical: 50, paddingHorizontal: 30 }}>
+    <ScrollView nestedScrollEnabled={true} style={{ flex: 1, paddingVertical: 50, paddingHorizontal: 30 }}>
       {/* Brand / Title */}
       <View style={homeStyles.authlogo}>
         <Image source={require('../../assets/img/brand.png')} />
@@ -73,14 +79,18 @@ const RegisterScreen = () => {
         onChangeText={text => setSurname(text)} />
 
       {/* Gender  */}
-      <TextInput
+      <DropDownPicker
         style={homeStyles.authInput}
+        open={open}
         value={gender}
-        placeholder={t('auth.gender')}
-        onChangeText={text => setGender(text)} />
+        placeholder={t('auth.gender.label')}
+        items={items}
+        setOpen={setOpen}
+        setValue={setGender}
+        setItems={setItems}
+        listMode="SCROLLVIEW" />
 
       {/* Birth date */}
-      {/* <DatePickerField formik={text => setBirthdate(text)} name={birthdate} /> */}
       <DatePickerInput
         style={homeStyles.authInput}
         locale={getDeviceLang()}

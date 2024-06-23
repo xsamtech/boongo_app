@@ -41,7 +41,11 @@
         "firstname": "First name",
         "lastname": "Last name",
         "surname": "Surname",
-        "gender": "Gender",
+        "gender": {
+            "label": "Gender",
+            "male": "Male",
+            "female": "Female"
+        },
         "birthdate": "Date of birth",
         "city": "City",
         "country": "Country",

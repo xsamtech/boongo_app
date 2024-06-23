@@ -15,10 +15,10 @@ export const AuthProvider = ({ children }) => {
             firstname, lastname, surname, gender, birthdate, city, country, address_1, address_2, p_o_box, email, phone, username, password, confirm_password, role_id
         })
         .then(res => {
-            // let message = res.message;
-            ToastAndroid.show(`${res}`, ToastAndroid.LONG);
+            let message = res.message;
+            ToastAndroid.show(`${message}`, ToastAndroid.LONG);
 
-            console.log(`${res}`);
+            console.log(`${message}`);
         })
         .catch(e => {
             ToastAndroid.show(`${e}`, ToastAndroid.LONG);

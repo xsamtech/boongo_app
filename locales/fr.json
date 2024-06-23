@@ -41,7 +41,11 @@
         "firstname": "Prénom",
         "lastname": "Nom",
         "surname": "Post-nom",
-        "gender": "Sexe",
+        "gender": {
+            "label": "Sexe",
+            "male": "Masculin",
+            "female": "Féminin"
+        },
         "birthdate": "Date de naissance",
         "city": "Ville",
         "country": "Pays",
