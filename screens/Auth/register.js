@@ -4,7 +4,7 @@
  */
 import React, { useContext, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { View, Text, TouchableOpacity, TextInput, Image, ScrollView, Linking, Platform, NativeModules, ToastAndroid } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, Image, ScrollView, Linking, Platform, NativeModules } from 'react-native';
 import { Button, Divider } from 'react-native-paper';
 import { DatePickerInput } from 'react-native-paper-dates';
 import { useTranslation } from 'react-i18next';
@@ -162,7 +162,6 @@ const RegisterScreen = () => {
       {/* Submit */}
       <Button style={homeStyles.authButton} onPress={() => {
         register(firstname, lastname, surname, gender, birthdate, city, country, address_1, address_2, p_o_box, email, phone, username, password, confirm_password);
-        ToastAndroid.show(register.message, ToastAndroid.LONG);
       }}>
         <Text style={homeStyles.authButtonText}>{t('login')}</Text>
       </Button>

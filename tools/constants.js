@@ -37,5 +37,5 @@ export const PADDING = {
 };
 
 export const API = {
-    url: 'https://192.168.43.82:1443/boongo/public/api'
+    url: 'http://192.168.43.82/boongo/public/api'
 };
