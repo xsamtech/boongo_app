@@ -4,13 +4,14 @@
  */
 import React, { useContext, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { View, Text, TouchableOpacity, TextInput, Image, ScrollView, Linking, Platform, NativeModules, Pressable } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, Image, ScrollView, Linking, Platform, NativeModules, Pressable, ToastAndroid } from 'react-native';
 import { Button, Divider } from 'react-native-paper';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { useTranslation } from 'react-i18next';
 import homeStyles from '../Home/style';
 import { AuthContext } from '../../contexts/AuthContext';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { API } from '../../tools/constants';
 
 const RegisterScreen = () => {
   // =============== Language ===============
@@ -26,40 +27,7 @@ const RegisterScreen = () => {
   const [firstname, setFirstname] = useState(null);
   const [lastname, setLastname] = useState(null);
   const [surname, setSurname] = useState(null);
-  // GENDER dropdown
-  const [genderOpen, setGenderOpen] = useState(false);
-  const [gender, setGender] = useState(null);
-  const [items, setItems] = useState([
-    { label: t('auth.gender.male'), value: 'M' },
-    { label: t('auth.gender.female'), value: 'F' }
-  ]);
-  // BIRTH DATE date-picker
-  const [birthdate, setBirthdate] = useState(new Date());
-  const [date, setDate] = useState(new Date());
-  const [showPicker, setShowPicker] = useState(false);
-
-  const toggleDatePicker = () => {
-    setShowPicker(!showPicker);
-  };
-
-  const mOnChange = ({ type }, selectedDate) => {
-    if (type === 'set') {
-      const currentDate = selectedDate;
-
-      setDate(currentDate);
-
-      if (Platform.OS === 'android') {
-        toggleDatePicker();
-        setBirthdate(currentDate.toDateString());
-      }
-
-    } else {
-      toggleDatePicker();
-    }
-  };
-
   const [city, setCity] = useState(null);
-  const [country, setCountry] = useState(null);
   const [address_1, setAddress1] = useState(null);
   const [address_2, setAddress2] = useState(null);
   const [p_o_box, setPOBox] = useState(null);
@@ -68,6 +36,72 @@ const RegisterScreen = () => {
   const [username, setUsername] = useState(null);
   const [password, setPassword] = useState(null);
   const [confirm_password, setConfirmPassword] = useState(null);
+  // COUNTRY dropdown
+  const [countryOpen, setCountryOpen] = useState(false);
+  const [country, setCountry] = useState(null);
+
+  const countriesList = () => {
+    fetch(`${API.url}/country`)
+      .then((res) => {
+        res.data.json(); // Convert result into readable format / parsed
+      })
+      .then((data) => {
+        ToastAndroid.show(`${data}`, ToastAndroid.LONG);
+      });
+  };
+
+  // GENDER dropdown
+  const [genderOpen, setGenderOpen] = useState(false);
+  const [gender, setGender] = useState(null);
+  const [genderItems, setGenderItems] = useState([
+    { label: t('auth.gender.male'), value: 'M' },
+    { label: t('auth.gender.female'), value: 'F' }
+  ]);
+  // BIRTH DATE date-picker
+  const [birthdate, setBirthdate] = useState(new Date());
+  const [date, setDate] = useState(new Date());
+  const [showPicker, setShowPicker] = useState(false);
+
+  // Show/Hide Datepicker
+  const toggleDatePicker = () => {
+    setShowPicker(!showPicker);
+  };
+
+  // On change, update date value
+  const mOnChange = ({ type }, selectedDate) => {
+    if (type === 'set') {
+      const currentDate = selectedDate;
+
+      setDate(currentDate);
+
+      if (Platform.OS === 'android') {
+        toggleDatePicker();
+        setBirthdate(formatDate(currentDate));
+      }
+
+    } else {
+      toggleDatePicker();
+    }
+  };
+
+  // If Platform is iOS, customize cofirmation button
+  const confirmIOSDate = () => {
+    setBirthdate(formatDate(date));
+    toggleDatePicker();
+  };
+
+  // Format Date according to MySQL
+  const formatDate = (rawDate) => {
+    let date = new Date(rawDate);
+    let year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+
+    month = month < 10 ? `0${month}` : month;
+    day = day < 10 ? `0${day}` : day;
+
+    return `${year}-${month}-${day}`;
+  };
 
   return (
     <ScrollView nestedScrollEnabled={true} style={{ flex: 1, paddingVertical: 50, paddingHorizontal: 30 }}>
@@ -104,10 +138,10 @@ const RegisterScreen = () => {
         open={genderOpen}
         value={gender}
         placeholder={t('auth.gender.label')}
-        items={items}
+        items={genderItems}
         setOpen={setGenderOpen}
         setValue={setGender}
-        setItems={setItems}
+        setItems={setGenderItems}
         listMode="SCROLLVIEW" />
 
       {/* Birth date */}
@@ -116,14 +150,15 @@ const RegisterScreen = () => {
           mode='date'
           display='spinner'
           value={date}
-          onChange={mOnChange} />
+          onChange={mOnChange}
+          maximumDate={new Date('2018-1-1')} />
       )}
       {showPicker && Platform.OS === 'ios' && (
         <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
           <TouchableOpacity style={homeStyles.authCancel} onPress={toggleDatePicker}>
             <Text style={homeStyles.authCancelText}>{t('cancel')}</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={homeStyles.authButton} onPress={toggleDatePicker}>
+          <TouchableOpacity style={homeStyles.authButton} onPress={confirmIOSDate}>
             <Text style={homeStyles.authButtonText}>{t('confirm')}</Text>
           </TouchableOpacity>
         </View>
