@@ -161,7 +161,7 @@ const RegisterScreen = () => {
 
       {/* Submit */}
       <Button style={homeStyles.authButton} onPress={() => {
-        register(firstname, lastname, surname, gender, birthdate, city, country, address_1, address_2, p_o_box, email, phone, username, password, confirm_password);
+        register(firstname, lastname, surname, gender, birthdate, city, country, address_1, address_2, p_o_box, email, phone, username, password, confirm_password, 4);
       }}>
         <Text style={homeStyles.authButtonText}>{t('login')}</Text>
       </Button>
