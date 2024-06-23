@@ -4,40 +4,60 @@
  */
 import React, { useContext, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { View, Text, TouchableOpacity, TextInput, Image, ScrollView, Linking, Platform, NativeModules } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, Image, ScrollView, Linking, Platform, NativeModules, Pressable } from 'react-native';
 import { Button, Divider } from 'react-native-paper';
-import { DatePickerInput } from 'react-native-paper-dates';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { useTranslation } from 'react-i18next';
 import homeStyles from '../Home/style';
 import { AuthContext } from '../../contexts/AuthContext';
-
-const getDeviceLang = () => {
-  const appLanguage = Platform.OS === 'ios'
-    ? NativeModules.SettingsManager.settings.AppleLocale || NativeModules.SettingsManager.settings.AppleLanguages[0]
-    : NativeModules.I18nManager.localeIdentifier;
-
-  return appLanguage.search(/-|_/g) !== -1 ? appLanguage.slice(0, 2) : appLanguage;
-};
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 const RegisterScreen = () => {
-  // Language
+  // =============== Language ===============
   const { t } = useTranslation();
-  // Navigation
+
+  // =============== Navigation ===============
   const navigation = useNavigation();
-  // Authentication context
+
+  // =============== Authentication context ===============
   const { register } = useContext(AuthContext);
-  // User data
+
+  // =============== User data ===============
   const [firstname, setFirstname] = useState(null);
   const [lastname, setLastname] = useState(null);
   const [surname, setSurname] = useState(null);
-  const [open, setOpen] = useState(false);          // Gender dropdown start
+  // GENDER dropdown
+  const [genderOpen, setGenderOpen] = useState(false);
   const [gender, setGender] = useState(null);
   const [items, setItems] = useState([
     { label: t('auth.gender.male'), value: 'M' },
     { label: t('auth.gender.female'), value: 'F' }
-  ]);                                               // Gender dropdown end
-  const [birthdate, setBirthdate] = useState(null);
+  ]);
+  // BIRTH DATE date-picker
+  const [birthdate, setBirthdate] = useState(new Date());
+  const [date, setDate] = useState(new Date());
+  const [showPicker, setShowPicker] = useState(false);
+
+  const toggleDatePicker = () => {
+    setShowPicker(!showPicker);
+  };
+
+  const mOnChange = ({ type }, selectedDate) => {
+    if (type === 'set') {
+      const currentDate = selectedDate;
+
+      setDate(currentDate);
+
+      if (Platform.OS === 'android') {
+        toggleDatePicker();
+        setBirthdate(currentDate.toDateString());
+      }
+
+    } else {
+      toggleDatePicker();
+    }
+  };
+
   const [city, setCity] = useState(null);
   const [country, setCountry] = useState(null);
   const [address_1, setAddress1] = useState(null);
@@ -81,23 +101,41 @@ const RegisterScreen = () => {
       {/* Gender  */}
       <DropDownPicker
         style={homeStyles.authInput}
-        open={open}
+        open={genderOpen}
         value={gender}
         placeholder={t('auth.gender.label')}
         items={items}
-        setOpen={setOpen}
+        setOpen={setGenderOpen}
         setValue={setGender}
         setItems={setItems}
         listMode="SCROLLVIEW" />
 
       {/* Birth date */}
-      <DatePickerInput
-        style={homeStyles.authInput}
-        locale={getDeviceLang()}
-        value={birthdate}
-        label={t('auth.birthdate')}
-        onChangeText={text => setBirthdate(text)}
-        inputMode='start' />
+      {showPicker && (
+        <DateTimePicker
+          mode='date'
+          display='spinner'
+          value={date}
+          onChange={mOnChange} />
+      )}
+      {showPicker && Platform.OS === 'ios' && (
+        <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+          <TouchableOpacity style={homeStyles.authCancel} onPress={toggleDatePicker}>
+            <Text style={homeStyles.authCancelText}>{t('cancel')}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={homeStyles.authButton} onPress={toggleDatePicker}>
+            <Text style={homeStyles.authButtonText}>{t('confirm')}</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+      {!showPicker && (
+        <TextInput
+          style={homeStyles.authInput}
+          value={birthdate}
+          placeholder={t('auth.birthdate')}
+          onChangeText={setBirthdate}
+          onPressIn={toggleDatePicker} />
+      )}
 
       {/* City  */}
       <TextInput

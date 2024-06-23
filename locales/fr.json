@@ -14,11 +14,17 @@
     "have_account": "Vous avez déjà un compte ?",
     "no_account": "Vous n’avez pas de compte ?",
     "select_date": "Sélectionner la date",
+    "confirm": "Confirmer",
+    "send": "Envoyer",
+    "cancel": "Annuler",
+    "update": "Mettre à jour",
+    "change": "Modifier",
     "register": "Inscription",
     "login": "Connexion",
     "logout": "Déconnexion",
     "subscribe": "S’abonner",
     "addToCart": "Ajouter au panier",
+    "withdrawFromCart": "Retirer du panier",
     "pay": "Payer maintenant",
 
     "navigation": {

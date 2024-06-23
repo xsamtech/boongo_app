@@ -14,11 +14,17 @@
     "have_account": "Already have an account?",
     "no_account": "Don’t have an account?",
     "select_date": "Select the date",
+    "confirm": "Confirm",
+    "send": "Send",
+    "cancel": "Cancel",
+    "update": "Update",
+    "change": "Change",
     "register": "Register",
     "login": "Log in",
     "logout": "Log out",
     "subscribe": "Subscribe",
     "addToCart": "Add to cart",
+    "withdrawFromCart": "Withdraw from cart",
     "pay": "Pay now",
 
     "navigation": {
