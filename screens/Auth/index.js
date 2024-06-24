@@ -2,72 +2,87 @@
  * @author Xanders
  * @see https://team.xsamtech.com/xanderssamoth
  */
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, Text, TouchableOpacity, TextInput, Image, ScrollView, Linking } from 'react-native';
 import { Button, Divider } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import homeStyles from '../Home/style';
+import Spinner from 'react-native-loading-spinner-overlay';
+import { AuthContext } from '../../contexts/AuthContext';
 
 const LoginScreen = () => {
-  const [username, setUsername] = useState(null);
-  const [password, setPassword] = useState(null);
-  const navigation = useNavigation();
+  // =============== Language ===============
   const { t } = useTranslation();
 
+  // =============== Authentication context ===============
+  const { isLoading, login } = useContext(AuthContext);
+
+  // =============== Navigation ===============
+  const navigation = useNavigation();
+
+  // =============== User data ===============
+  const [username, setUsername] = useState(null);
+  const [password, setPassword] = useState(null);
+
   return (
-    <ScrollView style={{ flex: 1, paddingVertical: 50, paddingHorizontal: 30 }}>
-      {/* Brand / Title */}
-      <View style={homeStyles.authlogo}>
-        <Image source={require('../../assets/img/brand.png')} />
-      </View>
-      {/* <Text style={homeStyles.authTitle}>{t('login')}</Text> */}
+    <View style={{ flex: 1 }}>
+      <Spinner visible={isLoading} />
 
-      {/* Username */}
-      <TextInput
-        style={homeStyles.authInput}
-        value={username}
-        placeholder={t('auth.login_username')}
-        onChangeText={text => setUsername(text)} />
+      <ScrollView style={{ paddingVertical: 50, paddingHorizontal: 30 }}
+        contentContainerStyle={{ flexGrow: 1, paddingBottom: 100 }}>
+        {/* Brand / Title */}
+        <View style={homeStyles.authlogo}>
+          <Image source={require('../../assets/img/brand.png')} />
+        </View>
+        {/* <Text style={homeStyles.authTitle}>{t('login')}</Text> */}
 
-      {/* Password */}
-      <TextInput
-        style={homeStyles.authInput}
-        value={password}
-        placeholder={t('auth.password.label')}
-        onChangeText={text => setPassword(text)} secureTextEntry />
+        {/* Username */}
+        <TextInput
+          style={homeStyles.authInput}
+          value={username}
+          placeholder={t('auth.login_username')}
+          onChangeText={text => setUsername(text)} />
 
-      {/* Submit */}
-      <Button style={homeStyles.authButton}>
-        <Text style={homeStyles.authButtonText}>{t('login')}</Text>
-      </Button>
+        {/* Password */}
+        <TextInput
+          style={homeStyles.authInput}
+          value={password}
+          placeholder={t('auth.password.label')}
+          onChangeText={text => setPassword(text)} secureTextEntry />
 
-      {/* Register link */}
-      <View>
-        <Text style={homeStyles.authText}>{t('no_account')} <Text style={homeStyles.authLink} onPress={() => navigation.navigate('Register')}>{t('register')}</Text></Text>
-        <TouchableOpacity onPress={() => navigation.navigate('PasswordReset')}>
-          <Text style={homeStyles.authLink}>{t('auth.password.forgotten')}</Text>
-        </TouchableOpacity>
-      </View>
+        {/* Submit */}
+        <Button style={homeStyles.authButton} onPress={() => { login(username, password); }}>
+          <Text style={homeStyles.authButtonText}>{t('login')}</Text>
+        </Button>
 
-      {/* Terms accept */}
-      <Divider style={homeStyles.authDivider} />
-      <Text style={homeStyles.authTermsText}>
-        {t('terms_accept1')} <Text style={homeStyles.link} onPress={() => navigation.navigate('Terms')}>{t('navigation.terms')}</Text> 
-        {t('terms_accept2')} <Text style={homeStyles.link} onPress={() => navigation.navigate('Privacy')}>{t('navigation.privacy')}</Text>
-      </Text>
+        {/* Register link */}
+        <View>
+          <Text style={homeStyles.authText}>{t('no_account')} <Text style={homeStyles.authLink} onPress={() => navigation.navigate('Register')}>{t('register')}</Text></Text>
+          <TouchableOpacity onPress={() => navigation.navigate('PasswordReset')}>
+            <Text style={homeStyles.authLink}>{t('auth.password.forgotten')}</Text>
+          </TouchableOpacity>
+        </View>
 
-      {/* Submit */}
-      <Button style={homeStyles.authCancel} onPress={() => navigation.navigate('Home_')}>
-        <Text style={homeStyles.authCancelText}>{t('back_home')}</Text>
-      </Button>
+        {/* Terms accept */}
+        <Divider style={homeStyles.authDivider} />
+        <Text style={homeStyles.authTermsText}>
+          {t('terms_accept1')} <Text style={homeStyles.link} onPress={() => navigation.navigate('Terms')}>{t('navigation.terms')}</Text>
+          {t('terms_accept2')} <Text style={homeStyles.link} onPress={() => navigation.navigate('Privacy')}>{t('navigation.privacy')}</Text>
+        </Text>
 
-      {/* Copyright */}
-      <Text style={homeStyles.authBottomText}>{t('copyright')} | {t('all_rights_reserved')}</Text>
-      <Text style={homeStyles.authBottomText}>
-        Designed by <Text style={homeStyles.authBottomLink} onPress={() => Linking.openURL('https://xsamtech.com')}> Xsam Technologies</Text>
-      </Text>
-    </ScrollView>
+        {/* Submit */}
+        <Button style={homeStyles.authCancel} onPress={() => navigation.navigate('Home_')}>
+          <Text style={homeStyles.authCancelText}>{t('back_home')}</Text>
+        </Button>
+
+        {/* Copyright */}
+        <Text style={homeStyles.authBottomText}>{t('copyright')} | {t('all_rights_reserved')}</Text>
+        <Text style={homeStyles.authBottomText}>
+          Designed by <Text style={homeStyles.authBottomLink} onPress={() => Linking.openURL('https://xsamtech.com')}> Xsam Technologies</Text>
+        </Text>
+      </ScrollView>
+    </View>
   );
 };
 

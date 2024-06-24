@@ -3,7 +3,7 @@
  * @see https://team.xsamtech.com/xanderssamoth
  */
 import 'react-native-gesture-handler';
-import React from 'react';
+import React, { useContext } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer, useNavigation, DrawerActions } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -26,12 +26,13 @@ import LanguageScreen from './screens/Language';
 import RegisterScreen from './screens/Auth/register';
 import LoginScreen from './screens/Auth';
 import PasswordResetScreen from './screens/Auth/password-reset';
-import { AuthProvider } from './contexts/AuthContext';
+import { AuthContext, AuthProvider } from './contexts/AuthContext';
 
 const StackNav = () => {
     const Stack = createNativeStackNavigator();
     const navigation = useNavigation();
     const { t } = useTranslation();
+    const { userInfo } = useContext(AuthContext);
 
     return (
         <Stack.Navigator
@@ -43,7 +44,7 @@ const StackNav = () => {
                 headerTintColor: COLORS.white,
                 headerTitleAlign: 'center'
             }}>
-            <Stack.Screen name='Home_' component={HomeScreen} options={{ 
+            <Stack.Screen name='Home_' component={HomeScreen} options={{
                 title: t('navigation.home'),
                 headerLeft: () => {
                     return (
@@ -59,7 +60,7 @@ const StackNav = () => {
                         </TouchableOpacity>
                     );
                 }
-            }}/>
+            }} />
             <Stack.Screen name='About' component={AboutScreen} options={{ headerShown: false, title: t('navigation.about') }} />
             <Stack.Screen name='Book' component={BookScreen} options={{
                 title: t('navigation.book'),
@@ -101,14 +102,21 @@ const StackNav = () => {
                     );
                 }
             }} />
-            <Stack.Screen name='Notification' component={NotificationScreen} />
-            <Stack.Screen name='Account' component={AccountScreen} />
-            <Stack.Screen name='Cart' component={CartScreen} />
-            <Stack.Screen name='MyWork' component={MyWorkScreen} />
             <Stack.Screen name='Language' component={LanguageScreen} options={{ title: t('change_lang') }} />
-            <Stack.Screen name='Register' component={RegisterScreen} options={{ headerShown: false, title: t('register') }} />
-            <Stack.Screen name='Login' component={LoginScreen} options={{ headerShown: false, title: t('login') }} />
-            <Stack.Screen name='PasswordReset' component={PasswordResetScreen} options={{ headerShown: false, title: t('auth.password.reset') }} />
+            {userInfo.id ? (
+                <>
+                    <Stack.Screen name='Notification' component={NotificationScreen} />
+                    <Stack.Screen name='Account' component={AccountScreen} />
+                    <Stack.Screen name='Cart' component={CartScreen} />
+                    <Stack.Screen name='MyWork' component={MyWorkScreen} />
+                </>
+            ) : (
+                <>
+                    <Stack.Screen name='Register' component={RegisterScreen} options={{ headerShown: false, title: t('register') }} />
+                    <Stack.Screen name='Login' component={LoginScreen} options={{ headerShown: false, title: t('login') }} />
+                    <Stack.Screen name='PasswordReset' component={PasswordResetScreen} options={{ headerShown: false, title: t('auth.password.reset') }} />
+                </>
+            )}
         </Stack.Navigator>
     );
 };

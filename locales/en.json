@@ -14,6 +14,7 @@
     "have_account": "Already have an account?",
     "no_account": "Don’t have an account?",
     "select_date": "Select the date",
+    "search": "Search...",
     "show": "Show",
     "hide": "Hide",
     "see_all": "See all",
@@ -60,7 +61,10 @@
         },
         "birthdate": "Date of birth",
         "city": "City",
-        "country": "Country",
+        "country": {
+            "title": "Choose a country",
+            "label": "Country"
+        },
         "address_1": "Address 1",
         "address_2": "Address 2 (Optional)",
         "p_o_box": "P.O. Box",

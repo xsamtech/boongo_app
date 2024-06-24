@@ -14,6 +14,7 @@
     "have_account": "Vous avez déjà un compte ?",
     "no_account": "Vous n’avez pas de compte ?",
     "select_date": "Sélectionner la date",
+    "search": "Rechercher ...",
     "show": "Afficher",
     "hide": "Cacher",
     "see_all": "Voir tout",
@@ -60,7 +61,10 @@
         },
         "birthdate": "Date de naissance",
         "city": "Ville",
-        "country": "Pays",
+        "country": {
+            "title": "Choisir un pays",
+            "label": "Pays"
+        },
         "address_1": "Adresse 1",
         "address_2": "Adresse 2 (Facultative)",
         "p_o_box": "Boite Postale",
