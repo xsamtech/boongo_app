@@ -20,6 +20,28 @@ const homeStyles = StyleSheet.create({
         paddingHorizontal: PADDING.horizontal
     },
 
+    cardEmpty: {
+        width: '100%',
+        paddingHorizontal: 15,
+        paddingVertical: 10,
+        marginTop: 10,
+        marginBottom: 40,
+        marginHorizontal: 10,
+        backgroundColor: COLORS.white,
+        elevation: 1
+    },
+
+    cardEmptyTitle: {
+        marginBottom: 10,
+        fontSize: 16,
+        fontWeight: '700',
+        color: COLORS.black,
+    },
+
+    cardEmptyText: {
+        fontSize: 14,
+    },
+
     heading: {
         fontSize: 25,
         color: COLORS.black,

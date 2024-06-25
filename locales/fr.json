@@ -10,7 +10,15 @@
     "change_lang": "Changer de langue",
     "back_home": "Retour à l’accueil",
     "error": "Erreur :",
+    "empty_list": {
+        "title": "La liste est vide",
+        "description_popular": "Ici, seront affichés les œuvres les plus consultées par les membres.",
+        "description_books": "Ici, seront affichés les ouvrages qui pourront être consultés par les membres.",
+        "description_mags": "Ici, seront affichés les revues, journaux ou magazines qui pourront être consultés par les membres.",
+        "description_maps": "Ici, seront affichées les cartes géographiques qui pourront être consultées par les membres."
+    },
     "back_list": "Retour à la liste",
+    "most_popular": "Les plus populaires",
     "have_account": "Vous avez déjà un compte ?",
     "no_account": "Vous n’avez pas de compte ?",
     "select_date": "Sélectionner la date",

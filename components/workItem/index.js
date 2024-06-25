@@ -9,12 +9,12 @@ import styles from './style';
 const WorkItem = ({item}) => {
     return (
         <TouchableOpacity style={styles.scrollableListItem}>
-            <Image source={item.photo_url} style={styles.thumbnail} />
+            {item.image_url !== null ? <Image source={{ uri: item.image_url }} style={styles.thumbnail} /> : null}
             <Text style={styles.titleOne}>
-                {((item.title).length > 25) ? (((item.title).substring(0, 25 - 3)) + '...') : item.title}
+                {((item.work_title).length > 25) ? (((item.work_title).substring(0, 25 - 3)) + '...') : item.work_title}
             </Text>
             <Text style={styles.paragraph}>
-                {((item.description).length > 33) ? (((item.description).substring(0, 33 - 3)) + '...') : item.description}
+                {((item.work_content).length > 33) ? (((item.work_content).substring(0, 33 - 3)) + '...') : item.work_content}
             </Text>
         </TouchableOpacity>
     )

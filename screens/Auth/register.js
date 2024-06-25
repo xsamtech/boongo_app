@@ -45,8 +45,8 @@ const RegisterScreen = () => {
   const [countries, setCountries] = useState([]);
 
   useEffect(() => {
-    var config = {
-      method: 'get',
+    const config = {
+      method: 'GET',
       url: `${API.url}/country`,
       headers: {
         'X-localization': 'fr'

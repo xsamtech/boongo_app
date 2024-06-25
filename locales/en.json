@@ -10,7 +10,15 @@
     "change_lang": "Change language",
     "back_home": "Back to home",
     "error": "Error:",
+    "empty_list": {
+        "title": "The list is empty",
+        "description_popular": "Here, the works most consulted by members will be displayed.",
+        "description_books": "Here, the books will be displayed which can be consulted by members.",
+        "description_mags": "Here, the journals, newspapers or magazines which can be consulted by members will be displayed.",
+        "description_maps": "Here, geographic maps will be displayed which can be consulted by members."
+    },
     "back_list": "Back to the list",
+    "most_popular": "The most popular",
     "have_account": "Already have an account?",
     "no_account": "Don’t have an account?",
     "select_date": "Select the date",
