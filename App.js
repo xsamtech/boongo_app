@@ -103,7 +103,7 @@ const StackNav = () => {
                     );
                 }
             }} />
-            <Stack.Screen name='WorkData' component={WorkDataScreen} options={{ headerShown: false }} />
+            <Stack.Screen name='WorkData' component={WorkDataScreen} options={{ title: t('work_details.title') }} />
             <Stack.Screen name='Language' component={LanguageScreen} options={{ title: t('change_lang') }} />
             {userInfo.id ? (
                 <>

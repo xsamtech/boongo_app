@@ -248,6 +248,81 @@ const homeStyles = StyleSheet.create({
         textAlign: 'center'
     },
 
+    // Work details
+    workBody: {
+        padding: 10,
+    },
+
+    workCard: {
+        backgroundColor: COLORS.white,
+        padding: 15,
+    },
+
+    workTop: {
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        marginBottom: 10,
+    },
+
+    workBottom: {
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+    },
+
+    workImage: {
+        width: 160,
+        height: 240,
+        marginRight: 10,
+        borderWidth: 3,
+        borderColor: COLORS.light,
+        borderRadius: 20
+    },
+
+    workDesc: {
+        flexDirection: 'row',
+        alignItems: 'flex-start'
+    },
+
+    workTitle: {
+        fontSize: 23,
+        fontWeight: '700',
+        color: COLORS.black,
+        marginTop: 10,
+        marginBottom: 7
+    },
+
+    workContent: {
+        fontSize: 14,
+        marginBottom: 10
+    },
+
+    workDescText: {
+        fontSize: 16,
+        color: COLORS.black,
+        marginBottom: 10
+    },
+
+    workDescBadge: {
+        fontSize: 16,
+        color: COLORS.white,
+        backgroundColor: COLORS.success,
+        marginBottom: 10,
+        paddingVertical: 2,
+        paddingHorizontal: 10,
+        borderRadius: 10,
+    },
+
+    workIconBtns: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        maxWidth: 154,
+        marginTop: 10,
+    },
+
+    workIconBtn: {
+        fontSize: 25,
+    },
+
     // Horizontal scrolling badges
     scrollableBadges: {
         marginTop: 3,

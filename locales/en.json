@@ -18,6 +18,12 @@
         "description_maps": "Here, geographic maps will be displayed which can be consulted by members."
     },
     "back_list": "Back to the list",
+    "work_details": {
+        "title": "Details about the work",
+        "type": "Work type: ",
+        "categories": "Categories: ",
+        "author": "Author: "
+    },
     "most_popular": "The most popular",
     "have_account": "Already have an account?",
     "no_account": "Don’t have an account?",

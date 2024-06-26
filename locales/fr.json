@@ -18,6 +18,12 @@
         "description_maps": "Ici, seront affichées les cartes géographiques qui pourront être consultées par les membres."
     },
     "back_list": "Retour à la liste",
+    "work_details": {
+        "title": "Détails sur l’œuvre",
+        "type": "Type d’œuvre : ",
+        "categories": "Catégories : ",
+        "author": "Auteur : "
+    },
     "most_popular": "Les plus populaires",
     "have_account": "Vous avez déjà un compte ?",
     "no_account": "Vous n’avez pas de compte ?",

@@ -2,8 +2,8 @@
  * @author Xanders
  * @see https://team.xsamtech.com/xanderssamoth
  */
-import { View, Text, TouchableOpacity, Modal, SafeAreaView, FlatList, ScrollView, ActivityIndicator } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity, Modal, SafeAreaView, FlatList, ScrollView, ActivityIndicator, RefreshControl } from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import homeStyles from './style';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -21,6 +21,12 @@ const HomeScreen = () => {
   const [books, setBooks] = useState([]);
   const [mags, setMags] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  // =============== Refresh control ===============
+  const onRefresh = useCallback(() => {
+    setIsLoading(true);
+    setTimeout(() => { setIsLoading(false); }, 2000);
+  }, []);
 
   // =============== Using the Effect Hook ===============
   // MOST POPULAR
@@ -63,8 +69,6 @@ const HomeScreen = () => {
   };
   // BOOKS
   const getBooks = () => {
-    let date = new Date();
-    const year = date.getFullYear();
     const config = { method: 'GET', url: `${API.url}/work/find_all_by_type/fr/Ouvrage`, headers: { 'X-localization': 'fr' } };
 
     axios(config)
@@ -82,8 +86,6 @@ const HomeScreen = () => {
   };
   // MAGAZINES
   const getMags = () => {
-    let date = new Date();
-    const year = date.getFullYear();
     const config = { method: 'GET', url: `${API.url}/work/find_all_by_type/fr/Article`, headers: { 'X-localization': 'fr' } };
 
     axios(config)
@@ -101,7 +103,9 @@ const HomeScreen = () => {
   };
 
   return (
-    <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}>
+    <ScrollView
+      contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}
+      refreshControl={<RefreshControl refreshing={isLoading} onRefresh={onRefresh} />}>
       <View style={homeStyles.headingArea}>
         <Text style={homeStyles.heading}>{t('welcome_title')}</Text>
         <Text style={homeStyles.headingText}>{t('welcome_description')}</Text>
