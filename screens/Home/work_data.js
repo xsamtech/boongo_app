@@ -90,18 +90,27 @@ const WorkDataScreen = ({ route, navigation }) => {
           </View>
 
           <View style={homeStyles.workBottom}>
+            {work.user_owner ? (
+              <>
+                <View style={homeStyles.workDesc}>
+                  <Text style={homeStyles.workDescText}>{t('work_details.author')}</Text>
+                  <Text style={[homeStyles.workDescText, { fontWeight: '600' }]}>{work.user_owner ? work.user_owner : null}</Text>
+                </View>
+              </>
+            ) : ''}
             <View style={homeStyles.workDesc}>
-              <Text style={[homeStyles.workDescText, { fontWeight: '600' }]}>{t('work_details.type')}</Text>
-              <Text style={[homeStyles.workDescText, { color: COLORS.success }]}>{work.type ? work.type.type_name : null}</Text>
+              <Text style={homeStyles.workDescText}>{t('work_details.type')}</Text>
+              <Text style={[homeStyles.workDescText, { fontWeight: '600' }]}>{work.type ? work.type.type_name : null}</Text>
             </View>
             <View style={homeStyles.workDesc}>
-              <Text style={[homeStyles.workDescText, { fontWeight: '600' }]}>{t('work_details.categories')}</Text>
+              <Text style={homeStyles.workDescText}>{t('work_details.categories')}</Text>
               <FlatList
                 data={work.categories}
                 keyExtractor={item => item.id}
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
-                style={homeStyles.scrollableList}
+                style={homeStyles.workDescBadgesList}
+                contentContainerStyle={homeStyles.workDescBadgesListContents}
                 renderItem={({ item }) => {
                   return (<Text style={homeStyles.workDescBadge}>{item.category_name}</Text>);
                 }} />

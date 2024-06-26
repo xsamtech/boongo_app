@@ -278,11 +278,6 @@ const homeStyles = StyleSheet.create({
         borderRadius: 20
     },
 
-    workDesc: {
-        flexDirection: 'row',
-        alignItems: 'flex-start'
-    },
-
     workTitle: {
         fontSize: 23,
         fontWeight: '700',
@@ -296,17 +291,39 @@ const homeStyles = StyleSheet.create({
         marginBottom: 10
     },
 
+    workDesc: {
+        flexShrink: 1,
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        marginBottom: 10,
+    },
+
     workDescText: {
         fontSize: 16,
         color: COLORS.black,
         marginBottom: 10
     },
 
+    workDescBadgesList: {
+        flexDirection: 'column',
+        marginBottom: 10,
+        paddingHorizontal: PADDING.horizontal
+    },
+
+    workDescBadgesListContents: {
+        flexDirection: 'row',
+        width: '100%',
+        flexWrap: 'wrap',
+        alignItems: 'flex-start',
+        justifyContent: 'flex-start',
+    },
+
     workDescBadge: {
         fontSize: 16,
-        color: COLORS.white,
-        backgroundColor: COLORS.success,
+        color: COLORS.black,
+        backgroundColor: COLORS.secondary,
         marginBottom: 10,
+        marginRight: 5,
         paddingVertical: 2,
         paddingHorizontal: 10,
         borderRadius: 10,
