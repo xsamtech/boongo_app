@@ -27,6 +27,7 @@ import RegisterScreen from './screens/Auth/register';
 import LoginScreen from './screens/Auth';
 import PasswordResetScreen from './screens/Auth/password-reset';
 import { AuthContext, AuthProvider } from './contexts/AuthContext';
+import WorkDataScreen from './screens/Home/work_data';
 
 const StackNav = () => {
     const Stack = createNativeStackNavigator();
@@ -102,6 +103,7 @@ const StackNav = () => {
                     );
                 }
             }} />
+            <Stack.Screen name='WorkData' component={WorkDataScreen} options={{ headerShown: false }} />
             <Stack.Screen name='Language' component={LanguageScreen} options={{ title: t('change_lang') }} />
             {userInfo.id ? (
                 <>
