@@ -20,7 +20,7 @@
     "back_list": "Retour à la liste",
     "work_details": {
         "title": "Détails sur l’œuvre",
-        "type": "Type d’œuvre : ",
+        "type": "Type : ",
         "categories": "Catégories : ",
         "author": "Auteur : "
     },

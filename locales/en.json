@@ -20,7 +20,7 @@
     "back_list": "Back to the list",
     "work_details": {
         "title": "Details about the work",
-        "type": "Work type: ",
+        "type": "Type: ",
         "categories": "Categories: ",
         "author": "Author: "
     },

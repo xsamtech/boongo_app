@@ -2,7 +2,7 @@
  * @author Xanders
  * @see https://team.xsamtech.com/xanderssamoth
  */
-import { View, Text, RefreshControl, Image, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, RefreshControl, Image, TouchableOpacity, FlatList, Button } from 'react-native';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import { AuthContext } from '../../contexts/AuthContext';
@@ -12,6 +12,8 @@ import axios from 'axios';
 import homeStyles from './style';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import { Divider } from 'react-native-paper';
+import { NetworkInfo } from 'react-native-network-info';
+import UserAgent from 'react-native-user-agent';
 
 const WorkDataScreen = ({ route, navigation }) => {
   // =============== Language ===============
@@ -39,29 +41,31 @@ const WorkDataScreen = ({ route, navigation }) => {
   }, []);
 
   const getWork = () => {
-    const config = {
-      method: 'GET',
-      url: `${API.url}/work/${itemId}`,
-      headers: {
-        'X-localization': 'fr',
-        'X-user-id': userInfo.id ? userInfo.id : null,
-        'X-ip-address': '192.168.43.78',
-        'X-user-agent': 'application-name/1.6.7.42 Dalvik/2.1.0 (Linux; U; Android 5.1.1; Android SDK built for x86 Build/LMY48X)',
-      }
-    };
+    NetworkInfo.getIPAddress().then(ip_address => {
+      const config = {
+        method: 'GET',
+        url: `${API.url}/work/${itemId}`,
+        headers: {
+          'X-localization': 'fr',
+          'X-user-id': userInfo.id ? userInfo.id : null,
+          'X-ip-address': ip_address,
+          'X-user-agent': UserAgent.getUserAgent()
+        }
+      };
 
-    axios(config)
-      .then(res => {
-        const workData = res.data.data;
+      axios(config)
+        .then(res => {
+          const workData = res.data.data;
 
-        setWork(workData);
-        setIsLoading(false);
+          setWork(workData);
+          setIsLoading(false);
 
-        return workData;
-      })
-      .catch(error => {
-        console.log(error);
-      });
+          return workData;
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    })
   };
 
   return (
@@ -74,7 +78,7 @@ const WorkDataScreen = ({ route, navigation }) => {
             <View>
               <Image source={{ uri: work.image_url ? work.image_url : `${WEB.url}/assets/img/cover.png` }} style={homeStyles.workImage} />
             </View>
-            <View style={{ maxWidth: 154 }}>
+            <View style={homeStyles.workDescTop}>
               <Text style={homeStyles.workTitle}>{work.work_title}</Text>
               <Text style={homeStyles.workContent}>{work.work_content}</Text>
               <Divider />
@@ -92,18 +96,18 @@ const WorkDataScreen = ({ route, navigation }) => {
           <View style={homeStyles.workBottom}>
             {work.user_owner ? (
               <>
-                <View style={homeStyles.workDesc}>
-                  <Text style={homeStyles.workDescText}>{t('work_details.author')}</Text>
+                <View style={homeStyles.workDescBottom}>
+                  <Text style={[homeStyles.workDescText, { color: COLORS.dark_secondary}]}>{t('work_details.author')}</Text>
                   <Text style={[homeStyles.workDescText, { fontWeight: '600' }]}>{work.user_owner ? work.user_owner : null}</Text>
                 </View>
               </>
             ) : ''}
-            <View style={homeStyles.workDesc}>
-              <Text style={homeStyles.workDescText}>{t('work_details.type')}</Text>
+            <View style={homeStyles.workDescBottom}>
+              <Text style={[homeStyles.workDescText, { color: COLORS.dark_secondary}]}>{t('work_details.type')}</Text>
               <Text style={[homeStyles.workDescText, { fontWeight: '600' }]}>{work.type ? work.type.type_name : null}</Text>
             </View>
-            <View style={homeStyles.workDesc}>
-              <Text style={homeStyles.workDescText}>{t('work_details.categories')}</Text>
+            <View style={homeStyles.workDescBottom}>
+              <Text style={[homeStyles.workDescText, { color: COLORS.dark_secondary}]}>{t('work_details.categories')}</Text>
               <FlatList
                 data={work.categories}
                 keyExtractor={item => item.id}
@@ -115,6 +119,18 @@ const WorkDataScreen = ({ route, navigation }) => {
                   return (<Text style={homeStyles.workDescBadge}>{item.category_name}</Text>);
                 }} />
             </View>
+          </View>
+        </View>
+        <View style={homeStyles.workCard}>
+          <View style={{ padding: 10 }}>
+            <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: COLORS.primary, marginBottom: 10, padding: 10, borderRadius: 5 }}>
+              <FontAwesome6 style={{ fontSize: 16, color: COLORS.white, marginRight: 10 }} name='money-check-dollar' />
+              <Text style={{ color: COLORS.white }}>{t('subscribe')}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: COLORS.warning, padding: 10, borderRadius: 5 }}>
+              <FontAwesome6 style={{ fontSize: 16, color: COLORS.black, marginRight: 10 }} name='cart-shopping' />
+              <Text style={{ color: COLORS.black }}>{t('addToCart')}</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>

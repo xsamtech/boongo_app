@@ -255,6 +255,7 @@ const homeStyles = StyleSheet.create({
 
     workCard: {
         backgroundColor: COLORS.white,
+        marginBottom: 14,
         padding: 15,
     },
 
@@ -264,9 +265,9 @@ const homeStyles = StyleSheet.create({
         marginBottom: 10,
     },
 
-    workBottom: {
-        flexDirection: 'column',
-        alignItems: 'flex-start',
+    workDescTop: {
+        flexShrink: 1,
+        marginBottom: 10,
     },
 
     workImage: {
@@ -291,7 +292,12 @@ const homeStyles = StyleSheet.create({
         marginBottom: 10
     },
 
-    workDesc: {
+    workBottom: {
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+    },
+
+    workDescBottom: {
         flexShrink: 1,
         flexDirection: 'row',
         alignItems: 'flex-start',
