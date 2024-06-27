@@ -250,7 +250,8 @@ const homeStyles = StyleSheet.create({
 
     // Work details
     workBody: {
-        padding: 10,
+        paddingVertical: 30,
+        paddingHorizontal: 10,
     },
 
     workCard: {

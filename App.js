@@ -29,6 +29,7 @@ import PasswordResetScreen from './screens/Auth/password-reset';
 import { AuthContext, AuthProvider } from './contexts/AuthContext';
 import WorkDataScreen from './screens/Home/work_data';
 import SplashScreen from './screens/Home/splash_screen';
+import UpdateAccountScreen from './screens/Account/update_account';
 
 const StackNav = () => {
     const Stack = createNativeStackNavigator();
@@ -113,7 +114,8 @@ const StackNav = () => {
                     {userInfo.id ? (
                         <>
                             <Stack.Screen name='Notification' component={NotificationScreen} />
-                            <Stack.Screen name='Account' component={AccountScreen} />
+                            <Stack.Screen name='Account' component={AccountScreen} options={{ title: t('navigation.account') }} />
+                            <Stack.Screen name='UpdateAccount' component={UpdateAccountScreen} options={{ title: t('navigation.update_account') }} />
                             <Stack.Screen name='Cart' component={CartScreen} />
                             <Stack.Screen name='MyWork' component={MyWorkScreen} />
                         </>
