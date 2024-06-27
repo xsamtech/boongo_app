@@ -30,6 +30,8 @@ import { AuthContext, AuthProvider } from './contexts/AuthContext';
 import WorkDataScreen from './screens/Home/work_data';
 import SplashScreen from './screens/Home/splash_screen';
 import UpdateAccountScreen from './screens/Account/update_account';
+import PDFViewerScreen from './screens/Home/pdf_viewer';
+import VideoPlayerScreen from './screens/Home/video_player';
 
 const StackNav = () => {
     const Stack = createNativeStackNavigator();
@@ -110,6 +112,8 @@ const StackNav = () => {
                         }
                     }} />
                     <Stack.Screen name='WorkData' component={WorkDataScreen} options={{ title: t('work_details.title') }} />
+                    <Stack.Screen name='PDFViewer' component={PDFViewerScreen} options={{ headerShown: false }} />
+                    <Stack.Screen name='VideoPlayer' component={VideoPlayerScreen} options={{ headerShown: false }} />
                     <Stack.Screen name='Language' component={LanguageScreen} options={{ title: t('change_lang') }} />
                     {userInfo.id ? (
                         <>

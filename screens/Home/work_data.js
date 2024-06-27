@@ -2,7 +2,7 @@
  * @author Xanders
  * @see https://team.xsamtech.com/xanderssamoth
  */
-import { View, Text, RefreshControl, Image, TouchableOpacity, FlatList, Button } from 'react-native';
+import { View, Text, RefreshControl, Image, TouchableOpacity, FlatList } from 'react-native';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import { AuthContext } from '../../contexts/AuthContext';
@@ -22,7 +22,7 @@ const WorkDataScreen = ({ route, navigation }) => {
   // =============== Authentication context ===============
   const { userInfo } = useContext(AuthContext);
 
-  // =============== Get ID parameters ===============
+  // =============== Get parameters ===============
   const { itemId } = route.params;
 
   // =============== Get data ===============
@@ -83,12 +83,16 @@ const WorkDataScreen = ({ route, navigation }) => {
               <Text style={homeStyles.workContent}>{work.work_content}</Text>
               <Divider />
               <View style={homeStyles.workIconBtns}>
-                <TouchableOpacity style={{ marginHorizontal: 30 }}>
+                <TouchableOpacity style={{ marginHorizontal: 30 }} onPress={() => navigation.navigate('PDFViewer', { itemId: work.id, docUri: work.document_url })}>
                   <FontAwesome6 style={[homeStyles.workIconBtn, { color: COLORS.danger }]} name='file-lines' />
                 </TouchableOpacity>
-                <TouchableOpacity>
-                  <FontAwesome6 style={[homeStyles.workIconBtn, { color: COLORS.primary }]} name='play-circle' />
-                </TouchableOpacity>
+                {work.video_url ? (
+                  <>
+                    <TouchableOpacity onPress={() => navigation.navigate('VideoPlayer', { videoUri: work.video_url })}>
+                      <FontAwesome6 style={[homeStyles.workIconBtn, { color: COLORS.primary }]} name='play-circle' />
+                    </TouchableOpacity>
+                  </>
+                ) : ''}
               </View>
             </View>
           </View>
@@ -97,17 +101,17 @@ const WorkDataScreen = ({ route, navigation }) => {
             {work.user_owner ? (
               <>
                 <View style={homeStyles.workDescBottom}>
-                  <Text style={[homeStyles.workDescText, { color: COLORS.dark_secondary}]}>{t('work_details.author')}</Text>
+                  <Text style={[homeStyles.workDescText, { color: COLORS.dark_secondary }]}>{t('work_details.author')}</Text>
                   <Text style={[homeStyles.workDescText, { fontWeight: '600' }]}>{work.user_owner ? work.user_owner : null}</Text>
                 </View>
               </>
             ) : ''}
             <View style={homeStyles.workDescBottom}>
-              <Text style={[homeStyles.workDescText, { color: COLORS.dark_secondary}]}>{t('work_details.type')}</Text>
+              <Text style={[homeStyles.workDescText, { color: COLORS.dark_secondary }]}>{t('work_details.type')}</Text>
               <Text style={[homeStyles.workDescText, { fontWeight: '600' }]}>{work.type ? work.type.type_name : null}</Text>
             </View>
             <View style={homeStyles.workDescBottom}>
-              <Text style={[homeStyles.workDescText, { color: COLORS.dark_secondary}]}>{t('work_details.categories')}</Text>
+              <Text style={[homeStyles.workDescText, { color: COLORS.dark_secondary }]}>{t('work_details.categories')}</Text>
               <FlatList
                 data={work.categories}
                 keyExtractor={item => item.id}
@@ -122,13 +126,13 @@ const WorkDataScreen = ({ route, navigation }) => {
           </View>
         </View>
         <View style={homeStyles.workCard}>
-          <View style={{ padding: 10 }}>
-            <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: COLORS.primary, marginBottom: 10, padding: 10, borderRadius: 5 }}>
-              <FontAwesome6 style={{ fontSize: 16, color: COLORS.white, marginRight: 10 }} name='money-check-dollar' />
+          <View style={homeStyles.workCmds}>
+            <TouchableOpacity style={[homeStyles.workCmd, { backgroundColor: COLORS.primary, marginBottom: 10 }]} onPress={() => { userInfo.id ? navigation.navigate('Account') : navigation.navigate('Login') }}>
+              <FontAwesome6 style={[homeStyles.workCmdIcon, { color: COLORS.white }]} name='money-check-dollar' />
               <Text style={{ color: COLORS.white }}>{t('subscribe')}</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: COLORS.warning, padding: 10, borderRadius: 5 }}>
-              <FontAwesome6 style={{ fontSize: 16, color: COLORS.black, marginRight: 10 }} name='cart-shopping' />
+            <TouchableOpacity style={[homeStyles.workCmd, { backgroundColor: COLORS.warning }]} onPress={() => { userInfo.id ? navigation.navigate('Cart') : navigation.navigate('Login') }}>
+              <FontAwesome6 style={[homeStyles.workCmdIcon, { color: COLORS.black }]} name='cart-shopping' />
               <Text style={{ color: COLORS.black }}>{t('addToCart')}</Text>
             </TouchableOpacity>
           </View>

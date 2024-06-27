@@ -2,7 +2,7 @@
  * @author Xanders
  * @see https://team.xsamtech.com/xanderssamoth
  */
-import { StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 import { COLORS, PADDING } from '../../tools/constants';
 
 const homeStyles = StyleSheet.create({
@@ -272,12 +272,17 @@ const homeStyles = StyleSheet.create({
     },
 
     workImage: {
-        width: 160,
-        height: 240,
+        width: Dimensions.get('window').width / 2.5,
+        height: (Dimensions.get('window').width / 2.5) * 1.5,
         marginRight: 10,
         borderWidth: 3,
         borderColor: COLORS.light,
         borderRadius: 20
+    },
+
+    workImageMap: {
+        width: '100%',
+        height: '100%',
     },
 
     workTitle: {
@@ -345,6 +350,22 @@ const homeStyles = StyleSheet.create({
 
     workIconBtn: {
         fontSize: 25,
+    },
+
+    workCmds: {
+        padding: 10,
+    },
+
+    workCmd: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 10,
+        borderRadius: 5
+    },
+
+    workCmdIcon: {
+        fontSize: 16,
+        marginRight: 10
     },
 
     // Horizontal scrolling badges
