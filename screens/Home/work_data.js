@@ -134,6 +134,7 @@ const WorkDataScreen = ({ route, navigation }) => {
           </View>
         </View>
         <View style={homeStyles.workCard}>
+          <Text style={{ marginBottom: 10, textAlign: 'center', color: COLORS.black }}>{t('work_details.subscription_info')}</Text>
           <View style={homeStyles.workCmds}>
             <TouchableOpacity style={[homeStyles.workCmd, { backgroundColor: COLORS.primary, marginBottom: 10 }]} onPress={() => { userInfo.id ? navigation.navigate('Account') : navigation.navigate('Login') }}>
               <FontAwesome6 style={[homeStyles.workCmdIcon, { color: COLORS.white }]} name='money-check-dollar' />

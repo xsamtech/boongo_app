@@ -2,7 +2,7 @@
  * @author Xanders
  * @see https://team.xsamtech.com/xanderssamoth
  */
-import { View, Text, TouchableOpacity, FlatList, ScrollView, ActivityIndicator, RefreshControl } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, ScrollView, ActivityIndicator, RefreshControl, Dimensions, Image } from 'react-native';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import homeStyles from './style';
@@ -135,6 +135,10 @@ const HomeScreen = () => {
             renderItem={({ item }) => {
               return (<WorkItem item={item} />);
             }} />
+
+          <View style={[homeStyles.cardEmpty, { width: Dimensions.get('window').width - 10, marginVertical: 50, padding: 10 }]}>
+            <Image source={require('../../assets/img/ad.png')} style={{ width: '100%', height: Dimensions.get('screen').width / 2, borderRadius: 10 }} />
+          </View>
 
           <View style={homeStyles.listTitleArea}>
             <Text style={homeStyles.listTitle}>{t('navigation.book')}</Text>

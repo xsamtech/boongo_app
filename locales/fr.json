@@ -16,6 +16,7 @@
         "description_popular": "Ici, seront affichés les œuvres les plus consultées par les membres.",
         "description_books": "Ici, seront affichés les ouvrages qui pourront être consultés par les membres.",
         "description_mags": "Ici, seront affichés les revues, journaux ou magazines qui pourront être consultés par les membres.",
+        "description_medias": "Ici, seront affichés les médias qui pourront être consultés par les membres.",
         "description_maps": "Ici, seront affichées les cartes géographiques qui pourront être consultées par les membres."
     },
     "back_list": "Retour à la liste",
@@ -24,7 +25,8 @@
         "type": "Type : ",
         "categories": "Catégories : ",
         "category": "Catégorie : ",
-        "author": "Auteur : "
+        "author": "Auteur : ",
+        "subscription_info": "Abonnez-vous pour être en mesure de consulter, ou bien commandez un ouvrage ou une revue."
     },
     "most_popular": "Les plus populaires",
     "have_account": "Vous avez déjà un compte ?",

@@ -16,6 +16,7 @@
         "description_popular": "Here, the works most consulted by members will be displayed.",
         "description_books": "Here, the books will be displayed which can be consulted by members.",
         "description_mags": "Here, the journals, newspapers or magazines which can be consulted by members will be displayed.",
+        "description_medias": "Here, the medias will be displayed which can be consulted by members.",
         "description_maps": "Here, geographic maps will be displayed which can be consulted by members."
     },
     "back_list": "Back to the list",
@@ -24,7 +25,8 @@
         "type": "Type: ",
         "categories": "Categories: ",
         "category": "Category: ",
-        "author": "Author: "
+        "author": "Author: ",
+        "subscription_info": "Subscribe to be able to consult, or order a book or magazine."
     },
     "most_popular": "The most popular",
     "have_account": "Already have an account?",
