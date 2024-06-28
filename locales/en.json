@@ -23,6 +23,7 @@
         "title": "Details about the work",
         "type": "Type: ",
         "categories": "Categories: ",
+        "category": "Category: ",
         "author": "Author: "
     },
     "most_popular": "The most popular",

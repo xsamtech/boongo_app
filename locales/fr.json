@@ -23,6 +23,7 @@
         "title": "Détails sur l’œuvre",
         "type": "Type : ",
         "categories": "Catégories : ",
+        "category": "Catégorie : ",
         "author": "Auteur : "
     },
     "most_popular": "Les plus populaires",

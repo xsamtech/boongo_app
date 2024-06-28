@@ -21,7 +21,8 @@ const homeStyles = StyleSheet.create({
     },
 
     cardEmpty: {
-        width: '100%',
+        flexShrink: 1,
+        width: Dimensions.get('window').width,
         paddingHorizontal: 15,
         paddingVertical: 10,
         marginTop: 10,
@@ -323,9 +324,8 @@ const homeStyles = StyleSheet.create({
     },
 
     workDescBadgesListContents: {
-        flexDirection: 'row',
-        width: '100%',
-        flexWrap: 'wrap',
+        flexShrink: 1,
+        flexDirection: 'column',
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
     },

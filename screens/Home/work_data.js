@@ -27,6 +27,7 @@ const WorkDataScreen = ({ route, navigation }) => {
 
   // =============== Get data ===============
   const [work, setWork] = useState({});
+  const [categoryCount, setCategoryCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
   // =============== Refresh control ===============
@@ -56,8 +57,10 @@ const WorkDataScreen = ({ route, navigation }) => {
       axios(config)
         .then(res => {
           const workData = res.data.data;
+          const workCategories = res.data.data.categories.length;
 
           setWork(workData);
+          setCategoryCount(workCategories);
           setIsLoading(false);
 
           return workData;
@@ -82,17 +85,20 @@ const WorkDataScreen = ({ route, navigation }) => {
               <Text style={homeStyles.workTitle}>{work.work_title}</Text>
               <Text style={homeStyles.workContent}>{work.work_content}</Text>
               <Divider />
-              <View style={homeStyles.workIconBtns}>
-                <TouchableOpacity style={{ marginHorizontal: 30 }} onPress={() => navigation.navigate('PDFViewer', { itemId: work.id, docUri: work.document_url })}>
+              <View style={[homeStyles.workIconBtns, { justifyContent: 'space-between', paddingHorizontal: 20 }]}>
+                <TouchableOpacity onPress={() => navigation.navigate('PDFViewer', { docTitle: work.workTitle, docUri: work.document_url })}>
                   <FontAwesome6 style={[homeStyles.workIconBtn, { color: COLORS.danger }]} name='file-lines' />
                 </TouchableOpacity>
                 {work.video_url ? (
                   <>
-                    <TouchableOpacity onPress={() => navigation.navigate('VideoPlayer', { videoUri: work.video_url })}>
+                    <TouchableOpacity onPress={() => navigation.navigate('VideoPlayer', { videoTitle: work.workTitle, videoUri: work.video_url })}>
                       <FontAwesome6 style={[homeStyles.workIconBtn, { color: COLORS.primary }]} name='play-circle' />
                     </TouchableOpacity>
                   </>
                 ) : ''}
+                <TouchableOpacity>
+                  <FontAwesome6 style={[homeStyles.workIconBtn, { color: COLORS.success }]} name='headphones' />
+                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -111,7 +117,9 @@ const WorkDataScreen = ({ route, navigation }) => {
               <Text style={[homeStyles.workDescText, { fontWeight: '600' }]}>{work.type ? work.type.type_name : null}</Text>
             </View>
             <View style={homeStyles.workDescBottom}>
-              <Text style={[homeStyles.workDescText, { color: COLORS.dark_secondary }]}>{t('work_details.categories')}</Text>
+              <Text style={[homeStyles.workDescText, { color: COLORS.dark_secondary }]}>
+                {categoryCount > 1 ? t('work_details.categories') : t('work_details.category')}
+              </Text>
               <FlatList
                 data={work.categories}
                 keyExtractor={item => item.id}

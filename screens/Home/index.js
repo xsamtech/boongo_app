@@ -2,7 +2,7 @@
  * @author Xanders
  * @see https://team.xsamtech.com/xanderssamoth
  */
-import { View, Text, TouchableOpacity, Modal, SafeAreaView, FlatList, ScrollView, ActivityIndicator, RefreshControl } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, ScrollView, ActivityIndicator, RefreshControl } from 'react-native';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import homeStyles from './style';
@@ -69,13 +69,13 @@ const HomeScreen = () => {
   };
   // BOOKS
   const getBooks = () => {
-    const config = { method: 'GET', url: `${API.url}/work/find_all_by_type/fr/Ouvrage`, headers: { 'X-localization': 'fr' } };
+    const config = { method: 'GET', url: `${API.url}/work/find_all_by_type_status/fr/Ouvrage/Pertinente`, headers: { 'X-localization': 'fr' } };
 
     axios(config)
       .then(res => {
         const booksData = res.data.data;
 
-        setBooks(booksData)
+        setBooks(booksData);
         setIsLoading(false);
 
         return booksData;
@@ -86,13 +86,13 @@ const HomeScreen = () => {
   };
   // MAGAZINES
   const getMags = () => {
-    const config = { method: 'GET', url: `${API.url}/work/find_all_by_type/fr/Article`, headers: { 'X-localization': 'fr' } };
+    const config = { method: 'GET', url: `${API.url}/work/find_all_by_type_status/fr/Article/Pertinente`, headers: { 'X-localization': 'fr' } };
 
     axios(config)
       .then(res => {
         const magsData = res.data.data;
 
-        setMags(magsData)
+        setMags(magsData);
         setIsLoading(false);
 
         return magsData;
@@ -118,23 +118,23 @@ const HomeScreen = () => {
           <View style={homeStyles.listTitleArea}>
             <Text style={homeStyles.listTitle}>{t('most_popular')}</Text>
           </View>
-          {popular.length > 0 ?
-            <FlatList
-              data={popular}
-              keyExtractor={item => item.id}
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              style={homeStyles.scrollableList}
-              renderItem={({ item }) => {
-                return (<WorkItem item={item} />);
-              }} />
-            :
-            <>
-              <View style={homeStyles.cardEmpty}>
-                <Text style={homeStyles.cardEmptyTitle}>{t('empty_list.title')}</Text>
-                <Text style={homeStyles.cardEmptyText}>{t('empty_list.description_popular')}</Text>
-              </View>
-            </>}
+          <FlatList
+            data={popular}
+            keyExtractor={item => item.id}
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            style={homeStyles.scrollableList}
+            ListEmptyComponent={() => {
+              return (
+                <View style={homeStyles.cardEmpty}>
+                  <Text style={homeStyles.cardEmptyTitle}>{t('empty_list.title')}</Text>
+                  <Text style={homeStyles.cardEmptyText}>{t('empty_list.description_popular')}</Text>
+                </View>
+              )
+            }}
+            renderItem={({ item }) => {
+              return (<WorkItem item={item} />);
+            }} />
 
           <View style={homeStyles.listTitleArea}>
             <Text style={homeStyles.listTitle}>{t('navigation.book')}</Text>
@@ -143,23 +143,23 @@ const HomeScreen = () => {
               <MaterialCommunityIcons name='chevron-double-right' size={ICON_SIZE.s3} />
             </TouchableOpacity>
           </View>
-          {books.length > 0 ?
-            <FlatList
-              data={books}
-              keyExtractor={item => item.id}
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              style={homeStyles.scrollableList}
-              renderItem={({ item }) => {
-                return (<WorkItem item={item} />);
-              }} />
-            :
-            <>
-              <View style={homeStyles.cardEmpty}>
-                <Text style={homeStyles.cardEmptyTitle}>{t('empty_list.title')}</Text>
-                <Text style={homeStyles.cardEmptyText}>{t('empty_list.description_books')}</Text>
-              </View>
-            </>}
+          <FlatList
+            data={books}
+            keyExtractor={item => item.id}
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            style={homeStyles.scrollableList}
+            ListEmptyComponent={() => {
+              return (
+                <View style={homeStyles.cardEmpty}>
+                  <Text style={homeStyles.cardEmptyTitle}>{t('empty_list.title')}</Text>
+                  <Text style={homeStyles.cardEmptyText}>{t('empty_list.description_books')}</Text>
+                </View>
+              )
+            }}
+            renderItem={({ item }) => {
+              return (<WorkItem item={item} />);
+            }} />
 
           <View style={homeStyles.listTitleArea}>
             <Text style={homeStyles.listTitle}>{t('navigation.magazine')}</Text>
@@ -168,23 +168,23 @@ const HomeScreen = () => {
               <MaterialCommunityIcons name='chevron-double-right' size={ICON_SIZE.s3} />
             </TouchableOpacity>
           </View>
-          {mags.length > 0 ?
-            <FlatList
-              data={mags}
-              keyExtractor={item => item.id}
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              style={homeStyles.scrollableList}
-              renderItem={({ item }) => {
-                return (<WorkItem item={item} />);
-              }} />
-            :
-            <>
-              <View style={homeStyles.cardEmpty}>
-                <Text style={homeStyles.cardEmptyTitle}>{t('empty_list.title')}</Text>
-                <Text style={homeStyles.cardEmptyText}>{t('empty_list.description_mags')}</Text>
-              </View>
-            </>}
+          <FlatList
+            data={mags}
+            keyExtractor={item => item.id}
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            style={homeStyles.scrollableList}
+            ListEmptyComponent={() => {
+              return (
+                <View style={homeStyles.cardEmpty}>
+                  <Text style={homeStyles.cardEmptyTitle}>{t('empty_list.title')}</Text>
+                  <Text style={homeStyles.cardEmptyText}>{t('empty_list.description_mags')}</Text>
+                </View>
+              )
+            }}
+            renderItem={({ item }) => {
+              return (<WorkItem item={item} />);
+            }} />
         </>
       }
     </ScrollView>
