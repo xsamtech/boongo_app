@@ -13,6 +13,7 @@ import { useNavigation } from '@react-navigation/native';
 import homeStyles from './screens/Home/style';
 import { AuthContext } from './contexts/AuthContext';
 import Spinner from 'react-native-loading-spinner-overlay';
+import TextBrand from './assets/img/text.svg';
 
 const DrawerList = [
     { icon: 'home-outline', label: 'navigation.home', navigateTo: 'Home' },
@@ -63,7 +64,8 @@ const DrawerContent = (props) => {
             <DrawerContentScrollView {...props}>
                 <View style={homeStyles.drawerContent}>
                     <View style={{ flexDirection: 'column', alignItems: 'center', marginVertical: 12 }}>
-                        <Image source={require('./assets/img/brand.png')} />
+                        <TextBrand width={154} height={50} />
+                        {/* <Image source={require('./assets/img/brand.png')} /> */}
                     </View>
                     <TouchableOpacity activeOpacity={0.8} onPress={() => { userInfo.id ? navigation.navigate('Account') : navigation.navigate('Login') }}>
                         <View style={homeStyles.drawerUserInfoSection}>

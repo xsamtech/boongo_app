@@ -10,6 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 import homeStyles from '../Home/style';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { AuthContext } from '../../contexts/AuthContext';
+import TextBrand from '../../assets/img/text.svg';
 
 const LoginScreen = () => {
   // =============== Language ===============
@@ -33,7 +34,8 @@ const LoginScreen = () => {
         contentContainerStyle={{ flexGrow: 1, paddingBottom: 100 }}>
         {/* Brand / Title */}
         <View style={homeStyles.authlogo}>
-          <Image source={require('../../assets/img/brand.png')} />
+          <TextBrand width={154} height={50} />
+          {/* <Image source={require('../../assets/img/brand.png')} /> */}
         </View>
         {/* <Text style={homeStyles.authTitle}>{t('login')}</Text> */}
 

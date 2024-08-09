@@ -8,6 +8,7 @@ import { COLORS } from '../../tools/constants';
 import homeStyles from './style';
 import { Divider } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
+import LogoText from '../../assets/img/logo-text.svg';
 
 const SplashScreen = () => {
   // =============== Language ===============
@@ -18,7 +19,8 @@ const SplashScreen = () => {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 50 }}>
       <View style={{ marginBottom: 20, paddingHorizontal: 100 }}>
-        <Image source={require('../../assets/img/logo.png')} />
+        <LogoText width={250} height={157} />
+        {/* <Image source={require('../../assets/img/logo.png')} /> */}
       </View>
 
       <ActivityIndicator size='large' color={COLORS.danger} />

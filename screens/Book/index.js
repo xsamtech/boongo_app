@@ -2,12 +2,12 @@
  * @author Xanders
  * @see https://team.xsamtech.com/xanderssamoth
  */
-import { View, Text, FlatList, RefreshControl, TouchableOpacity, SafeAreaView, Dimensions } from 'react-native';
+import { View, Text, FlatList, RefreshControl, TouchableOpacity, SafeAreaView, Dimensions, ActivityIndicator } from 'react-native';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import homeStyles from '../Home/style';
-import { API } from '../../tools/constants';
+import { API, COLORS, PADDING } from '../../tools/constants';
 import BookMagItem from '../../components/workItem/book_mag';
 
 const BookScreen = () => {
@@ -15,14 +15,13 @@ const BookScreen = () => {
   const { t } = useTranslation();
 
   // =============== Get data ===============
+  const [categories, setCategories] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [hasCategories, setHasCategories] = useState(false);
   const [books, setBooks] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [lastPage, setLastPage] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-
-  // =============== Refresh control ===============
-  const [totalPages, setTotalpages] = useState(0);
-  const [itemsPerPage, setItemsPerPage] = useState(0);
-  const [currentPage, setCurrentPage] = useState(0);
-  const [refreshing, setRefreshing] = useState(false);
 
   // =============== Refresh control ===============
   const onRefresh = useCallback(() => {
@@ -31,83 +30,143 @@ const BookScreen = () => {
   }, []);
 
   // =============== Using the Effect Hook ===============
+  // CATEGORIES
+  useEffect(() => {
+    getCategories();
+  }, []);
+
+  // BOOKS
   useEffect(() => {
     getBooks();
   }, []);
 
   // =============== Some work functions ===============
-  const getBooks = () => {
-    const config = { method: 'GET', url: `${API.url}/work/find_all_by_type_status/fr/Ouvrage/Pertinente`, headers: { 'X-localization': 'fr' } };
+  // CATEGORIES
+  // Get all categories
+  const getCategories = () => {
+    setIsLoading(true);
+
+    const config = { method: 'GET', url: `${API.url}/category/find_by_group/Catégorie%20pour%20œuvre`, headers: { 'X-localization': 'fr' } };
 
     axios(config)
       .then(res => {
-        const booksData = res.data.data;
-        const booksLastPage = res.data.lastPage;
+        const categoriesData = res.data.data;
 
-        setBooks(booksData);
-        setTotalpages(booksLastPage);
-        setItemsPerPage(books.length);
+        setCategories(categoriesData);
         setIsLoading(false);
-
-        return booksData;
       })
       .catch(error => {
         console.log(error);
       });
   };
 
-  // =============== Pagination Buttons ===============
-  const renderPaginationButtons = () => {
-    const maxButtonsToShow = 5;
-    let startPage = Math.max(0, currentPage - Math.floor(maxButtonsToShow / 2));
-    let endPage = Math.min(totalPages, startPage + maxButtonsToShow - 1);
+  // Add a category to the filter
+  const addCategory = ({ item }) => {
+    let categoriesData = [];
 
-    if (endPage - startPage + 1 < maxButtonsToShow) {
-      startPage = Math.max(0, endPage - maxButtonsToShow + 1);
+    categoriesData.push(item);
+
+    setSelectedCategories(categoriesData);
+    hasCategories(true);
+  };
+
+  // Remove a category from filter
+  const removeCategory = ({ item }) => {
+    if (categories.indexOf(item) > -1) {
+      categories.splice(item);
     }
 
-    const buttons = [];
+    if (categories.length > 0) {
+      hasCategories(true);
 
-    for (let i = startPage; i <= endPage; i++) {
-      buttons.push(
-        <TouchableOpacity
-          key={i}
-          onPress={() => handlePageClick(i)}
-          style={[
-            styles.paginationButton,
-            i === currentPage ? styles.activeButton : null,
-          ]}>
-          <Text style={{ color: 'white' }}>{i}</Text>
-        </TouchableOpacity>,
-      );
+    } else {
+      hasCategories(false);
     }
+  };
 
-    return buttons;
+  // BOOKS
+  const getBooks = () => {
+    setIsLoading(true);
+
+    const urlAllBooks = `${API.url}/work/find_all_by_type_status/fr/Ouvrage/Pertinente?page=${currentPage}`;
+    const urlBooksByCategories = `${API.url}/work/filter_by_categories_type_status?page=${currentPage}`;
+    const config = {
+      method: hasCategories ? 'POST' : 'GET', 
+      url: hasCategories ? urlBooksByCategories : urlAllBooks, 
+      headers: { 'X-localization': 'fr' }
+    };
+
+    axios(config)
+      .then(res => {
+        const booksData = res.data.data;
+        const booksLastPage = res.data.lastPage;
+
+        setCurrentPage(currentPage + 1);
+        setLastPage(booksLastPage);
+        setBooks([...books, ...booksData]);
+        setIsLoading(false);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
+  // =============== « Load more » button ===============
+  const renderLoadMoreButton = () => {
+    return (
+      <View>
+        <TouchableOpacity activeOpacity={0.9} onPress={getBooks} style={[homeStyles.authButton, { marginBottom: 30, paddingVertical: PADDING.vertical, borderRadius: 30 }]}>
+          <Text style={homeStyles.authButtonText}>{t('load_more')}</Text>
+          {isLoading ? (<ActivityIndicator color={COLORS.white} style={{ marginLeft: 8 }} />) : null}
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
+  // =============== Category Item ===============
+  const CategoryItem = ({ item }) => {
+    return (
+      <TouchableOpacity style={[homeStyles.workDescBadge, { backgroundColor: (hasCategories ? COLORS.black : COLORS.warning) }]}>
+        <Text style={[homeStyles.paragraph, {color: (hasCategories ? COLORS.warning : COLORS.black)}]}>{item.category_name}</Text>
+      </TouchableOpacity>
+    )
   };
 
   return (
-    <SafeAreaView contentContainerStyle={{ flexGrow: 1 }}>
-      <View style={[homeStyles.cardEmpty, { height: Dimensions.get('window').height - 70, paddingLeft: 5 }]}>
-        <FlatList
-          data={books}
-          keyExtractor={item => item.id}
-          horizontal={false}
-          showsVerticalScrollIndicator={false}
-          style={homeStyles.scrollableList}
-          windowSize={10}
-          ListEmptyComponent={() => {
-            return (
-              <>
-                <Text style={homeStyles.cardEmptyTitle}>{t('empty_list.title')}</Text>
-                <Text style={homeStyles.cardEmptyText}>{t('empty_list.description_books')}</Text>
-              </>
-            )
-          }}
-          renderItem={({ item }) => {
-            return (<BookMagItem item={item} />);
-          }}
-          refreshControl={<RefreshControl refreshing={isLoading} onRefresh={onRefresh} />} />
-      </View>
+    <SafeAreaView contentContainerStyle={{ flexGrow: 1 }}
+      style={[homeStyles.cardEmpty, { height: Dimensions.get('window').height - 70, paddingLeft: 5 }]}>
+      {/* Categories */}
+      <FlatList
+        data={categories}
+        keyExtractor={item => item.id}
+        horizontal={true}
+        showsHorizontalScrollIndicator={false}
+        style={{ paddingHorizontal: PADDING.horizontal }}
+        renderItem={({ item }) => {
+          return (<CategoryItem item={item} />);
+        }} />
+
+      {/* Works */}
+      <FlatList
+        data={books}
+        keyExtractor={item => item.id}
+        horizontal={false}
+        showsVerticalScrollIndicator={false}
+        style={homeStyles.scrollableList}
+        windowSize={10}
+        ListEmptyComponent={() => {
+          return (
+            <>
+              <Text style={homeStyles.cardEmptyTitle}>{t('empty_list.title')}</Text>
+              <Text style={homeStyles.cardEmptyText}>{t('empty_list.description_books')}</Text>
+            </>
+          )
+        }}
+        renderItem={({ item }) => {
+          return (<BookMagItem item={item} />);
+        }}
+        ListFooterComponent={currentPage <= lastPage ? renderLoadMoreButton : null}
+        refreshControl={<RefreshControl refreshing={isLoading} onRefresh={onRefresh} />} />
     </SafeAreaView>
   );
 };
