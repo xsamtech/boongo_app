@@ -103,11 +103,8 @@ const BookScreen = () => {
       console.log('Données à envoyer : ' + JSON.stringify(selectedCategories));
 
       const url = `${API.url}/work/filter_by_categories_type_status/fr/Ouvrage/Pertinente?page=${currentPage}`;
-
       let mParams = {}
-      // let mParams = {
-      //   categories_ids: selectedCategories
-      // };
+      let qs = require('qs');
 
       // Define an array of key-value pairs
       let pairsArray = [];
@@ -127,7 +124,7 @@ const BookScreen = () => {
         'X-localization': 'fr'
       };
 
-      axios.post(url, { params: JSON.stringify(mParams), headers: mHeaders }).then(res => {
+      axios.post(url, qs.stringify(mParams)).then(res => {
         const booksData = res.data.data;
         const booksLastPage = res.data.lastPage;
 
