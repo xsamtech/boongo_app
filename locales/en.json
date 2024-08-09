@@ -12,6 +12,9 @@
     "load_more": "Load more",
     "video_ended": "The video is finished!",
     "error": "Error:",
+    "error_message": {
+        "no_server_response": "No response received from the server."
+    },
     "empty_list": {
         "title": "The list is empty",
         "description_popular": "Here, the works most consulted by members will be displayed.",

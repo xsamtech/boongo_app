@@ -12,6 +12,9 @@
     "load_more": "Charger plus",
     "video_ended": "La vidéo est terminée !",
     "error": "Erreur :",
+    "error_message": {
+        "no_server_response": "Aucune réponse reçue du serveur."
+    },
     "empty_list": {
         "title": "La liste est vide",
         "description_popular": "Ici, seront affichés les œuvres les plus consultées par les membres.",

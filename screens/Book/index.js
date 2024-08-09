@@ -2,7 +2,7 @@
  * @author Xanders
  * @see https://team.xsamtech.com/xanderssamoth
  */
-import { View, Text, FlatList, RefreshControl, TouchableOpacity, SafeAreaView, Dimensions, ActivityIndicator } from 'react-native';
+import { View, Text, FlatList, RefreshControl, TouchableOpacity, SafeAreaView, Dimensions, ActivityIndicator, ToastAndroid } from 'react-native';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
@@ -28,6 +28,13 @@ const BookScreen = () => {
     setIsLoading(true);
     setTimeout(() => { setIsLoading(false); }, 2000);
   }, []);
+
+  const handleReload = () => {
+    // Vider les données
+    setBooks([]);
+    // Recharger les données
+    getBooks();
+  };
 
   // =============== Using the Effect Hook ===============
   // CATEGORIES
@@ -61,27 +68,31 @@ const BookScreen = () => {
   };
 
   // Add a category to the filter
-  const addCategory = ({ item }) => {
+  const addCategory = item => {
     let categoriesData = [];
 
-    categoriesData.push(item);
+    categoriesData.push(parseInt(item));
 
     setSelectedCategories(categoriesData);
-    hasCategories(true);
+    setHasCategories(true);
+
+    handleReload();
   };
 
   // Remove a category from filter
-  const removeCategory = ({ item }) => {
-    if (categories.indexOf(item) > -1) {
-      categories.splice(item);
+  const removeCategory = item => {
+    if (selectedCategories.indexOf(item) > -1) {
+      selectedCategories.splice(item);
     }
 
-    if (categories.length > 0) {
-      hasCategories(true);
+    if (selectedCategories.length > 0) {
+      setHasCategories(true);
 
     } else {
-      hasCategories(false);
+      setHasCategories(false);
     }
+
+    handleReload();
   };
 
   // BOOKS
@@ -89,9 +100,34 @@ const BookScreen = () => {
     setIsLoading(true);
 
     if (hasCategories) {
-      axios.post(`${API.url}/work/filter_by_categories_type_status/fr/Ouvrage/Pertinente?page=${currentPage}`, {
-        selectedCategories
-      }).then(res => {
+      console.log('Données à envoyer : ' + JSON.stringify(selectedCategories));
+
+      const url = `${API.url}/work/filter_by_categories_type_status/fr/Ouvrage/Pertinente?page=${currentPage}`;
+
+      let mParams = {}
+      // let mParams = {
+      //   categories_ids: selectedCategories
+      // };
+
+      // Define an array of key-value pairs
+      let pairsArray = [];
+
+      for (let i = 0; i < selectedCategories.length; i++) {
+        pairsArray.push(['categories_ids[' + i + ']', selectedCategories[i]]);
+      }
+
+      // Add each key-value pair to the object
+      pairsArray.forEach(([key, value]) => {
+        mParams[key] = value;
+      });
+
+      console.log(mParams);
+
+      const mHeaders = {
+        'X-localization': 'fr'
+      };
+
+      axios.post(url, { params: JSON.stringify(mParams), headers: mHeaders }).then(res => {
         const booksData = res.data.data;
         const booksLastPage = res.data.lastPage;
 
@@ -100,12 +136,24 @@ const BookScreen = () => {
         setBooks([...books, ...booksData]);
         setIsLoading(false);
 
-      }).catch(e => {
-        console.log(error);
+      }).catch(error => {
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          ToastAndroid.show(`${error.response.status} -> ${error.response.data.message || error.response.data}`, ToastAndroid.LONG);
+          console.log(`${error.response.status} -> ${error.response.data.message || error.response.data}`);
+
+        } else if (error.request) {
+          // The request was made but no response was received
+          ToastAndroid.show(t('error') + ' ' + t('error_message.no_server_response'), ToastAndroid.LONG);
+
+        } else {
+          // An error occurred while configuring the query
+          ToastAndroid.show(`${error}`, ToastAndroid.LONG);
+        }
       });
 
     } else {
-      axios.get(`${API.url}/work/filter_by_categories_type_status/fr/Ouvrage/Pertinente?page=${currentPage}`).then(res => {
+      axios.get(`${API.url}/work/find_all_by_type_status/fr/Ouvrage/Pertinente?page=${currentPage}`).then(res => {
         const booksData = res.data.data;
         const booksLastPage = res.data.lastPage;
 
@@ -114,8 +162,19 @@ const BookScreen = () => {
         setBooks([...books, ...booksData]);
         setIsLoading(false);
 
-      }).catch(e => {
-        console.log(error);
+      }).catch(error => {
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          ToastAndroid.show(`${error.response.status} -> ${error.response.data.message || error.response.data}`, ToastAndroid.LONG);
+
+        } else if (error.request) {
+          // The request was made but no response was received
+          ToastAndroid.show(t('error') + ' ' + t('error_message.no_server_response'), ToastAndroid.LONG);
+
+        } else {
+          // An error occurred while configuring the query
+          ToastAndroid.show(`${error}`, ToastAndroid.LONG);
+        }
       });
     }
   };
@@ -134,51 +193,67 @@ const BookScreen = () => {
 
   // =============== Category Item ===============
   const CategoryItem = ({ item }) => {
-    return (
-      <TouchableOpacity
-        style={[homeStyles.workDescBadge, { backgroundColor: (categories.includes(item.id) ? COLORS.black : COLORS.warning) }]}
-        onPress={categories.includes(item.id) ? removeCategory(item.id) : addCategory(item.id)}>
-        <Text style={[homeStyles.paragraph, { color: (categories.includes(item.id) ? COLORS.warning : COLORS.black) }]}>{item.category_name}</Text>
-      </TouchableOpacity>
-    )
+    if (selectedCategories.includes(item.id)) {
+      return (
+        <TouchableOpacity
+          style={[homeStyles.workDescBadge, { backgroundColor: (selectedCategories.includes(item.id) ? COLORS.black : COLORS.warning), marginBottom: 0 }]}
+          onPress={() => removeCategory(item.id)}>
+          <Text style={[homeStyles.paragraph, { color: (selectedCategories.includes(item.id) ? COLORS.warning : COLORS.black) }]}>{item.category_name}</Text>
+        </TouchableOpacity>
+      );
+
+    } else {
+      return (
+        <TouchableOpacity
+          style={[homeStyles.workDescBadge, { backgroundColor: (selectedCategories.includes(item.id) ? COLORS.black : COLORS.warning), marginBottom: 0 }]}
+          onPress={() => addCategory(item.id)}>
+          <Text style={[homeStyles.paragraph, { color: (selectedCategories.includes(item.id) ? COLORS.warning : COLORS.black) }]}>{item.category_name}</Text>
+        </TouchableOpacity>
+      );
+    }
   };
 
   return (
-    <SafeAreaView contentContainerStyle={{ flexGrow: 1 }}
-      style={[homeStyles.cardEmpty, { height: Dimensions.get('window').height - 70, paddingLeft: 5 }]}>
+    <View style={{ height: Dimensions.get('window').height - 20 }}>
       {/* Categories */}
-      <FlatList
-        data={categories}
-        keyExtractor={item => item.id}
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}
-        style={{ paddingHorizontal: PADDING.horizontal }}
-        renderItem={({ item }) => {
-          return (<CategoryItem item={item} />);
-        }} />
+      <View style={{ paddingTop: PADDING.vertical }}>
+        <FlatList
+          data={categories}
+          keyExtractor={item => item.id}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          style={{ paddingHorizontal: PADDING.horizontal }}
+          renderItem={({ item }) => {
+            return (<CategoryItem item={item} />);
+          }} />
+      </View>
 
       {/* Works */}
-      <FlatList
-        data={books}
-        keyExtractor={item => item.id}
-        horizontal={false}
-        showsVerticalScrollIndicator={false}
-        style={homeStyles.scrollableList}
-        windowSize={10}
-        ListEmptyComponent={() => {
-          return (
-            <>
-              <Text style={homeStyles.cardEmptyTitle}>{t('empty_list.title')}</Text>
-              <Text style={homeStyles.cardEmptyText}>{t('empty_list.description_books')}</Text>
-            </>
-          )
-        }}
-        renderItem={({ item }) => {
-          return (<BookMagItem item={item} />);
-        }}
-        ListFooterComponent={currentPage <= lastPage ? renderLoadMoreButton : null}
-        refreshControl={<RefreshControl refreshing={isLoading} onRefresh={onRefresh} />} />
-    </SafeAreaView>
+      <SafeAreaView contentContainerStyle={{ flexGrow: 1 }}
+        style={[homeStyles.cardEmpty, { height: Dimensions.get('window').height - 70, marginLeft: 0, paddingLeft: 5 }]}>
+        <FlatList
+          data={books}
+          extraData={this.state}
+          keyExtractor={item => item.id}
+          horizontal={false}
+          showsVerticalScrollIndicator={false}
+          style={homeStyles.scrollableList}
+          windowSize={10}
+          ListEmptyComponent={() => {
+            return (
+              <>
+                <Text style={homeStyles.cardEmptyTitle}>{t('empty_list.title')}</Text>
+                <Text style={[homeStyles.cardEmptyText, { marginBottom: 25 }]}>{t('empty_list.description_books')}</Text>
+              </>
+            )
+          }}
+          renderItem={({ item }) => {
+            return (<BookMagItem item={item} />);
+          }}
+          ListFooterComponent={currentPage <= lastPage ? renderLoadMoreButton : null}
+          refreshControl={<RefreshControl refreshing={isLoading} onRefresh={onRefresh} />} />
+      </SafeAreaView>
+    </View>
   );
 };
 
