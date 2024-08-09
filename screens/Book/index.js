@@ -88,16 +88,10 @@ const BookScreen = () => {
   const getBooks = () => {
     setIsLoading(true);
 
-    const urlAllBooks = `${API.url}/work/find_all_by_type_status/fr/Ouvrage/Pertinente?page=${currentPage}`;
-    const urlBooksByCategories = `${API.url}/work/filter_by_categories_type_status?page=${currentPage}`;
-    const config = {
-      method: hasCategories ? 'POST' : 'GET', 
-      url: hasCategories ? urlBooksByCategories : urlAllBooks, 
-      headers: { 'X-localization': 'fr' }
-    };
-
-    axios(config)
-      .then(res => {
+    if (hasCategories) {
+      axios.post(`${API.url}/work/filter_by_categories_type_status/fr/Ouvrage/Pertinente?page=${currentPage}`, {
+        selectedCategories
+      }).then(res => {
         const booksData = res.data.data;
         const booksLastPage = res.data.lastPage;
 
@@ -105,10 +99,25 @@ const BookScreen = () => {
         setLastPage(booksLastPage);
         setBooks([...books, ...booksData]);
         setIsLoading(false);
-      })
-      .catch(error => {
+
+      }).catch(e => {
         console.log(error);
       });
+
+    } else {
+      axios.get(`${API.url}/work/filter_by_categories_type_status/fr/Ouvrage/Pertinente?page=${currentPage}`).then(res => {
+        const booksData = res.data.data;
+        const booksLastPage = res.data.lastPage;
+
+        setCurrentPage(currentPage + 1);
+        setLastPage(booksLastPage);
+        setBooks([...books, ...booksData]);
+        setIsLoading(false);
+
+      }).catch(e => {
+        console.log(error);
+      });
+    }
   };
 
   // =============== « Load more » button ===============
@@ -126,8 +135,10 @@ const BookScreen = () => {
   // =============== Category Item ===============
   const CategoryItem = ({ item }) => {
     return (
-      <TouchableOpacity style={[homeStyles.workDescBadge, { backgroundColor: (hasCategories ? COLORS.black : COLORS.warning) }]}>
-        <Text style={[homeStyles.paragraph, {color: (hasCategories ? COLORS.warning : COLORS.black)}]}>{item.category_name}</Text>
+      <TouchableOpacity
+        style={[homeStyles.workDescBadge, { backgroundColor: (categories.includes(item.id) ? COLORS.black : COLORS.warning) }]}
+        onPress={categories.includes(item.id) ? removeCategory(item.id) : addCategory(item.id)}>
+        <Text style={[homeStyles.paragraph, { color: (categories.includes(item.id) ? COLORS.warning : COLORS.black) }]}>{item.category_name}</Text>
       </TouchableOpacity>
     )
   };
