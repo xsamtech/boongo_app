@@ -70,6 +70,35 @@ const homeStyles = StyleSheet.create({
         alignItems: 'center',
     },
 
+    // Custom header
+    headerBanner: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: COLORS.danger
+    },
+
+    headerButton: {
+        width: 40,
+        height: 40, 
+        marginVertical: PADDING.horizontal,
+        marginLeft: PADDING.horizontal,
+        paddingVertical: 7,
+        paddingLeft: 11
+    },
+
+    headerButtonIcon: {
+        fontSize: 25,
+        color: COLORS.white
+    },
+
+    headerTitle: {
+        width: Dimensions.get('window').width - 80,
+        textAlign: 'center',
+        fontSize: 20,
+        fontWeight: '500',
+        color: COLORS.white
+    },
+
     // Authentication
     authlogo: {
         flexDirection: 'column',

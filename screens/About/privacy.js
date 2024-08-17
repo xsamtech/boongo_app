@@ -2,14 +2,30 @@
  * @author Xanders
  * @see https://team.xsamtech.com/xanderssamoth
  */
-import { View, Text } from 'react-native';
 import React from 'react';
+import { View, Text, SafeAreaView, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
+import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
+import homeStyles from '../Home/style';
 
 const PrivacyScreen = () => {
+  const { t } = useTranslation();
+  const navigation = useNavigation();
+
   return (
-    <View>
-      <Text>About</Text>
-    </View>
+    <SafeAreaView>
+      {/* Custom header */}
+      <View style={homeStyles.headerBanner}>
+        <TouchableOpacity style={homeStyles.headerButton} onPress={() => navigation.goBack()}>
+          <FontAwesome6 style={homeStyles.headerButtonIcon} name='angle-left' />
+        </TouchableOpacity>
+        <Text style={homeStyles.headerTitle}>{t('privacy_title')}</Text>
+      </View>
+
+      {/* Content */}
+      <Text>Privacy</Text>
+    </SafeAreaView>
   );
 };
 

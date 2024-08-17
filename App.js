@@ -70,7 +70,7 @@ const StackNav = () => {
                             );
                         }
                     }} />
-                    <Stack.Screen name='About' component={AboutScreen} options={{ headerShown: false, title: t('navigation.about') }} />
+                    <Stack.Screen name='About' component={AboutScreen} options={{ headerShown: false }} />
                     <Stack.Screen name='Book' component={BookScreen} options={{
                         title: t('navigation.book'),
                         headerRight: () => {
