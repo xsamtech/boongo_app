@@ -7,12 +7,13 @@ import { SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { ICON_SIZE } from '../../tools/constants';
+import { ICON_SIZE, WEB } from '../../tools/constants';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
-import TermsScreen from '../About/terms';
-import PrivacyScreen from '../About/privacy';
+import WebView from 'react-native-webview';
 import homeStyles from '../Home/style';
+import TermsScreen from '../About/terms';
+import ContactScreen from './contact';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -31,7 +32,7 @@ const AboutScreenContent = () => {
       </View>
 
       {/* Content */}
-      <Text>About</Text>
+      <WebView source={{ uri: WEB.url + '/about' }} style={{ flex: 1 }} />
     </SafeAreaView>
   );
 };
@@ -68,12 +69,12 @@ const AboutScreen = () => {
         }}
       />
       <Tab.Screen
-        name='Privacy' component={PrivacyScreen}
+        name='Contact' component={ContactScreen}
         options={{
-          title: t('navigation.privacy'),
-          tabBarLabel: t('navigation.privacy'),
+          title: t('navigation.contact'),
+          tabBarLabel: t('navigation.contact'),
           tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name='account-lock-outline' color={color} size={ICON_SIZE.s1} />
+            <MaterialCommunityIcons name='phone-outline' color={color} size={ICON_SIZE.s1} />
           ),
         }}
       />
