@@ -7,10 +7,10 @@ import { SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { WebView } from 'react-native-webview';
 import { ICON_SIZE, WEB } from '../../tools/constants';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
+import { WebView } from 'react-native-webview';
 import homeStyles from '../Home/style';
 import TermsScreen from '../About/terms';
 import ContactScreen from './contact';
@@ -22,7 +22,7 @@ const AboutScreenContent = () => {
   const navigation = useNavigation();
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ flex: 1 }}>
       {/* Custom header */}
       <View style={homeStyles.headerBanner}>
         <TouchableOpacity style={homeStyles.headerButton} onPress={() => navigation.goBack()}>
@@ -32,7 +32,7 @@ const AboutScreenContent = () => {
       </View>
 
       {/* Content */}
-      <WebView source={{ uri: WEB.url + '/about?app_id=1a' }} style={{ flex: 1 }} />
+      <WebView source={{ uri: WEB.url + '/about?app_id=1a' }} />
     </SafeAreaView>
   );
 };

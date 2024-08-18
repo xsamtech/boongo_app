@@ -16,7 +16,7 @@ const TermsScreen = () => {
   const navigation = useNavigation();
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ flex: 1 }}>
       {/* Custom header */}
       <View style={homeStyles.headerBanner}>
         <TouchableOpacity style={homeStyles.headerButton} onPress={() => navigation.goBack()}>
@@ -26,7 +26,7 @@ const TermsScreen = () => {
       </View>
 
       {/* Content */}
-      <WebView source={{ uri: WEB.url + '/about/terms_of_use?app_id=1a' }} style={{ flex: 1 }} />
+      <WebView source={{ uri: WEB.url + '/about/terms_of_use?app_id=1a' }} />
     </SafeAreaView>
   );
 };
