@@ -6,9 +6,9 @@ import React from 'react';
 import { View, Text, SafeAreaView, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import { WebView } from 'react-native-webview';
 import { WEB } from '../../tools/constants';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
-import WebView from 'react-native-webview';
 import homeStyles from '../Home/style';
 
 const ContactScreen = () => {
@@ -22,7 +22,7 @@ const ContactScreen = () => {
         <TouchableOpacity style={homeStyles.headerButton} onPress={() => navigation.goBack()}>
           <FontAwesome6 style={homeStyles.headerButtonIcon} name='angle-left' />
         </TouchableOpacity>
-        <Text style={homeStyles.headerTitle}>{t('terms_title')}</Text>
+        <Text style={homeStyles.headerTitle}>{t('navigation.contact')}</Text>
       </View>
 
       {/* Content */}
