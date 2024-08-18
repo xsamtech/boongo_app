@@ -32,7 +32,7 @@ const AboutScreenContent = () => {
       </View>
 
       {/* Content */}
-      <WebView source={{ uri: WEB.url + '/about' }} style={{ flex: 1 }} />
+      <WebView source={{ uri: WEB.url + '/about?app_id=1a' }} style={{ flex: 1 }} />
     </SafeAreaView>
   );
 };

@@ -26,7 +26,7 @@ const TermsScreen = () => {
       </View>
 
       {/* Content */}
-      <WebView source={{ uri: WEB.url + '/about/terms_of_use' }} style={{ flex: 1 }} />
+      <WebView source={{ uri: WEB.url + '/about/terms_of_use?app_id=1a' }} style={{ flex: 1 }} />
     </SafeAreaView>
   );
 };
