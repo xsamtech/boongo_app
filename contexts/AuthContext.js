@@ -31,10 +31,21 @@ export const AuthProvider = ({ children }) => {
 
             console.log(`${message}`);
             setIsLoading(false);
-        }).catch(e => {
-            ToastAndroid.show(`${e}`, ToastAndroid.LONG);
+        }).catch(error => {
+            if (error.response) {
+                // The request was made and the server responded with a status code
+                ToastAndroid.show(`${error.response.status} -> ${error.response.data.message || error.response.data}`, ToastAndroid.LONG);
+                console.log(`${error.response.status} -> ${error.response.data.message || error.response.data}`);
 
-            console.log(`Register error: ${e}`);
+            } else if (error.request) {
+                // The request was made but no response was received
+                ToastAndroid.show(t('error') + ' ' + t('error_message.no_server_response'), ToastAndroid.LONG);
+
+            } else {
+                // An error occurred while configuring the query
+                ToastAndroid.show(`${error}`, ToastAndroid.LONG);
+            }
+
             setIsLoading(false);
         });
     };
@@ -56,10 +67,21 @@ export const AuthProvider = ({ children }) => {
 
             console.log(`${message}`);
             setIsLoading(false);
-        }).catch(e => {
-            ToastAndroid.show(`${e}`, ToastAndroid.LONG);
+        }).catch(error => {
+            if (error.response) {
+                // The request was made and the server responded with a status code
+                ToastAndroid.show(`${error.response.status} -> ${error.response.data.message || error.response.data}`, ToastAndroid.LONG);
+                console.log(`${error.response.status} -> ${error.response.data.message || error.response.data}`);
 
-            console.log(`Login error: ${e}`);
+            } else if (error.request) {
+                // The request was made but no response was received
+                ToastAndroid.show(t('error') + ' ' + t('error_message.no_server_response'), ToastAndroid.LONG);
+
+            } else {
+                // An error occurred while configuring the query
+                ToastAndroid.show(`${error}`, ToastAndroid.LONG);
+            }
+
             setIsLoading(false);
         });
     };
@@ -84,10 +106,21 @@ export const AuthProvider = ({ children }) => {
 
             setSplashLoading(false);
 
-        } catch (e) {
-            ToastAndroid.show(`${e}`, ToastAndroid.LONG);
+        } catch (error) {
+            if (error.response) {
+                // The request was made and the server responded with a status code
+                ToastAndroid.show(`${error.response.status} -> ${error.response.data.message || error.response.data}`, ToastAndroid.LONG);
+                console.log(`${error.response.status} -> ${error.response.data.message || error.response.data}`);
 
-            console.log(`Login error: ${e}`);
+            } else if (error.request) {
+                // The request was made but no response was received
+                ToastAndroid.show(t('error') + ' ' + t('error_message.no_server_response'), ToastAndroid.LONG);
+
+            } else {
+                // An error occurred while configuring the query
+                ToastAndroid.show(`${error}`, ToastAndroid.LONG);
+            }
+
             setSplashLoading(false);
         }
         setIsLoading(true);

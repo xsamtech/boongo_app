@@ -69,8 +69,8 @@
         "mapping": "Mapping",
         "media": "Medias",
         "notification": "Notifications",
-        "account": "My account",
-        "update_account": "Update account",
+        "account": "My profile",
+        "update_account": "Edit account",
         "cart": "My cart",
         "work": "My works"
     },

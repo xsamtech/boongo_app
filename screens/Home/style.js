@@ -94,7 +94,7 @@ const homeStyles = StyleSheet.create({
     headerTitle: {
         width: Dimensions.get('window').width - 80,
         textAlign: 'center',
-        fontSize: 20,
+        fontSize: 19,
         fontWeight: '500',
         color: COLORS.white
     },

@@ -117,11 +117,9 @@ const StackNav = () => {
                     <Stack.Screen name='Language' component={LanguageScreen} options={{ title: t('change_lang') }} />
                     {userInfo.id ? (
                         <>
-                            <Stack.Screen name='Notification' component={NotificationScreen} />
-                            <Stack.Screen name='Account' component={AccountScreen} options={{ title: t('navigation.account') }} />
-                            <Stack.Screen name='UpdateAccount' component={UpdateAccountScreen} options={{ title: t('navigation.update_account') }} />
-                            <Stack.Screen name='Cart' component={CartScreen} />
-                            <Stack.Screen name='MyWork' component={MyWorkScreen} />
+                            <Stack.Screen name='Account' component={AccountScreen} options={{ headerShown: false, title: t('navigation.account') }} />
+                            <Stack.Screen name='Notification' component={NotificationScreen} options={{ title: t('navigation.notification') }} />
+                            <Stack.Screen name='Cart' component={CartScreen} options={{ title: t('navigation.cart') }} />
                         </>
                     ) : (
                         <>
