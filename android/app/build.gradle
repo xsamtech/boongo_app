@@ -91,7 +91,7 @@ android {
             keyPassword 'android'
         }
         release {
-            storeFile file('boongo.keystore')
+            storeFile file('release.keystore')
             storePassword 'B0ng0_@pp'
             keyAlias 'bng'
             keyPassword 'B0ng0_@pp'

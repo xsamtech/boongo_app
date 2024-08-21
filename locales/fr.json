@@ -53,6 +53,8 @@
     "register": "Inscription",
     "login": "Connexion",
     "logout": "Déconnexion",
+    "personal_infos": "Infos personnelles",
+    "change_password": "Modifier mot de passe",
     "subscribe": "S’abonner",
     "addToCart": "Ajouter au panier",
     "withdrawFromCart": "Retirer du panier",

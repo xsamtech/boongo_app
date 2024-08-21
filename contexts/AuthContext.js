@@ -31,10 +31,117 @@ export const AuthProvider = ({ children }) => {
 
             console.log(`${message}`);
             setIsLoading(false);
+
         }).catch(error => {
             if (error.response) {
                 // The request was made and the server responded with a status code
-                ToastAndroid.show(`${error.response.status} -> ${error.response.data.message || error.response.data}`, ToastAndroid.LONG);
+                ToastAndroid.show(`${error.response.data.message || error.response.data}`, ToastAndroid.LONG);
+                console.log(`${error.response.status} -> ${error.response.data.message || error.response.data}`);
+
+            } else if (error.request) {
+                // The request was made but no response was received
+                ToastAndroid.show(t('error') + ' ' + t('error_message.no_server_response'), ToastAndroid.LONG);
+
+            } else {
+                // An error occurred while configuring the query
+                ToastAndroid.show(`${error}`, ToastAndroid.LONG);
+            }
+
+            setIsLoading(false);
+        });
+    };
+
+    const update = (id, firstname, lastname, surname, gender, birthdate, city, country, address_1, address_2, p_o_box, email, phone, username) => {
+        setIsLoading(true);
+
+        axios.put(`${API.url}/user/${id}`, {
+            id, firstname, lastname, surname, gender, birthdate, city, country, address_1, address_2, p_o_box, email, phone, username
+        }, {
+            headers: { 'Authorization': `Bearer ${userInfo.api_token}` }
+        }).then(res => {
+            let message = res.data.message;
+            let userData = res.data.data;
+
+            setUserInfo(userData);
+
+            AsyncStorage.setItem('userInfo', JSON.stringify(userData));
+            ToastAndroid.show(`${message}`, ToastAndroid.LONG);
+
+            console.log(`${message}`);
+            setIsLoading(false);
+
+        }).catch(error => {
+            if (error.response) {
+                // The request was made and the server responded with a status code
+                ToastAndroid.show(`${error.response.data.message || error.response.data}`, ToastAndroid.LONG);
+                console.log(`${error.response.status} -> ${error.response.data.message || error.response.data}`);
+
+            } else if (error.request) {
+                // The request was made but no response was received
+                ToastAndroid.show(t('error') + ' ' + t('error_message.no_server_response'), ToastAndroid.LONG);
+
+            } else {
+                // An error occurred while configuring the query
+                ToastAndroid.show(`${error}`, ToastAndroid.LONG);
+            }
+
+            setIsLoading(false);
+        });
+    };
+
+    const updateAvatar = (user_id, image_64) => {
+        setIsLoading(true);
+
+        axios.put(`${API.url}/user/update_avatar_picture/${user_id}`, {
+            user_id, image_64
+        }, {
+            headers: { 'Authorization': `Bearer ${userInfo.api_token}` }
+        }).then(res => {
+            let message = res.data.message;
+
+            ToastAndroid.show(`${message}`, ToastAndroid.LONG);
+
+            console.log(`${message}`);
+            setIsLoading(false);
+
+        }).catch(error => {
+            if (error.response) {
+                // The request was made and the server responded with a status code
+                ToastAndroid.show(`${error.response.data.message || error.response.data}`, ToastAndroid.LONG);
+                console.log(`${error.response.status} -> ${error.response.data.message || error.response.data}`);
+
+            } else if (error.request) {
+                // The request was made but no response was received
+                ToastAndroid.show(t('error') + ' ' + t('error_message.no_server_response'), ToastAndroid.LONG);
+
+            } else {
+                // An error occurred while configuring the query
+                ToastAndroid.show(`${error}`, ToastAndroid.LONG);
+            }
+
+            setIsLoading(false);
+        });
+    };
+
+    const changePassword = (id, former_password, new_password, confirm_new_password) => {
+        setIsLoading(true);
+
+        axios.put(`${API.url}/user/update_password/${id}`, {
+            former_password, new_password, confirm_new_password
+        }, {
+            headers: { 'Authorization': `Bearer ${userInfo.api_token}` }
+        }).then(res => {
+            let message = res.data.message;
+
+            ToastAndroid.show(`${message}`, ToastAndroid.LONG);
+
+            console.log(`${message}`);
+            setIsLoading(false);
+
+        }).catch(error => {
+            if (error.response) {
+                // The request was made and the server responded with a status code
+                ToastAndroid.show(`${error.response.data.message || error.response.data}`, ToastAndroid.LONG);
                 console.log(`${error.response.status} -> ${error.response.data.message || error.response.data}`);
 
             } else if (error.request) {
@@ -70,7 +177,7 @@ export const AuthProvider = ({ children }) => {
         }).catch(error => {
             if (error.response) {
                 // The request was made and the server responded with a status code
-                ToastAndroid.show(`${error.response.status} -> ${error.response.data.message || error.response.data}`, ToastAndroid.LONG);
+                ToastAndroid.show(`${error.response.data.message || error.response.data}`, ToastAndroid.LONG);
                 console.log(`${error.response.status} -> ${error.response.data.message || error.response.data}`);
 
             } else if (error.request) {
@@ -109,7 +216,7 @@ export const AuthProvider = ({ children }) => {
         } catch (error) {
             if (error.response) {
                 // The request was made and the server responded with a status code
-                ToastAndroid.show(`${error.response.status} -> ${error.response.data.message || error.response.data}`, ToastAndroid.LONG);
+                ToastAndroid.show(`${error.response.data.message || error.response.data}`, ToastAndroid.LONG);
                 console.log(`${error.response.status} -> ${error.response.data.message || error.response.data}`);
 
             } else if (error.request) {
@@ -135,7 +242,7 @@ export const AuthProvider = ({ children }) => {
 
     return (
         <AuthContext.Provider
-            value={{ isLoading, userInfo, splashLoading, register, login, logout }}>
+            value={{ isLoading, userInfo, splashLoading, register, update, updateAvatar, changePassword, login, logout }}>
             {children}
         </AuthContext.Provider>
     );

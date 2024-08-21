@@ -53,6 +53,8 @@
     "register": "Register",
     "login": "Log in",
     "logout": "Log out",
+    "personal_infos": "Personal infos",
+    "change_password": "Change password",
     "subscribe": "Subscribe",
     "addToCart": "Add to cart",
     "withdrawFromCart": "Withdraw from cart",
