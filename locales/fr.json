@@ -120,6 +120,11 @@
         "status": {
             "disable": "Désactiver mon compte",
             "reactivate": "Réactivater mon compte"
+        },
+        "my_works": {
+            "description": "Devenez un de nos partenaires pour pouvoir publier vos ouvrages qui seront visibles par tous. Et cela vous donnera l'avantage d'acquérir de l'argent selon les consultations du public.",
+            "terms_link": "Veuillez cliquer ci-dessous pour voir nos conditions.",
+            "start_button": "Devenir partenaire"
         }
     }
 }

@@ -3,7 +3,7 @@
  * @see https://team.xsamtech.com/xanderssamoth
  */
 import React, { useContext, useState } from 'react';
-import { Dimensions, SafeAreaView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Image, SafeAreaView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
@@ -77,9 +77,9 @@ const AccountScreenContent = () => {
 
         {/* Profil photo */}
         <View style={{ alignItems: 'center', paddingTop: 30 }}>
-          {userInfo.avatar_url == null
+          {userInfo.avatar_url != null
             ?
-            <Image style={{ width: 160, height: 160, borderRadius: 160 / 2 }} source={{ uri: `${API.url}/public/${userInfo.avatar_url}` }} />
+            <Image style={{ width: 160, height: 160, borderRadius: 160 / 2 }} source={{ uri: userInfo.avatar_url }} />
             :
             (userInfo.gender == 'F' ? <AvatarF width={160} height={160} /> : <AvatarM width={160} height={160} />)
           }

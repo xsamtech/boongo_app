@@ -6,7 +6,7 @@ import React, { useContext } from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { View, Text, Image } from 'react-native';
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
-import { Avatar, Button, Divider, Title } from 'react-native-paper';
+import { Button, Divider, Title } from 'react-native-paper';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
@@ -16,7 +16,6 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import TextBrand from './assets/img/text.svg';
 import AvatarF from './assets/img/avatar-F.svg';
 import AvatarM from './assets/img/avatar-M.svg';
-import { API } from './tools/constants';
 
 const DrawerList = [
     { icon: 'home-outline', label: 'navigation.home', navigateTo: 'Home' },
@@ -76,9 +75,9 @@ const DrawerContent = (props) => {
                                 {userInfo.id ? (
                                     <>
                                         <View style={{ marginTop: 5 }}>
-                                            {userInfo.avatar_url == null
+                                            {userInfo.avatar_url != null
                                                 ?
-                                                <Image style={{ width: 60, height: 60, borderRadius: 60 / 2 }} source={{ uri: `${API.url}/public/${userInfo.avatar_url}` }} />
+                                                <Image style={{ width: 60, height: 60, borderRadius: 60 / 2 }} source={{ uri: userInfo.avatar_url }} />
                                                 :
                                                 (userInfo.gender == 'F' ? <AvatarF width={60} height={60} /> : <AvatarM width={60} height={60} />)
                                             }

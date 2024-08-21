@@ -120,6 +120,11 @@
         "status": {
             "disable": "Disable my account",
             "reactivate": "Reactivate my account"
+        },
+        "my_works": {
+            "description": "Become one of our partners to be able to publish your works which will be visible to all. And this will give you the advantage of acquiring money according to public consultations.",
+            "terms_link": "Please click below to see our terms.",
+            "start_button": "Become a partner"
         }
     }
 }
