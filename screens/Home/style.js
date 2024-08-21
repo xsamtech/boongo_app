@@ -433,6 +433,36 @@ const homeStyles = StyleSheet.create({
         fontWeight: '700',
         textTransform: 'uppercase'
     },
+
+    // Home styles
+    homeScrollableListItem: {
+        flexDirection: 'column',
+        alignItems: 'center',
+        maxWidth: 170,
+        paddingHorizontal: 15,
+        paddingVertical: 15,
+        marginRight: 15,
+        backgroundColor: COLORS.white,
+        elevation: 1
+    },
+
+    homeTitleOne: {
+        fontSize: 16,
+        fontWeight: '800',
+        color: COLORS.black
+    },
+
+    homeParagraph: {
+        marginTop: 4,
+        fontSize: 12
+    },
+
+    homeThumbnail: {
+        width: 110,
+        height: 150,
+        borderRadius: 5,
+        marginBottom: 4
+    },
 });
 
 export default homeStyles;

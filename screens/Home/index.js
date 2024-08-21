@@ -7,7 +7,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import homeStyles from './style';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import WorkItem from '../../components/workItem';
 import { API, COLORS, ICON_SIZE } from '../../tools/constants';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
@@ -100,6 +99,23 @@ const HomeScreen = () => {
       .catch(error => {
         console.log(error);
       });
+  };
+
+  const WorkItem = ({ item }) => {
+    // =============== Navigation ===============
+    const navigation = useNavigation();
+
+    return (
+      <TouchableOpacity style={homeStyles.homeScrollableListItem} onPress={() => navigation.navigate('WorkData', { itemId: item.id })}>
+        <Image source={{ uri: item.image_url ? item.image_url : `${WEB.url}/assets/img/cover.png` }} style={homeStyles.homeThumbnail} />
+        <Text style={homeStyles.homeTitleOne}>
+          {((item.work_title).length > 25) ? (((item.work_title).substring(0, 25 - 3)) + '...') : item.work_title}
+        </Text>
+        <Text style={homeStyles.homeParagraph}>
+          {((item.work_content).length > 33) ? (((item.work_content).substring(0, 33 - 3)) + '...') : item.work_content}
+        </Text>
+      </TouchableOpacity>
+    )
   };
 
   return (
