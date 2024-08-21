@@ -2,27 +2,25 @@
  * @author Xanders
  * @see https://team.xsamtech.com/xanderssamoth
  */
-import { View, Text, FlatList, RefreshControl, TouchableOpacity, SafeAreaView } from 'react-native';
 import React, { useCallback, useEffect, useState } from 'react';
+import { View, Text, FlatList, RefreshControl, TouchableOpacity, SafeAreaView, Dimensions, ActivityIndicator, ToastAndroid, Image } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
+import { API, COLORS, PADDING } from '../../tools/constants';
 import homeStyles from '../Home/style';
-import { API } from '../../tools/constants';
-import MapMediaItem from '../../components/workItem/map_media';
 
 const MediaScreen = () => {
   // =============== Language ===============
   const { t } = useTranslation();
 
   // =============== Get data ===============
+  const [categories, setCategories] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([0]);
   const [medias, setMedias] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  // =============== Refresh control ===============
-  const [totalPages, setTotalpages] = useState(0);
-  const [itemsPerPage, setItemsPerPage] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
-  const [refreshing, setRefreshing] = useState(false);
+  const [lastPage, setLastPage] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   // =============== Refresh control ===============
   const onRefresh = useCallback(() => {
@@ -30,85 +28,218 @@ const MediaScreen = () => {
     setTimeout(() => { setIsLoading(false); }, 2000);
   }, []);
 
+  const handleReload = () => {
+    // Vider les données
+    setMedias([]);
+    // Recharger les données
+    getMedias();
+  };
+
   // =============== Using the Effect Hook ===============
+  // CATEGORIES
+  useEffect(() => {
+    getCategories();
+  }, []);
+
+  // MAPS
   useEffect(() => {
     getMedias();
   }, []);
 
   // =============== Some work functions ===============
-  const getMedias = () => {
-    const config = { method: 'GET', url: `${API.url}/work/find_all_by_type_status/fr/Médias/Pertinente`, headers: { 'X-localization': 'fr' } };
+  // CATEGORIES
+  // Get all categories
+  const getCategories = () => {
+    setIsLoading(true);
+
+    const config = { method: 'GET', url: `${API.url}/category/find_by_group/Catégorie%20pour%20carte`, headers: { 'X-localization': 'fr' } };
+    const item_all = { "id": 0, "category_name": t('all_f'), "category_name_fr": "Toutes", "category_name_en": "All", "category_description": null };
 
     axios(config)
       .then(res => {
-        const mediasData = res.data.data;
-        const mediasLastPage = res.data.lastPage;
+        const categoriesData = res.data.data;
 
-        setMedias(mediasData);
-        setTotalpages(mediasLastPage);
-        setItemsPerPage(medias.length);
+        categoriesData.unshift(item_all);
+
+        setCategories(categoriesData);
         setIsLoading(false);
-
-        return mediasData;
       })
       .catch(error => {
         console.log(error);
       });
   };
 
-  // =============== Pagination Buttons ===============
-  const renderPaginationButtons = () => {
-    const maxButtonsToShow = 5;
-    let startPage = Math.max(0, currentPage - Math.floor(maxButtonsToShow / 2));
-    let endPage = Math.min(totalPages, startPage + maxButtonsToShow - 1);
+  // Add a category to the filter
+  const addCategory = (item) => {
+    // let categoriesData = [];
 
-    if (endPage - startPage + 1 < maxButtonsToShow) {
-      startPage = Math.max(0, endPage - maxButtonsToShow + 1);
+    // categoriesData.push(parseInt(item));
+
+    console.log(parseInt(item));
+
+    setSelectedCategories([parseInt(item)]);
+
+    console.log('Données à envoyer : ' + JSON.stringify(selectedCategories));
+
+    handleReload();
+  };
+
+  // Remove a category from filter
+  const removeCategory = item => {
+    if (selectedCategories.indexOf(item) > -1) {
+      selectedCategories.splice(item);
     }
 
-    const buttons = [];
+    handleReload();
+  };
 
-    for (let i = startPage; i <= endPage; i++) {
-      buttons.push(
+  // MEDIAS
+  const getMedias = () => {
+    const config = { method: 'GET', url: `${API.url}/work/find_all_by_type_status/fr/Médias/Pertinente`, headers: { 'X-localization': 'fr' } };
+    setIsLoading(true);
+
+    const url = `${API.url}/work/filter_by_categories_type_status/fr/Médias/Pertinente?page=${currentPage}`;
+    let mParams = {}
+    let qs = require('qs');
+
+    // Define an array of key-value pairs
+    let pairsArray = [];
+
+    for (let i = 0; i < selectedCategories.length; i++) {
+      pairsArray.push(['categories_ids[' + i + ']', selectedCategories[i]]);
+    }
+
+    // Add each key-value pair to the object
+    pairsArray.forEach(([key, value]) => {
+      mParams[key] = value;
+    });
+
+    console.log(mParams);
+
+    const mHeaders = {
+      'X-localization': 'fr'
+    };
+
+    axios.post(url, qs.stringify(mParams), mHeaders).then(res => {
+      const mediasData = res.data.data;
+      const mediasLastPage = res.data.lastPage;
+
+      setCurrentPage(currentPage + 1);
+      setLastPage(mediasLastPage);
+      setMedias([...medias, ...mediasData]);
+      setIsLoading(false);
+
+    }).catch(error => {
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        ToastAndroid.show(`${error.response.status} -> ${error.response.data.message || error.response.data}`, ToastAndroid.LONG);
+        console.log(`${error.response.status} -> ${error.response.data.message || error.response.data}`);
+
+      } else if (error.request) {
+        // The request was made but no response was received
+        ToastAndroid.show(t('error') + ' ' + t('error_message.no_server_response'), ToastAndroid.LONG);
+
+      } else {
+        // An error occurred while configuring the query
+        ToastAndroid.show(`${error}`, ToastAndroid.LONG);
+      }
+    });
+  };
+
+  // =============== « Load more » button ===============
+  const renderLoadMoreButton = () => {
+    return (
+      <View>
+        <TouchableOpacity activeOpacity={0.9} onPress={getMedias} style={[homeStyles.authButton, { marginBottom: 30, paddingVertical: PADDING.vertical, borderRadius: 30 }]}>
+          <Text style={homeStyles.authButtonText}>{t('load_more')}</Text>
+          {isLoading ? (<ActivityIndicator color={COLORS.white} style={{ marginLeft: 8 }} />) : null}
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
+  // =============== Category Item ===============
+  const CategoryItem = ({ item }) => {
+    if (selectedCategories.includes(item.id)) {
+      return (
         <TouchableOpacity
-          key={i}
-          onPress={() => handlePageClick(i)}
-          style={[
-            styles.paginationButton,
-            i === currentPage ? styles.activeButton : null,
-          ]}>
-          <Text style={{ color: 'white' }}>{i}</Text>
-        </TouchableOpacity>,
+          style={[homeStyles.workDescBadge, { backgroundColor: (selectedCategories.includes(item.id) ? COLORS.black : COLORS.warning), marginBottom: 0 }]}
+          onPress={() => removeCategory(item.id)}>
+          <Text style={[homeStyles.paragraph, { color: (selectedCategories.includes(item.id) ? COLORS.warning : COLORS.black) }]}>{item.category_name}</Text>
+        </TouchableOpacity>
+      );
+
+    } else {
+      return (
+        <TouchableOpacity
+          style={[homeStyles.workDescBadge, { backgroundColor: (selectedCategories.includes(item.id) ? COLORS.black : COLORS.warning), marginBottom: 0 }]}
+          onPress={() => addCategory(item.id)}>
+          <Text style={[homeStyles.paragraph, { color: (selectedCategories.includes(item.id) ? COLORS.warning : COLORS.black) }]}>{item.category_name}</Text>
+        </TouchableOpacity>
       );
     }
+  };
 
-    return buttons;
+  // =============== Map Item ===============
+  const MediaItem = ({ item }) => {
+    const navigation = useNavigation();
+
+    return (
+      <TouchableOpacity onPress={() => navigation.navigate('WorkData', { itemId: item.id })}>
+        <View style={[homeStyles.cardEmpty, { marginLeft: 0, marginBottom: 0 }]}>
+          <View>
+            <Image source={{ uri: item.image_url ? item.image_url : `${WEB.url}/assets/img/cover.png` }} style={[homeStyles.workImage, { width: Dimensions.get('window').width - 45, height: Dimensions.get('window').width / 1.5 }]} />
+          </View>
+          <View style={homeStyles.workDescTop}>
+            <Text style={[homeStyles.workTitle, { textAlign: 'center', fontWeight: '500' }]}>{item.work_title}</Text>
+          </View>
+        </View>
+      </TouchableOpacity>
+    )
   };
 
   return (
-    <SafeAreaView contentContainerStyle={{ flexGrow: 1 }}>
-      <View>
+    <View style={{ height: Dimensions.get('window').height - 20 }}>
+      {/* Categories */}
+      <View style={{ paddingTop: PADDING.vertical }}>
         <FlatList
-          data={medias}
+          data={categories}
           keyExtractor={item => item.id}
-          horizontal={false}
-          showsVerticalScrollIndicator={false}
-          style={homeStyles.scrollableList}
-          windowSize={10}
-          ListEmptyComponent={() => {
-            return (
-              <View style={[homeStyles.cardEmpty, { marginLeft: 0 }]}>
-                <Text style={homeStyles.cardEmptyTitle}>{t('empty_list.title')}</Text>
-                <Text style={homeStyles.cardEmptyText}>{t('empty_list.description_medias')}</Text>
-              </View>
-            )
-          }}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          style={{ paddingHorizontal: PADDING.horizontal }}
           renderItem={({ item }) => {
-            return (<MapMediaItem item={item} />);
-          }}
-          refreshControl={<RefreshControl refreshing={isLoading} onRefresh={onRefresh} />} />
+            return (<CategoryItem item={item} />);
+          }} />
       </View>
-    </SafeAreaView>
+
+      {/* Works */}
+      <SafeAreaView contentContainerStyle={{ flexGrow: 1 }}>
+        <View style={[homeStyles.cardEmpty, { height: Dimensions.get('window').height - 70, marginLeft: 0, paddingLeft: 5 }]}>
+          <FlatList
+            data={medias}
+            extraData={this.state}
+            keyExtractor={item => item.id}
+            horizontal={false}
+            showsVerticalScrollIndicator={false}
+            style={homeStyles.scrollableList}
+            windowSize={10}
+            ListEmptyComponent={() => {
+              return (
+                <>
+                  <Text style={homeStyles.cardEmptyTitle}>{t('empty_list.title')}</Text>
+                  <Text style={[homeStyles.cardEmptyText, { marginBottom: 25 }]}>{t('empty_list.description_medias')}</Text>
+                </>
+              )
+            }}
+            renderItem={({ item }) => {
+              return (<MediaItem item={item} />);
+            }}
+            ListFooterComponent={medias.length > 0 ? renderLoadMoreButton : null}
+            refreshControl={<RefreshControl refreshing={isLoading} onRefresh={onRefresh} />} />
+        </View>
+      </SafeAreaView>
+    </View>
   );
 };
 
