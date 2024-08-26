@@ -5,8 +5,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { View, Text, FlatList, RefreshControl, TouchableOpacity, SafeAreaView, Dimensions, ActivityIndicator, ToastAndroid, Image } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import { useNavigation } from '@react-navigation/native';
+import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import axios from 'axios';
 import { ICON_SIZE, API, COLORS, PADDING } from '../../tools/constants';
 import homeStyles from '../Home/style';
