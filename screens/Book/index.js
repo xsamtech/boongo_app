@@ -17,11 +17,26 @@ const BookScreen = () => {
 
   // =============== Get data ===============
   const [categories, setCategories] = useState([]);
-  const [selectedCategories, setSelectedCategories] = useState([0]);
+  const [idCat, setIdCat] = useState(0);
   const [books, setBooks] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [lastPage, setLastPage] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+
+  // =============== Handle badge press ===============
+  const handleReload = () => {
+    // Clear data
+    books.splice(0, books.length);
+    console.log('handleReload => Works count: ' + books.length + ', Selected category: ' + idCat);
+    
+    // Reload data
+    getBooks();
+  };
+
+  const handleBadgePress = (id) => {
+    setIdCat(id);
+    handleReload();
+  };
 
   // =============== Refresh control ===============
   const onRefresh = useCallback(() => {
@@ -29,17 +44,14 @@ const BookScreen = () => {
     setTimeout(() => { setIsLoading(false); }, 2000);
   }, []);
 
-  const handleReload = () => {
-    // Vider les données
-    setBooks([]);
-    // Recharger les données
-    getBooks();
-  };
-
   // =============== Using the Effect Hook ===============
   // CATEGORIES
   useEffect(() => {
     getCategories();
+  }, []);
+
+  useEffect(() => {
+    handleReload();
   }, []);
 
   // BOOKS
@@ -62,6 +74,7 @@ const BookScreen = () => {
 
         categoriesData.unshift(item_all);
 
+        setIdCat(item_all.id);
         setCategories(categoriesData);
         setIsLoading(false);
       })
@@ -70,64 +83,27 @@ const BookScreen = () => {
       });
   };
 
-  // Add a category to the filter
-  const addCategory = (item) => {
-    // let categoriesData = [];
-
-    // categoriesData.push(parseInt(item));
-
-    console.log(parseInt(item));
-
-    setSelectedCategories([parseInt(item)]);
-
-    console.log('Données à envoyer : ' + JSON.stringify(selectedCategories));
-
-    handleReload();
-  };
-
-  // Remove a category from filter
-  const removeCategory = item => {
-    if (selectedCategories.indexOf(item) > -1) {
-      selectedCategories.splice(item);
-    }
-
-    handleReload();
-  };
-
   // BOOKS
-  const getBooks = () => {
+  const getBooks = async () => {
     setIsLoading(true);
 
-    const url = `${API.url}/work/filter_by_categories_type_status/fr/Ouvrage/Pertinente?page=${currentPage}`;
-    let mParams = {}
     let qs = require('qs');
-
-    // Define an array of key-value pairs
-    let pairsArray = [];
-
-    for (let i = 0; i < selectedCategories.length; i++) {
-      pairsArray.push(['categories_ids[' + i + ']', selectedCategories[i]]);
-    }
-
-    // Add each key-value pair to the object
-    pairsArray.forEach(([key, value]) => {
-      mParams[key] = value;
-    });
-
-    console.log(mParams);
-
+    const url = `${API.url}/work/filter_by_categories_type_status/fr/Ouvrage/Pertinente?page=${currentPage}`;
+    let mParams = {'categories_ids[0]': idCat}
     const mHeaders = {
       'X-localization': 'fr'
     };
 
-    axios.post(url, qs.stringify(mParams), mHeaders).then(res => {
+    await axios.post(url, qs.stringify(mParams), mHeaders).then(res => {
       const booksData = res.data.data;
       const booksLastPage = res.data.lastPage;
 
-      setCurrentPage(currentPage + 1);
+      // setCurrentPage(currentPage + 1);
       setLastPage(booksLastPage);
-      setBooks([...books, ...booksData]);
+      setBooks(booksData);
       setIsLoading(false);
+
+      console.log('getBooks => Works count: ' + booksData.length + ', Selected category: ' + idCat);
 
     }).catch(error => {
       if (error.response) {
@@ -160,24 +136,11 @@ const BookScreen = () => {
 
   // =============== Category Item ===============
   const CategoryItem = ({ item }) => {
-    if (selectedCategories.includes(item.id)) {
-      return (
-        <TouchableOpacity
-          style={[homeStyles.workDescBadge, { backgroundColor: (selectedCategories.includes(item.id) ? COLORS.black : COLORS.warning), marginBottom: 0 }]}
-          onPress={() => removeCategory(item.id)}>
-          <Text style={[homeStyles.paragraph, { color: (selectedCategories.includes(item.id) ? COLORS.warning : COLORS.black) }]}>{item.category_name}</Text>
-        </TouchableOpacity>
-      );
-
-    } else {
-      return (
-        <TouchableOpacity
-          style={[homeStyles.workDescBadge, { backgroundColor: (selectedCategories.includes(item.id) ? COLORS.black : COLORS.warning), marginBottom: 0 }]}
-          onPress={() => addCategory(item.id)}>
-          <Text style={[homeStyles.paragraph, { color: (selectedCategories.includes(item.id) ? COLORS.warning : COLORS.black) }]}>{item.category_name}</Text>
-        </TouchableOpacity>
-      );
-    }
+    return (
+      <TouchableOpacity style={idCat === item.id ? homeStyles.categoryBadgeSelected : homeStyles.categoryBadge} onPress={() => handleBadgePress(item.id)}>
+        <Text style={idCat === item.id ? homeStyles.categoryBadgeTextSelected : homeStyles.categoryBadgeText}>{item.category_name}</Text>
+      </TouchableOpacity>
+    );
   };
 
   // =============== Book Item ===============
@@ -218,10 +181,10 @@ const BookScreen = () => {
 
       {/* Works */}
       <SafeAreaView contentContainerStyle={{ flexGrow: 1 }}>
-        <View style={[homeStyles.cardEmpty, { height: Dimensions.get('window').height - 70, marginLeft: 0, paddingLeft: 5 }]}>
+        <View style={[homeStyles.cardEmpty, { height: Dimensions.get('window').height - 70, marginLeft: 0, paddingLeft: 5, paddingBottom: 30 }]}>
           <FlatList
             data={books}
-            extraData={this.state}
+            extraData={books}
             keyExtractor={item => item.id}
             horizontal={false}
             showsVerticalScrollIndicator={false}
@@ -239,7 +202,7 @@ const BookScreen = () => {
               return (<BookItem item={item} />);
             }}
             ListFooterComponent={books.length > 0 ? renderLoadMoreButton : null}
-            refreshControl={<RefreshControl refreshing={isLoading} onRefresh={onRefresh} />} />
+            refreshControl={currentPage === lastPage ? '' : <RefreshControl refreshing={isLoading} onRefresh={onRefresh} />} />
         </View>
       </SafeAreaView>
     </View>

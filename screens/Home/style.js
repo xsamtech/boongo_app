@@ -463,6 +463,37 @@ const homeStyles = StyleSheet.create({
         borderRadius: 5,
         marginBottom: 4
     },
+
+    // Category filter badge
+    categoryBadge: {
+        backgroundColor: COLORS.warning,
+        marginRight: 7,
+        paddingTop: 3,
+        paddingBottom: 4,
+        paddingHorizontal: 10,
+        borderRadius: 10
+    },
+
+    categoryBadgeText: {
+        fontSize: 14,
+        fontWeight: '800',
+        color: COLORS.black
+    },
+
+    categoryBadgeSelected: {
+        backgroundColor: COLORS.black,
+        marginRight: 7,
+        paddingTop: 3,
+        paddingBottom: 4,
+        paddingHorizontal: 10,
+        borderRadius: 10
+    },
+
+    categoryBadgeTextSelected: {
+        fontSize: 14,
+        fontWeight: '800',
+        color: COLORS.warning
+    },
 });
 
 export default homeStyles;
