@@ -3,7 +3,7 @@
  * @see https://team.xsamtech.com/xanderssamoth
  */
 import React, { useCallback, useEffect, useState } from 'react';
-import { View, Text, FlatList, RefreshControl, TouchableOpacity, SafeAreaView, Dimensions, ActivityIndicator, ToastAndroid, Image } from 'react-native';
+import { View, Text, FlatList, RefreshControl, TouchableOpacity, SafeAreaView, Dimensions, ActivityIndicator, ToastAndroid, Image, TouchableHighlight } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
@@ -19,24 +19,24 @@ const BookScreen = () => {
   const [categories, setCategories] = useState([]);
   const [idCat, setIdCat] = useState(0);
   const [books, setBooks] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [lastPage, setLastPage] = useState(0);
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const [lastPage, setLastPage] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
   // =============== Handle badge press ===============
-  const handleReload = () => {
+  const handleBadgePress = useCallback((id) => {
+    setIdCat(id);
+    handleReload();
+  }, []);
+
+  const handleReload = useCallback(() => {
     // Clear data
     books.splice(0, books.length);
-    console.log('handleReload => Works count: ' + books.length + ', Selected category: ' + idCat);
     
     // Reload data
     getBooks();
-  };
-
-  const handleBadgePress = (id) => {
-    setIdCat(id);
-    handleReload();
-  };
+    console.log('handleReload => Works count: ' + books.length + ', Selected category: ' + idCat);
+  }, []);
 
   // =============== Refresh control ===============
   const onRefresh = useCallback(() => {
@@ -50,14 +50,10 @@ const BookScreen = () => {
     getCategories();
   }, []);
 
-  useEffect(() => {
-    handleReload();
-  }, []);
-
   // BOOKS
   useEffect(() => {
     getBooks();
-  }, []);
+  }, [idCat]);
 
   // =============== Some work functions ===============
   // CATEGORIES
@@ -84,7 +80,7 @@ const BookScreen = () => {
   };
 
   // BOOKS
-  const getBooks = async () => {
+  const getBooks = () => {
     setIsLoading(true);
 
     let qs = require('qs');
@@ -94,7 +90,7 @@ const BookScreen = () => {
       'X-localization': 'fr'
     };
 
-    await axios.post(url, qs.stringify(mParams), mHeaders).then(res => {
+    axios.post(url, qs.stringify(mParams), mHeaders).then(res => {
       const booksData = res.data.data;
       const booksLastPage = res.data.lastPage;
 
@@ -103,7 +99,7 @@ const BookScreen = () => {
       setBooks(booksData);
       setIsLoading(false);
 
-      console.log('getBooks => Works count: ' + booksData.length + ', Selected category: ' + idCat);
+      console.log(new Date() + ' : getBooks => Works count: ' + booksData.length + ', Selected category: ' + idCat);
 
     }).catch(error => {
       if (error.response) {
@@ -136,11 +132,20 @@ const BookScreen = () => {
 
   // =============== Category Item ===============
   const CategoryItem = ({ item }) => {
-    return (
-      <TouchableOpacity style={idCat === item.id ? homeStyles.categoryBadgeSelected : homeStyles.categoryBadge} onPress={() => handleBadgePress(item.id)}>
-        <Text style={idCat === item.id ? homeStyles.categoryBadgeTextSelected : homeStyles.categoryBadgeText}>{item.category_name}</Text>
-      </TouchableOpacity>
-    );
+    if (idCat === item.id) {
+      return (
+        <TouchableHighlight style={homeStyles.categoryBadgeSelected}>
+          <Text style={homeStyles.categoryBadgeTextSelected}>{item.category_name}</Text>
+        </TouchableHighlight>
+      );
+
+    } else {
+      return (
+        <TouchableOpacity style={homeStyles.categoryBadge} key={item.id} onPress={() => handleBadgePress(item.id)}>
+          <Text style={homeStyles.categoryBadgeText}>{item.category_name}</Text>
+        </TouchableOpacity>
+      );
+    }
   };
 
   // =============== Book Item ===============
@@ -201,8 +206,8 @@ const BookScreen = () => {
             renderItem={({ item }) => {
               return (<BookItem item={item} />);
             }}
-            ListFooterComponent={books.length > 0 ? renderLoadMoreButton : null}
-            refreshControl={currentPage === lastPage ? '' : <RefreshControl refreshing={isLoading} onRefresh={onRefresh} />} />
+            // ListFooterComponent={books.length > 0 ? currentPage === lastPage ? null : renderLoadMoreButton : null}
+            refreshControl={<RefreshControl refreshing={isLoading} onRefresh={onRefresh} />} />
         </View>
       </SafeAreaView>
     </View>
