@@ -3,7 +3,7 @@
  * @see https://team.xsamtech.com/xanderssamoth
  */
 import React, { useCallback, useEffect, useState } from 'react';
-import { View, Text, FlatList, RefreshControl, TouchableOpacity, SafeAreaView, Dimensions, ActivityIndicator, ToastAndroid, Image, TouchableHighlight } from 'react-native';
+import { View, Text, FlatList, RefreshControl, TouchableOpacity, SafeAreaView, Dimensions, ActivityIndicator, ToastAndroid, Image, TouchableHighlight, Platform, NativeModules } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
@@ -23,6 +23,13 @@ const BookScreen = () => {
   // const [lastPage, setLastPage] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
+  // =============== Get device language ===============
+  const getDeviceLang = () => {
+    const appLanguage = Platform.OS === 'ios' ? NativeModules.SettingsManager.settings.AppleLocale || NativeModules.SettingsManager.settings.AppleLanguages[0] : NativeModules.I18nManager.localeIdentifier;
+
+    return appLanguage.search(/-|_/g) !== -1 ? appLanguage.slice(0, 2) : appLanguage;
+  };
+
   // =============== Handle badge press ===============
   const handleBadgePress = useCallback((id) => {
     setIdCat(id);
@@ -32,7 +39,7 @@ const BookScreen = () => {
   const handleReload = useCallback(() => {
     // Clear data
     books.splice(0, books.length);
-    
+
     // Reload data
     getBooks();
     console.log('handleReload => Works count: ' + books.length + ', Selected category: ' + idCat);
@@ -61,7 +68,7 @@ const BookScreen = () => {
   const getCategories = () => {
     setIsLoading(true);
 
-    const config = { method: 'GET', url: `${API.url}/category/find_by_group/Catégorie%20pour%20œuvre`, headers: { 'X-localization': 'fr' } };
+    const config = { method: 'GET', url: `${API.url}/category/find_by_group/Catégorie%20pour%20œuvre`, headers: { 'X-localization': getDeviceLang } };
     const item_all = { "id": 0, "category_name": t('all_f'), "category_name_fr": "Toutes", "category_name_en": "All", "category_description": null };
 
     axios(config)
@@ -86,17 +93,17 @@ const BookScreen = () => {
     let qs = require('qs');
     // const url = `${API.url}/work/filter_by_categories_type_status/fr/Ouvrage/Pertinente?page=${currentPage}`;
     const url = `${API.url}/work/filter_by_categories_type_status/fr/Ouvrage/Pertinente`;
-    let mParams = {'categories_ids[0]': idCat}
+    let mParams = { 'categories_ids[0]': idCat }
     const mHeaders = {
-      'X-localization': 'fr'
+      'X-localization': getDeviceLang
     };
 
     axios.post(url, qs.stringify(mParams), mHeaders).then(res => {
       const booksData = res.data.data;
-      const booksLastPage = res.data.lastPage;
+      // const booksLastPage = res.data.lastPage;
 
       // setCurrentPage(currentPage + 1);
-      setLastPage(booksLastPage);
+      // setLastPage(booksLastPage);
       setBooks(booksData);
       setIsLoading(false);
 
