@@ -84,7 +84,8 @@ const BookScreen = () => {
     setIsLoading(true);
 
     let qs = require('qs');
-    const url = `${API.url}/work/filter_by_categories_type_status/fr/Ouvrage/Pertinente?page=${currentPage}`;
+    // const url = `${API.url}/work/filter_by_categories_type_status/fr/Ouvrage/Pertinente?page=${currentPage}`;
+    const url = `${API.url}/work/filter_by_categories_type_status/fr/Ouvrage/Pertinente`;
     let mParams = {'categories_ids[0]': idCat}
     const mHeaders = {
       'X-localization': 'fr'
