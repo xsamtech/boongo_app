@@ -7,7 +7,7 @@ import { View, Text, FlatList, RefreshControl, TouchableOpacity, SafeAreaView, D
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
-import { ICON_SIZE, API/*, COLORS*/, PADDING } from '../../tools/constants';
+import { API/*, COLORS*/, PADDING } from '../../tools/constants';
 import homeStyles from '../Home/style';
 
 const MappingScreen = () => {
@@ -60,7 +60,7 @@ const MappingScreen = () => {
   const getCategories = () => {
     setIsLoading(true);
 
-    const config = { method: 'GET', url: `${API.url}/category/find_by_group/Catégorie%20pour%20carte`, headers: { 'X-localization': 'fr' } };
+    const config = { method: 'GET', url: `${API.url}/category/find_by_group/Catégorie%20pour%20carte`, headers: { 'X-localization': getDeviceLang } };
     const item_all = { "id": 0, "category_name": t('all_f'), "category_name_fr": "Toutes", "category_name_en": "All", "category_description": null };
 
     axios(config)
