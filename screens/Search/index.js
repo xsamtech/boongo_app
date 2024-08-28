@@ -2,10 +2,11 @@
  * @author Xanders
  * @see https://team.xsamtech.com/xanderssamoth
  */
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import { Dimensions, FlatList, Image, NativeModules, Platform, RefreshControl, SafeAreaView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import axios from 'axios';
 import Logo from '../../assets/img/logo.svg';
@@ -20,6 +21,10 @@ const SearchScreen = () => {
   // =============== Navigation ===============
   const navigation = useNavigation();
 
+  // =============== Float button ===============
+  const [showBackToTop, setShowBackToTop] = useState(false);
+  const flatListRef = useRef(null);
+
   // =============== Search data ===============
   const [datas, setDatas] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -29,6 +34,18 @@ const SearchScreen = () => {
     const appLanguage = Platform.OS === 'ios' ? NativeModules.SettingsManager.settings.AppleLocale || NativeModules.SettingsManager.settings.AppleLanguages[0] : NativeModules.I18nManager.localeIdentifier;
 
     return appLanguage.search(/-|_/g) !== -1 ? appLanguage.slice(0, 2) : appLanguage;
+  };
+
+  // =============== Handle "scroll top" button ===============
+  const handleScroll = (event) => {
+    const { contentOffset } = event.nativeEvent;
+    const isAtTop = contentOffset.y === 0;
+
+    setShowBackToTop(!isAtTop);
+  };
+
+  const scrollToTop = () => {
+    flatListRef.current.scrollToOffset({ offset: 0, animated: true });
   };
 
   // =============== Refresh control ===============
@@ -83,6 +100,13 @@ const SearchScreen = () => {
 
   return (
     <SafeAreaView style={{ flex: 1, paddingBottom: 20 }}>
+      {/* Floating button */}
+      {showBackToTop && (
+        <TouchableOpacity style={[homeStyles.floatingButton, { backgroundColor: COLORS.success, bottom: 80 }]} onPress={scrollToTop}>
+          <MaterialCommunityIcons name='chevron-double-up' size={ICON_SIZE.s0_3} style={{ color: COLORS.white }} />
+        </TouchableOpacity>
+      )}
+
       {/* Search container */}
       <View style={homeStyles.searchContainer}>
         <Logo width={60} height={60} />
@@ -96,8 +120,10 @@ const SearchScreen = () => {
 
       {/* Search results list */}
       <FlatList
+        ref={flatListRef}
         data={datas}
-        keyExtractor={(item) => item.id}
+        keyExtractor={item => item.id}
+        onScroll={handleScroll}
         ListEmptyComponent={() => {
           return (
             <View style={[homeStyles.cardEmpty, { width: Dimensions.get('window').width - 20, backgroundColor: 'rgba(255, 255, 255, 0)', elevation: 0 }]}>

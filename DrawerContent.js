@@ -3,27 +3,28 @@
  * @see https://team.xsamtech.com/xanderssamoth
  */
 import React, { useContext } from 'react';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { View, Text, Image } from 'react-native';
-import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import { Button, Divider, Title } from 'react-native-paper';
+import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
-import homeStyles from './screens/Home/style';
-import { AuthContext } from './contexts/AuthContext';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Spinner from 'react-native-loading-spinner-overlay';
+import { AuthContext } from './contexts/AuthContext';
+import homeStyles from './screens/Home/style';
 import TextBrand from './assets/img/text.svg';
 import AvatarF from './assets/img/avatar-F.svg';
 import AvatarM from './assets/img/avatar-M.svg';
 
 const DrawerList = [
     { icon: 'home-outline', label: 'navigation.home', navigateTo: 'Home' },
-    { icon: 'help-circle-outline', label: 'navigation.about', navigateTo: 'About' },
     { icon: 'book', label: 'navigation.book', navigateTo: 'Book' },
     { icon: 'newspaper', label: 'navigation.magazine', navigateTo: 'Journal' },
     { icon: 'map-marker-outline', label: 'navigation.mapping', navigateTo: 'Mapping' },
-    { icon: 'video-outline', label: 'navigation.media', navigateTo: 'Media' }
+    { icon: 'video-outline', label: 'navigation.media', navigateTo: 'Media' },
+    { icon: 'help-circle-outline', label: 'navigation.about', navigateTo: 'About' },
+    { icon: 'translate', label: 'change_lang', navigateTo: 'Language' }
 ];
 
 const DrawerLayout = ({ icon, label, navigateTo }) => {

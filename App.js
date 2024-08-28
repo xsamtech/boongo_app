@@ -4,35 +4,33 @@
  */
 import 'react-native-gesture-handler';
 import React, { useContext } from 'react';
+import { TouchableOpacity } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer, useNavigation, DrawerActions } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { COLORS } from './tools/constants';
-import HomeScreen from './screens/Home';
+import { AuthContext, AuthProvider } from './contexts/AuthContext';
 import AboutScreen from './screens/About';
 import AccountScreen from './screens/Account';
-import CartScreen from './screens/Account/cart';
-import MyWorkScreen from './screens/Account/my_work';
 import BookScreen from './screens/Book';
+import CartScreen from './screens/Account/cart';
+import DrawerContent from './DrawerContent';
+import HomeScreen from './screens/Home';
 import JournalScreen from './screens/Journal';
+import LanguageScreen from './screens/Language';
+import LoginScreen from './screens/Auth';
 import MappingScreen from './screens/Mapping';
 import MediaScreen from './screens/Media';
 import NotificationScreen from './screens/Account/notification';
-import { useTranslation } from 'react-i18next';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { TouchableOpacity } from 'react-native';
-import DrawerContent from './DrawerContent';
-import LanguageScreen from './screens/Language';
-import RegisterScreen from './screens/Auth/register';
-import LoginScreen from './screens/Auth';
 import PasswordResetScreen from './screens/Auth/password-reset';
-import { AuthContext, AuthProvider } from './contexts/AuthContext';
-import WorkDataScreen from './screens/Home/work_data';
-import SplashScreen from './screens/Home/splash_screen';
-import UpdateAccountScreen from './screens/Account/update_account';
 import PDFViewerScreen from './screens/Home/pdf_viewer';
-import VideoPlayerScreen from './screens/Home/video_player';
+import RegisterScreen from './screens/Auth/register';
+import SplashScreen from './screens/Home/splash_screen';
 import SearchScreen from './screens/Search';
+import VideoPlayerScreen from './screens/Home/video_player';
+import WorkDataScreen from './screens/Home/work_data';
 
 const StackNav = () => {
     const Stack = createNativeStackNavigator();
@@ -65,8 +63,8 @@ const StackNav = () => {
                         },
                         headerRight: () => {
                             return (
-                                <TouchableOpacity onPress={() => navigation.navigate('Language')}>
-                                    <MaterialCommunityIcons style={{ fontSize: 30, color: COLORS.white }} name='translate' />
+                                <TouchableOpacity onPress={() => navigation.navigate('Search')}>
+                                    <MaterialCommunityIcons style={{ fontSize: 30, color: COLORS.white }} name='magnify' />
                                 </TouchableOpacity>
                             );
                         }
