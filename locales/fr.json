@@ -39,6 +39,7 @@
     "no_account": "Vous n’avez pas de compte ?",
     "select_date": "Sélectionner la date",
     "search": "Rechercher ...",
+    "search_description": "Rechercher un livre, une revue, un média ou une carte.",
     "show": "Afficher",
     "hide": "Cacher",
     "all_m": "Tous",

@@ -526,7 +526,8 @@ const homeStyles = StyleSheet.create({
         paddingHorizontal: 14,
         borderWidth: 1,
         borderEndWidth: 0,
-        borderColor: COLORS.secondary
+        borderColor: COLORS.secondary,
+        fontSize: 16
     },
 
     searchInputSubmit: {
@@ -535,6 +536,39 @@ const homeStyles = StyleSheet.create({
         paddingTop: 15,
         paddingHorizontal: 14,
     },
+
+    searchResult: {
+        flexShrink: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: Dimensions.get('window').width,
+        backgroundColor: 'rgba(255, 255, 255, 0)',
+        marginBottom: 0,
+        paddingVertical: PADDING.vertical,
+        paddingHorizontal: 15
+    },
+
+    searchResultImage: {
+        width: 80,
+        height: 100
+    },
+
+    searchResultTitle: {
+        marginBottom: 5,
+        fontSize: 16,
+        fontWeight: '700',
+        color: COLORS.black,
+    },
+
+    searchResultText: {
+        marginBottom: 10,
+        fontSize: 14,
+    },
+
+    searchResultLink: {
+        marginBottom: 10,
+        fontSize: 14,
+    }
 });
 
 export default homeStyles;
