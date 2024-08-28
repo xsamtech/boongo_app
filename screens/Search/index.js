@@ -27,6 +27,7 @@ const SearchScreen = () => {
 
   // =============== Search data ===============
   const [datas, setDatas] = useState([]);
+  const [inputValue, setInputValue] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   // =============== Get device language ===============
@@ -49,6 +50,12 @@ const SearchScreen = () => {
   };
 
   // =============== Refresh control ===============
+  const handleButtonPress = (text) => {
+    setIsLoading(true);
+    searchData(text);
+  };
+
+  // =============== Refresh control ===============
   const onRefresh = useCallback(() => {
     setIsLoading(true);
     setTimeout(() => { setIsLoading(false); }, 2000);
@@ -57,6 +64,7 @@ const SearchScreen = () => {
   // =============== Search work function ===============
   const searchData = (data) => {
     setIsLoading(true);
+    setInputValue(data);
 
     const config = { method: 'GET', url: `${API.url}/work/search/${data}`, headers: { 'X-localization': getDeviceLang } };
 
@@ -112,7 +120,7 @@ const SearchScreen = () => {
         <Logo width={60} height={60} />
         <View style={homeStyles.searchInput}>
           <TextInput placeholder={t('search')} onChangeText={text => searchData(text)} style={homeStyles.searchInputText} />
-          <TouchableOpacity style={homeStyles.searchInputSubmit}>
+          <TouchableOpacity style={homeStyles.searchInputSubmit} onPress={() => handleButtonPress(inputValue)}>
             <FontAwesome6 name='magnifying-glass' size={ICON_SIZE.s3} style={{ color: COLORS.white }} />
           </TouchableOpacity>
         </View>
