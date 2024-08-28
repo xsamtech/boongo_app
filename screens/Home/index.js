@@ -2,19 +2,19 @@
  * @author Xanders
  * @see https://team.xsamtech.com/xanderssamoth
  */
-import { View, Text, TouchableOpacity, FlatList, ScrollView, ActivityIndicator, RefreshControl, Dimensions, Image } from 'react-native';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import homeStyles from './style';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { API, COLORS, ICON_SIZE } from '../../tools/constants';
-import axios from 'axios';
+import { View, Text, TouchableOpacity, FlatList, ScrollView, ActivityIndicator, RefreshControl, Dimensions, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import axios from 'axios';
+import homeStyles from './style';
+import { API, COLORS, ICON_SIZE } from '../../tools/constants';
 
 const HomeScreen = () => {
   // =============== Navigation ===============
   const navigation = useNavigation();
-
+  
   // =============== Get data ===============
   const [popular, setPopular] = useState([]);
   const [books, setBooks] = useState([]);
