@@ -3,10 +3,10 @@
  * @see https://team.xsamtech.com/xanderssamoth
  */
 import React, { createContext, useEffect, useState } from 'react'
-import axios from 'axios';
-import { API } from '../tools/constants';
 import { ToastAndroid } from 'react-native';
+import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { API } from '../tools/constants';
 
 export const AuthContext = createContext();
 
