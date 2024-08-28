@@ -507,6 +507,34 @@ const homeStyles = StyleSheet.create({
         fontWeight: '800',
         color: COLORS.warning
     },
+
+    // Search
+    searchContainer: {
+        paddingTop: 15,
+        flexDirection: 'column',
+        alignItems: 'center'
+    },
+
+    searchInput: {
+        flexDirection: 'row'
+    },
+
+    searchInputText: {
+        width: Dimensions.get('window').width - 100,
+        backgroundColor: 'rgba(255, 255, 255, 0)',
+        marginVertical: 15,
+        paddingHorizontal: 14,
+        borderWidth: 1,
+        borderEndWidth: 0,
+        borderColor: COLORS.secondary
+    },
+
+    searchInputSubmit: {
+        backgroundColor: COLORS.primary,
+        marginVertical: 15,
+        paddingTop: 15,
+        paddingHorizontal: 14,
+    },
 });
 
 export default homeStyles;
