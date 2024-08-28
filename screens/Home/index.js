@@ -3,7 +3,7 @@
  * @see https://team.xsamtech.com/xanderssamoth
  */
 import React, { useCallback, useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, FlatList, ScrollView, ActivityIndicator, RefreshControl, Dimensions, Image } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, ScrollView, ActivityIndicator, RefreshControl, Dimensions, Image, ToastAndroid, Linking } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -11,10 +11,39 @@ import axios from 'axios';
 import homeStyles from './style';
 import { API, COLORS, ICON_SIZE } from '../../tools/constants';
 
+const sendWhatsAppMessage = async () => {
+  const phoneNumber = '+243815737600'; // Replace with the recipient's phone number
+  // const text = encodeURIComponent(message);
+
+  // Construct the WhatsApp URL
+  const url = `whatsapp://send?phone=${phoneNumber}&text=`;
+
+  try {
+    await Linking.openURL(url);
+
+  } catch (error) {
+    if (error.response) {
+      // The request was made and the server responded with a status code
+      ToastAndroid.show(`${error.response.status} -> ${error.response.data.message || error.response.data}`, ToastAndroid.LONG);
+
+    } else if (error.request) {
+      // The request was made but no response was received
+      ToastAndroid.show(t('error') + ' ' + t('error_message.no_server_response'), ToastAndroid.LONG);
+
+    } else {
+      // An error occurred while configuring the query
+      ToastAndroid.show(`${error}`, ToastAndroid.LONG);
+    }
+  }
+};
+
 const HomeScreen = () => {
+  // =============== Language ===============
+  const { t } = useTranslation();
+
   // =============== Navigation ===============
   const navigation = useNavigation();
-  
+
   // =============== Get data ===============
   const [popular, setPopular] = useState([]);
   const [books, setBooks] = useState([]);
@@ -42,9 +71,6 @@ const HomeScreen = () => {
   useEffect(() => {
     getMags();
   }, []);
-
-  // =============== Language ===============
-  const { t } = useTranslation();
 
   // =============== Some work functions ===============
   // MOST POPULAR
@@ -120,7 +146,7 @@ const HomeScreen = () => {
 
   return (
     <>
-      <TouchableOpacity style={[homeStyles.floatingButton, { backgroundColor: COLORS.success, paddingTop: 9 }]} /*onPress={() => { navigation.navigate('Book') }}*/>
+      <TouchableOpacity style={[homeStyles.floatingButton, { backgroundColor: COLORS.success, paddingTop: 9 }]} onPress={sendWhatsAppMessage}>
         <MaterialCommunityIcons name='whatsapp' size={ICON_SIZE.s0_4} style={{ color: COLORS.white }} />
       </TouchableOpacity>
 

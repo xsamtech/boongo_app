@@ -13,6 +13,9 @@
     "back_home": "Retour à l’accueil",
     "load_more": "Charger plus",
     "video_ended": "La vidéo est terminée !",
+    "success": {
+        "whatsapp": "Whatsapp est bien ouvert."
+    },
     "error": "Erreur :",
     "error_message": {
         "no_server_response": "Aucune réponse reçue du serveur."
