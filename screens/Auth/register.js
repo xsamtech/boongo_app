@@ -95,7 +95,7 @@ const RegisterScreen = () => {
 
         {/* Submit */}
         <Button style={[homeStyles.authButton, { backgroundColor: COLORS.success }]} onPress={() => {
-          register(firstname, lastname, surname, gender, birthdate, city, country, address_1, address_2, p_o_box, email, phone, username, password, confirm_password, 4);
+          register(firstname, lastname, null, null, null, null, null, null, null, null, email, phone, username, password, confirm_password, 4);
           navigation.navigate('Login');
         }}>
           <Text style={homeStyles.authButtonText}>{t('register')}</Text>
