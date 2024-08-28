@@ -64,6 +64,7 @@
 
     "navigation": {
         "home": "Accueil",
+        "search": "Rechercher une œuvre",
         "about": "A propos",
         "terms": "Conditions",
         "privacy": "Confidentialité",

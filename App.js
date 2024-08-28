@@ -32,6 +32,7 @@ import SplashScreen from './screens/Home/splash_screen';
 import UpdateAccountScreen from './screens/Account/update_account';
 import PDFViewerScreen from './screens/Home/pdf_viewer';
 import VideoPlayerScreen from './screens/Home/video_player';
+import SearchScreen from './screens/Search';
 
 const StackNav = () => {
     const Stack = createNativeStackNavigator();
@@ -111,6 +112,7 @@ const StackNav = () => {
                             );
                         }
                     }} />
+                    <Stack.Screen name='Search' component={SearchScreen} options={{ title: t('navigation.search') }} />
                     <Stack.Screen name='WorkData' component={WorkDataScreen} options={{ title: t('work_details.title') }} />
                     <Stack.Screen name='PDFViewer' component={PDFViewerScreen} options={{ headerShown: false }} />
                     <Stack.Screen name='VideoPlayer' component={VideoPlayerScreen} options={{ headerShown: false }} />

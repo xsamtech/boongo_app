@@ -119,95 +119,101 @@ const HomeScreen = () => {
   };
 
   return (
-    <ScrollView
-      contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}
-      refreshControl={<RefreshControl refreshing={isLoading} onRefresh={onRefresh} />}>
-      <View style={homeStyles.headingArea}>
-        <Text style={homeStyles.heading}>{t('welcome_title')}</Text>
-        <Text style={homeStyles.headingText}>{t('welcome_description')}</Text>
-      </View>
+    <>
+      <TouchableOpacity style={[homeStyles.floatingButton, { backgroundColor: COLORS.success, paddingTop: 9 }]} /*onPress={() => { navigation.navigate('Book') }}*/>
+        <MaterialCommunityIcons name='whatsapp' size={ICON_SIZE.s0_4} style={{ color: COLORS.white }} />
+      </TouchableOpacity>
 
-      {isLoading
-        ? <ActivityIndicator color={COLORS.primary} size='large' />
-        :
-        <>
-          <View style={homeStyles.listTitleArea}>
-            <Text style={homeStyles.listTitle}>{t('most_popular')}</Text>
-          </View>
-          <FlatList
-            data={popular}
-            keyExtractor={item => item.id}
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            style={homeStyles.scrollableList}
-            ListEmptyComponent={() => {
-              return (
-                <View style={homeStyles.cardEmpty}>
-                  <Text style={homeStyles.cardEmptyTitle}>{t('empty_list.title')}</Text>
-                  <Text style={homeStyles.cardEmptyText}>{t('empty_list.description_popular')}</Text>
-                </View>
-              )
-            }}
-            renderItem={({ item }) => {
-              return (<WorkItem item={item} />);
-            }} />
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}
+        refreshControl={<RefreshControl refreshing={isLoading} onRefresh={onRefresh} />}>
+        <View style={homeStyles.headingArea}>
+          <Text style={homeStyles.heading}>{t('welcome_title')}</Text>
+          <Text style={homeStyles.headingText}>{t('welcome_description')}</Text>
+        </View>
 
-          <View style={[homeStyles.cardEmpty, { width: Dimensions.get('window').width - 10, marginVertical: 50, padding: 10 }]}>
-            <Image source={require('../../assets/img/ad.png')} style={{ width: '100%', height: Dimensions.get('screen').width / 2, borderRadius: 10 }} />
-          </View>
+        {isLoading
+          ? <ActivityIndicator color={COLORS.primary} size='large' />
+          :
+          <>
+            <View style={homeStyles.listTitleArea}>
+              <Text style={homeStyles.listTitle}>{t('most_popular')}</Text>
+            </View>
+            <FlatList
+              data={popular}
+              keyExtractor={item => item.id}
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              style={homeStyles.scrollableList}
+              ListEmptyComponent={() => {
+                return (
+                  <View style={homeStyles.cardEmpty}>
+                    <Text style={homeStyles.cardEmptyTitle}>{t('empty_list.title')}</Text>
+                    <Text style={homeStyles.cardEmptyText}>{t('empty_list.description_popular')}</Text>
+                  </View>
+                )
+              }}
+              renderItem={({ item }) => {
+                return (<WorkItem item={item} />);
+              }} />
 
-          <View style={homeStyles.listTitleArea}>
-            <Text style={homeStyles.listTitle}>{t('navigation.book')}</Text>
-            <TouchableOpacity style={homeStyles.linkIcon} onPress={() => { navigation.navigate('Book') }}>
-              <Text style={homeStyles.link}>{t('see_all')} </Text>
-              <MaterialCommunityIcons name='chevron-double-right' size={ICON_SIZE.s3} />
-            </TouchableOpacity>
-          </View>
-          <FlatList
-            data={books}
-            keyExtractor={item => item.id}
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            style={homeStyles.scrollableList}
-            ListEmptyComponent={() => {
-              return (
-                <View style={homeStyles.cardEmpty}>
-                  <Text style={homeStyles.cardEmptyTitle}>{t('empty_list.title')}</Text>
-                  <Text style={homeStyles.cardEmptyText}>{t('empty_list.description_books')}</Text>
-                </View>
-              )
-            }}
-            renderItem={({ item }) => {
-              return (<WorkItem item={item} />);
-            }} />
+            <View style={[homeStyles.cardEmpty, { width: Dimensions.get('window').width - 10, marginVertical: 50, padding: 10 }]}>
+              <Image source={require('../../assets/img/ad.png')} style={{ width: '100%', height: Dimensions.get('screen').width / 2, borderRadius: 10 }} />
+            </View>
 
-          <View style={homeStyles.listTitleArea}>
-            <Text style={homeStyles.listTitle}>{t('navigation.magazine')}</Text>
-            <TouchableOpacity style={homeStyles.linkIcon} onPress={() => { navigation.navigate('Journal') }}>
-              <Text style={homeStyles.link}>{t('see_all')} </Text>
-              <MaterialCommunityIcons name='chevron-double-right' size={ICON_SIZE.s3} />
-            </TouchableOpacity>
-          </View>
-          <FlatList
-            data={mags}
-            keyExtractor={item => item.id}
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            style={homeStyles.scrollableList}
-            ListEmptyComponent={() => {
-              return (
-                <View style={homeStyles.cardEmpty}>
-                  <Text style={homeStyles.cardEmptyTitle}>{t('empty_list.title')}</Text>
-                  <Text style={homeStyles.cardEmptyText}>{t('empty_list.description_mags')}</Text>
-                </View>
-              )
-            }}
-            renderItem={({ item }) => {
-              return (<WorkItem item={item} />);
-            }} />
-        </>
-      }
-    </ScrollView>
+            <View style={homeStyles.listTitleArea}>
+              <Text style={homeStyles.listTitle}>{t('navigation.book')}</Text>
+              <TouchableOpacity style={homeStyles.linkIcon} onPress={() => { navigation.navigate('Book') }}>
+                <Text style={homeStyles.link}>{t('see_all')} </Text>
+                <MaterialCommunityIcons name='chevron-double-right' size={ICON_SIZE.s3} />
+              </TouchableOpacity>
+            </View>
+            <FlatList
+              data={books}
+              keyExtractor={item => item.id}
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              style={homeStyles.scrollableList}
+              ListEmptyComponent={() => {
+                return (
+                  <View style={homeStyles.cardEmpty}>
+                    <Text style={homeStyles.cardEmptyTitle}>{t('empty_list.title')}</Text>
+                    <Text style={homeStyles.cardEmptyText}>{t('empty_list.description_books')}</Text>
+                  </View>
+                )
+              }}
+              renderItem={({ item }) => {
+                return (<WorkItem item={item} />);
+              }} />
+
+            <View style={homeStyles.listTitleArea}>
+              <Text style={homeStyles.listTitle}>{t('navigation.magazine')}</Text>
+              <TouchableOpacity style={homeStyles.linkIcon} onPress={() => { navigation.navigate('Journal') }}>
+                <Text style={homeStyles.link}>{t('see_all')} </Text>
+                <MaterialCommunityIcons name='chevron-double-right' size={ICON_SIZE.s3} />
+              </TouchableOpacity>
+            </View>
+            <FlatList
+              data={mags}
+              keyExtractor={item => item.id}
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              style={homeStyles.scrollableList}
+              ListEmptyComponent={() => {
+                return (
+                  <View style={homeStyles.cardEmpty}>
+                    <Text style={homeStyles.cardEmptyTitle}>{t('empty_list.title')}</Text>
+                    <Text style={homeStyles.cardEmptyText}>{t('empty_list.description_mags')}</Text>
+                  </View>
+                )
+              }}
+              renderItem={({ item }) => {
+                return (<WorkItem item={item} />);
+              }} />
+          </>
+        }
+      </ScrollView>
+    </>
   );
 };
 

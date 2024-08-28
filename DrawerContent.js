@@ -67,7 +67,6 @@ const DrawerContent = (props) => {
                 <View style={homeStyles.drawerContent}>
                     <View style={{ flexDirection: 'column', alignItems: 'center', marginVertical: 12 }}>
                         <TextBrand width={154} height={50} />
-                        {/* <Image source={require('./assets/img/brand.png')} /> */}
                     </View>
                     <TouchableOpacity activeOpacity={0.8} onPress={() => { userInfo.id ? navigation.navigate('Account') : navigation.navigate('Login') }}>
                         <View style={homeStyles.drawerUserInfoSection}>

@@ -70,6 +70,19 @@ const homeStyles = StyleSheet.create({
         alignItems: 'center',
     },
 
+    // Floating button
+    floatingButton: {
+        alignItems: 'center',
+        position: 'absolute',
+        right: 30,
+        bottom: 40,
+        zIndex: 999,
+        width: 60,
+        height: 60,
+        paddingTop: 7,
+        borderRadius: 100 / 2
+    },
+
     // Custom header
     headerBanner: {
         flexDirection: 'row',

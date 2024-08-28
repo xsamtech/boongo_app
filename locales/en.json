@@ -64,6 +64,7 @@
 
     "navigation": {
         "home": "Home",
+        "search": "Search a work",
         "about": "About",
         "terms": "Terms",
         "privacy": "Privacy",

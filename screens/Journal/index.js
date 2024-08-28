@@ -2,18 +2,23 @@
  * @author Xanders
  * @see https://team.xsamtech.com/xanderssamoth
  */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { View, Text, FlatList, RefreshControl, TouchableOpacity, SafeAreaView, Dimensions/*, ActivityIndicator*/, ToastAndroid, Image, TouchableHighlight, Platform, NativeModules } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import axios from 'axios';
-import { ICON_SIZE, API/*, COLORS*/, PADDING } from '../../tools/constants';
+import { ICON_SIZE, API, COLORS, PADDING } from '../../tools/constants';
 import homeStyles from '../Home/style';
 
 const JournalScreen = () => {
   // =============== Language ===============
   const { t } = useTranslation();
+
+  // =============== Float button ===============
+  const [showBackToTop, setShowBackToTop] = useState(false);
+  const flatListRef = useRef(null);
 
   // =============== Get data ===============
   const [categories, setCategories] = useState([]);
@@ -26,6 +31,18 @@ const JournalScreen = () => {
     const appLanguage = Platform.OS === 'ios' ? NativeModules.SettingsManager.settings.AppleLocale || NativeModules.SettingsManager.settings.AppleLanguages[0] : NativeModules.I18nManager.localeIdentifier;
 
     return appLanguage.search(/-|_/g) !== -1 ? appLanguage.slice(0, 2) : appLanguage;
+  };
+
+  // =============== Handle "scroll top" button ===============
+  const handleScroll = (event) => {
+    const { contentOffset } = event.nativeEvent;
+    const isAtTop = contentOffset.y === 0;
+
+    setShowBackToTop(!isAtTop);
+  };
+
+  const scrollToTop = () => {
+    flatListRef.current.scrollToOffset({ offset: 0, animated: true });
   };
 
   // =============== Handle badge press ===============
@@ -203,6 +220,13 @@ const JournalScreen = () => {
 
   return (
     <View style={{ height: Dimensions.get('window').height - 20 }}>
+      {/* Floating button */}
+      {showBackToTop && (
+        <TouchableOpacity style={[homeStyles.floatingButton, { backgroundColor: COLORS.success, bottom: 80 }]} onPress={scrollToTop}>
+          <MaterialCommunityIcons name='chevron-double-up' size={ICON_SIZE.s0_3} style={{ color: COLORS.white }} />
+        </TouchableOpacity>
+      )}
+
       {/* Categories */}
       <View style={{ paddingTop: PADDING.vertical }}>
         <FlatList
@@ -220,11 +244,13 @@ const JournalScreen = () => {
       <SafeAreaView contentContainerStyle={{ flexGrow: 1 }}>
         <View style={[homeStyles.cardEmpty, { height: Dimensions.get('window').height - 70, marginLeft: 0, paddingLeft: 5 }]}>
           <FlatList
+            ref={flatListRef}
             data={mags}
             extraData={mags}
             keyExtractor={item => item.id}
             horizontal={false}
             showsVerticalScrollIndicator={false}
+            onScroll={handleScroll}
             style={homeStyles.scrollableList}
             windowSize={10}
             ListEmptyComponent={() => {

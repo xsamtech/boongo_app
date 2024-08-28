@@ -22,6 +22,9 @@ export const COLORS = {
 };
 
 export const ICON_SIZE = {
+    s0_3: 45,
+    s0_4: 40,
+    s0_5: 35,
     s1: 25,
     s2: 23,
     s3: 21,
