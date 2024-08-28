@@ -527,6 +527,8 @@ const homeStyles = StyleSheet.create({
         borderWidth: 1,
         borderEndWidth: 0,
         borderColor: COLORS.secondary,
+        borderTopLeftRadius: 7,
+        borderBottomLeftRadius: 7,
         fontSize: 16
     },
 
@@ -535,17 +537,19 @@ const homeStyles = StyleSheet.create({
         marginVertical: 15,
         paddingTop: 15,
         paddingHorizontal: 14,
+        borderTopRightRadius: 7,
+        borderBottomRightRadius: 7,
     },
 
     searchResult: {
         flexShrink: 1,
         flexDirection: 'row',
         alignItems: 'center',
-        width: Dimensions.get('window').width,
+        width: Dimensions.get('window').width - 30,
         backgroundColor: 'rgba(255, 255, 255, 0)',
         marginBottom: 0,
         paddingVertical: PADDING.vertical,
-        paddingHorizontal: 15
+        paddingHorizontal: 20
     },
 
     searchResultImage: {

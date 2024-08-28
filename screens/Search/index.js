@@ -2,18 +2,18 @@
  * @author Xanders
  * @see https://team.xsamtech.com/xanderssamoth
  */
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
-import { Dimensions, FlatList, Image, NativeModules, Platform, RefreshControl, SafeAreaView, Text, TextInput, ToastAndroid, TouchableOpacity, View } from 'react-native';
+import { Dimensions, FlatList, Image, NativeModules, Platform, RefreshControl, SafeAreaView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
-import Logo from '../../assets/img/logo.svg';
-import homeStyles from '../Home/style';
 import axios from 'axios';
+import Logo from '../../assets/img/logo.svg';
+import SearchLibrary from '../../assets/img/search-library.svg';
+import homeStyles from '../Home/style';
 import { API, COLORS, ICON_SIZE } from '../../tools/constants';
 
 const SearchScreen = () => {
-  const dummies = Array.from({ length: 0 }, (_, index) => `Item ${index + 1}`);
   // =============== Language ===============
   const { t } = useTranslation();
 
@@ -21,7 +21,7 @@ const SearchScreen = () => {
   const navigation = useNavigation();
 
   // =============== Search data ===============
-  const [data, setData] = useState(null);
+  const [datas, setDatas] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   // =============== Get device language ===============
@@ -37,38 +37,24 @@ const SearchScreen = () => {
     setTimeout(() => { setIsLoading(false); }, 2000);
   }, []);
 
-  // =============== Using the Effect Hook ===============
-  useEffect(() => {
-    searchData();
-  }, [data]);
-
   // =============== Search work function ===============
-  const searchData = () => {
+  const searchData = (data) => {
     setIsLoading(true);
 
     const config = { method: 'GET', url: `${API.url}/work/search/${data}`, headers: { 'X-localization': getDeviceLang } };
 
     axios(config)
       .then(res => {
+        datas.splice(0, datas.length);
+
         const resultsData = res.data.data;
 
-        setData(resultsData);
+        setDatas(resultsData);
         setIsLoading(false);
       })
       .catch(error => {
-        if (error.response) {
-          // The request was made and the server responded with a status code
-          ToastAndroid.show(`${error.response.status} -> ${error.response.data.message || error.response.data}`, ToastAndroid.LONG);
-          console.log(`${error.response.status} -> ${error.response.data.message || error.response.data}`);
-
-        } else if (error.request) {
-          // The request was made but no response was received
-          ToastAndroid.show(t('error') + ' ' + t('error_message.no_server_response'), ToastAndroid.LONG);
-
-        } else {
-          // An error occurred while configuring the query
-          ToastAndroid.show(`${error}`, ToastAndroid.LONG);
-        }
+        setDatas([]);
+        setIsLoading(false);
       });
   };
 
@@ -77,11 +63,15 @@ const SearchScreen = () => {
     return (
       <View style={homeStyles.searchResult}>
         <View style={homeStyles.searchResultImage}>
-          <Image source={require('../../assets/img/ad.png')} style={{ width: '100%', height: '100%', borderRadius: 5 }} />
+          <Image source={{ uri: item.image_url ? item.image_url : `${WEB.url}/assets/img/ad.png` }} style={{ width: '100%', height: '100%', borderRadius: 5 }} />
         </View>
         <View style={{ marginLeft: 10 }}>
-          <Text style={homeStyles.searchResultTitle}>{item}</Text>
-          <Text style={homeStyles.searchResultText}>{item}</Text>
+          <Text style={homeStyles.searchResultTitle}>
+            {((item.work_title).length > 25) ? (((item.work_title).substring(0, 25 - 3)) + '...') : item.work_title}
+          </Text>
+          <Text style={homeStyles.searchResultText}>
+            {((item.work_content).length > 33) ? (((item.work_content).substring(0, 33 - 3)) + '...') : item.work_content}
+          </Text>
           <TouchableOpacity style={homeStyles.linkIcon} onPress={() => navigation.navigate('WorkData', { itemId: item.id })}>
             <Text style={[homeStyles.link]}>{t('see_details')} </Text>
             <FontAwesome6 name='angle-right' size={ICON_SIZE.s6} />
@@ -97,8 +87,8 @@ const SearchScreen = () => {
       <View style={homeStyles.searchContainer}>
         <Logo width={60} height={60} />
         <View style={homeStyles.searchInput}>
-          <TextInput style={homeStyles.searchInputText} value={data} placeholder={t('search')} onChangeText={text => setData(text)} />
-          <TouchableOpacity style={homeStyles.searchInputSubmit} onPress={searchData}>
+          <TextInput placeholder={t('search')} onChangeText={text => searchData(text)} style={homeStyles.searchInputText} />
+          <TouchableOpacity style={homeStyles.searchInputSubmit}>
             <FontAwesome6 name='magnifying-glass' size={ICON_SIZE.s3} style={{ color: COLORS.white }} />
           </TouchableOpacity>
         </View>
@@ -106,12 +96,13 @@ const SearchScreen = () => {
 
       {/* Search results list */}
       <FlatList
-        data={dummies}
-        keyExtractor={(item) => item}
+        data={datas}
+        keyExtractor={(item) => item.id}
         ListEmptyComponent={() => {
           return (
             <View style={[homeStyles.cardEmpty, { width: Dimensions.get('window').width - 20, backgroundColor: 'rgba(255, 255, 255, 0)', elevation: 0 }]}>
-              <Text style={[homeStyles.cardEmptyText, { textAlign: 'center', fontSize: 19, fontWeight: '300', letterSpacing: 0.3 }]}>{t('search_description')}</Text>
+              <Text style={[homeStyles.cardEmptyText, { marginBottom: 30, textAlign: 'center', fontSize: 19, fontWeight: '300', letterSpacing: 0.3 }]}>{t('search_description')}</Text>
+              <SearchLibrary width={200} height={200} style={{ margin: 'auto', opacity: 0.9 }} />
             </View>
           )
         }}
