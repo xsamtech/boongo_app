@@ -3,12 +3,12 @@
  * @see https://team.xsamtech.com/xanderssamoth
  */
 import React, { useCallback, useEffect, useState } from 'react';
-import { View, Text, FlatList, RefreshControl, TouchableOpacity, SafeAreaView, Dimensions, ActivityIndicator, ToastAndroid, Image, TouchableHighlight, Platform, NativeModules } from 'react-native';
+import { View, Text, FlatList, RefreshControl, TouchableOpacity, SafeAreaView, Dimensions/*, ActivityIndicator*/, ToastAndroid, Image, TouchableHighlight, Platform, NativeModules } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import axios from 'axios';
-import { ICON_SIZE, API, COLORS, PADDING } from '../../tools/constants';
+import { ICON_SIZE, API/*, COLORS*/, PADDING } from '../../tools/constants';
 import homeStyles from '../Home/style';
 
 const BookScreen = () => {
@@ -19,8 +19,6 @@ const BookScreen = () => {
   const [categories, setCategories] = useState([]);
   const [idCat, setIdCat] = useState(0);
   const [books, setBooks] = useState([]);
-  // const [currentPage, setCurrentPage] = useState(1);
-  // const [lastPage, setLastPage] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
   // =============== Get device language ===============
@@ -33,15 +31,10 @@ const BookScreen = () => {
   // =============== Handle badge press ===============
   const handleBadgePress = useCallback((id) => {
     setIdCat(id);
-    handleReload();
-  }, []);
-
-  const handleReload = useCallback(() => {
-    // Clear data
     books.splice(0, books.length);
 
     // Reload data
-    getBooks();
+    getBooks2(id);
     console.log('handleReload => Works count: ' + books.length + ', Selected category: ' + idCat);
   }, []);
 
@@ -91,7 +84,6 @@ const BookScreen = () => {
     setIsLoading(true);
 
     let qs = require('qs');
-    // const url = `${API.url}/work/filter_by_categories_type_status/fr/Ouvrage/Pertinente?page=${currentPage}`;
     const url = `${API.url}/work/filter_by_categories_type_status/fr/Ouvrage/Pertinente`;
     let mParams = { 'categories_ids[0]': idCat }
     const mHeaders = {
@@ -100,10 +92,7 @@ const BookScreen = () => {
 
     axios.post(url, qs.stringify(mParams), mHeaders).then(res => {
       const booksData = res.data.data;
-      // const booksLastPage = res.data.lastPage;
 
-      // setCurrentPage(currentPage + 1);
-      // setLastPage(booksLastPage);
       setBooks(booksData);
       setIsLoading(false);
 
@@ -126,17 +115,52 @@ const BookScreen = () => {
     });
   };
 
-  // =============== « Load more » button ===============
-  const renderLoadMoreButton = () => {
-    return (
-      <View>
-        <TouchableOpacity activeOpacity={0.9} onPress={getBooks} style={[homeStyles.authButton, { marginBottom: 30, paddingVertical: PADDING.vertical, borderRadius: 30 }]}>
-          <Text style={homeStyles.authButtonText}>{t('load_more')}</Text>
-          {isLoading ? (<ActivityIndicator color={COLORS.white} style={{ marginLeft: 8 }} />) : null}
-        </TouchableOpacity>
-      </View>
-    );
+  const getBooks2 = (id) => {
+    setIsLoading(true);
+
+    let qs = require('qs');
+    const url = `${API.url}/work/filter_by_categories_type_status/fr/Ouvrage/Pertinente`;
+    let mParams = { 'categories_ids[0]': id }
+    const mHeaders = {
+      'X-localization': getDeviceLang
+    };
+
+    axios.post(url, qs.stringify(mParams), mHeaders).then(res => {
+      const booksData = res.data.data;
+
+      setBooks(booksData);
+      setIsLoading(false);
+
+      console.log(new Date() + ' : getBooks2 => Works count: ' + booksData.length + ', Selected category: ' + id);
+
+    }).catch(error => {
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        ToastAndroid.show(`${error.response.status} -> ${error.response.data.message || error.response.data}`, ToastAndroid.LONG);
+        console.log(`${error.response.status} -> ${error.response.data.message || error.response.data}`);
+
+      } else if (error.request) {
+        // The request was made but no response was received
+        ToastAndroid.show(t('error') + ' ' + t('error_message.no_server_response'), ToastAndroid.LONG);
+
+      } else {
+        // An error occurred while configuring the query
+        ToastAndroid.show(`${error}`, ToastAndroid.LONG);
+      }
+    });
   };
+
+  // =============== « Load more » button ===============
+  // const renderLoadMoreButton = () => {
+  //   return (
+  //     <View>
+  //       <TouchableOpacity activeOpacity={0.9} onPress={getBooks} style={[homeStyles.authButton, { marginBottom: 30, paddingVertical: PADDING.vertical, borderRadius: 30 }]}>
+  //         <Text style={homeStyles.authButtonText}>{t('load_more')}</Text>
+  //         {isLoading ? (<ActivityIndicator color={COLORS.white} style={{ marginLeft: 8 }} />) : null}
+  //       </TouchableOpacity>
+  //     </View>
+  //   );
+  // };
 
   // =============== Category Item ===============
   const CategoryItem = ({ item }) => {
