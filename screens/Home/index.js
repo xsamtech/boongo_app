@@ -12,10 +12,8 @@ import homeStyles from './style';
 import { API, COLORS, ICON_SIZE } from '../../tools/constants';
 
 const sendWhatsAppMessage = async () => {
-  const phoneNumber = '+243815737600'; // Replace with the recipient's phone number
+  const phoneNumber = '+243815737600';
   // const text = encodeURIComponent(message);
-
-  // Construct the WhatsApp URL
   const url = `whatsapp://send?phone=${phoneNumber}&text=`;
 
   try {
