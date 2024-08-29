@@ -2,14 +2,15 @@
  * @author Xanders
  * @see https://team.xsamtech.com/xanderssamoth
  */
-import { View, Text, Alert, Button, TouchableOpacity, Dimensions, ScrollView, Image } from 'react-native';
+import { View, Alert, Button, TouchableOpacity, Dimensions, ScrollView, Image } from 'react-native';
 import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import YoutubePlayer from "react-native-youtube-iframe";
 import getVideoId from 'get-video-id';
-import { COLORS, WEB } from '../../tools/constants';
+import { COLORS } from '../../tools/constants';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import homeStyles from './style';
+import TextBrand from '../../assets/img/text.svg';
 
 const VideoPlayerScreen = ({ route, navigation }) => {
   // =============== Language ===============
@@ -38,12 +39,15 @@ const VideoPlayerScreen = ({ route, navigation }) => {
 
   return (
     <ScrollView>
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      {/* Header */}
+      <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
         <TouchableOpacity style={{ width: 40, height: 40, backgroundColor: 'rgba(219, 51, 55, 0.5)', margin: 10, paddingVertical: 7, paddingHorizontal: 11, borderRadius: 40 / 2 }} onPress={() => navigation.goBack()}>
           <FontAwesome6 style={{ fontSize: 25, color: COLORS.black }} name='angle-left' />
         </TouchableOpacity>
-        {video_title ? (<Text>{((video_title).length > 25) ? (((video_title).substring(0, 25 - 3)) + '...') : video_title}</Text>) : ''}
+        <TextBrand width={140} height={55} style={{ marginLeft: 50 }} />
       </View>
+
+      {/* Content */}
       <YoutubePlayer
         height={((Dimensions.get('window').width / 16) * 9) + 1}
         play={playing}

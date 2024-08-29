@@ -10,7 +10,6 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import axios from 'axios';
 import Logo from '../../assets/img/logo.svg';
-import SearchLibrary from '../../assets/img/search-library.svg';
 import homeStyles from '../Home/style';
 import { API, COLORS, ICON_SIZE } from '../../tools/constants';
 
@@ -136,7 +135,6 @@ const SearchScreen = () => {
           return (
             <View style={[homeStyles.cardEmpty, { width: Dimensions.get('window').width - 20, backgroundColor: 'rgba(255, 255, 255, 0)', elevation: 0 }]}>
               <Text style={[homeStyles.cardEmptyText, { marginBottom: 30, textAlign: 'center', fontSize: 19, fontWeight: '300', letterSpacing: 0.3 }]}>{t('search_description')}</Text>
-              <SearchLibrary width={200} height={200} style={{ margin: 'auto', opacity: 0.9 }} />
             </View>
           )
         }}

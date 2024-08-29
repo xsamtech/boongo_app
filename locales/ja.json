@@ -12,20 +12,13 @@
     "change_lang": "Changer de langue",
     "back_home": "Retour à l’accueil",
     "load_more": "Charger plus",
-    "page": "Page",
-    "notepad": {
-        "title": "Enregistrez des résumés",
-        "page_number": "Numéro page",
-        "enter_note": "Entrer votre note"
-    },
     "video_ended": "La vidéo est terminée !",
     "success": {
         "whatsapp": "Whatsapp est bien ouvert."
     },
     "error": "Erreur :",
     "error_message": {
-        "no_server_response": "Aucune réponse reçue du serveur.",
-        "cannot_be_empty": "Ceci ne peut pas être vide."
+        "no_server_response": "Aucune réponse reçue du serveur."
     },
     "empty_list": {
         "title": "La liste est vide",
@@ -42,7 +35,7 @@
         "categories": "Catégories : ",
         "category": "Catégorie : ",
         "author": "Auteur : ",
-        "subscription_info": "Abonnez-vous pour être en mesure de consulter, ou bien devenez partenaire pour publier vos propres ouvrages."
+        "subscription_info": "Abonnez-vous pour être en mesure de consulter, ou bien commandez un ouvrage ou une revue."
     },
     "most_popular": "Les plus populaires",
     "have_account": "Vous avez déjà un compte ?",
@@ -59,7 +52,6 @@
     "expand": "Etendre",
     "cut": "Couper",
     "confirm": "Confirmer",
-    "save": "Enregistrer",
     "send": "Envoyer",
     "cancel": "Annuler",
     "update": "Mettre à jour",
@@ -77,8 +69,6 @@
     "navigation": {
         "home": "Accueil",
         "search": "Rechercher une œuvre",
-        "reading": "Lecture",
-        "summary": "Résumés",
         "about": "A propos",
         "terms": "Conditions",
         "privacy": "Confidentialité",

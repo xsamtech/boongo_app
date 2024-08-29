@@ -86,7 +86,7 @@ const WorkDataScreen = ({ route, navigation }) => {
               <Text style={homeStyles.workContent}>{work.work_content}</Text>
               <Divider />
               <View style={[homeStyles.workIconBtns, { justifyContent: 'space-between', paddingHorizontal: 20 }]}>
-                <TouchableOpacity onPress={() => navigation.navigate('PDFViewer', { docTitle: work.workTitle, docUri: work.document_url })}>
+                <TouchableOpacity onPress={() => navigation.navigate('PDFViewer', { docTitle: work.workTitle, docUri: work.document_url, curPage: 1 })}>
                   <FontAwesome6 style={[homeStyles.workIconBtn, { color: COLORS.danger }]} name='file-lines' />
                 </TouchableOpacity>
                 {work.video_url ? (
@@ -141,8 +141,8 @@ const WorkDataScreen = ({ route, navigation }) => {
               <Text style={{ color: COLORS.white }}>{t('subscribe')}</Text>
             </TouchableOpacity>
             <TouchableOpacity style={[homeStyles.workCmd, { backgroundColor: COLORS.warning }]} onPress={() => { userInfo.id ? navigation.navigate('Cart') : navigation.navigate('Login') }}>
-              <FontAwesome6 style={[homeStyles.workCmdIcon, { color: COLORS.black }]} name='cart-shopping' />
-              <Text style={{ color: COLORS.black }}>{t('addToCart')}</Text>
+              <FontAwesome6 style={[homeStyles.workCmdIcon, { color: COLORS.black }]} name='handshake-angle' />
+              <Text style={{ color: COLORS.black }}>{t('auth.my_works.start_button')}</Text>
             </TouchableOpacity>
           </View>
         </View>

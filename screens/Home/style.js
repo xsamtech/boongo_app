@@ -92,7 +92,7 @@ const homeStyles = StyleSheet.create({
 
     headerButton: {
         width: 40,
-        height: 40, 
+        height: 40,
         marginVertical: PADDING.horizontal,
         marginLeft: PADDING.horizontal,
         paddingVertical: 7,
@@ -561,17 +561,75 @@ const homeStyles = StyleSheet.create({
         marginBottom: 5,
         fontSize: 16,
         fontWeight: '700',
-        color: COLORS.black,
+        color: COLORS.black
     },
 
     searchResultText: {
         marginBottom: 10,
-        fontSize: 14,
+        fontSize: 14
     },
 
     searchResultLink: {
         marginBottom: 10,
-        fontSize: 14,
+        fontSize: 14
+    },
+
+    // Notepad
+    noteTitle: {
+        marginVertical: PADDING.vertical, 
+        fontSize: 18, 
+        textAlign: 'center', 
+        color: COLORS.black
+    },
+
+    noteForm: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+
+    noteInput: {
+        width: Dimensions.get('window').width - 20,
+        borderColor: '#ddd',
+        borderWidth: 1,
+        borderBottomWidth: 0,
+        paddingHorizontal: 14,
+        fontSize: 15
+    },
+
+    noteSubmit: {
+        width: Dimensions.get('window').width - 20,
+        backgroundColor: COLORS.primary,
+        paddingVertical: 12,
+        paddingHorizontal: 16
+    },
+
+    noteContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+        width: Dimensions.get('window').width - 33,
+        marginHorizontal: 20,
+        paddingVertical: 10,
+        // paddingRight: 20,
+        borderBottomColor: '#ddd',
+        borderBottomWidth: 1
+    },
+
+    noteText: {
+        width: Dimensions.get('window').width - 70,
+        fontSize: 16
+    },
+
+    noteDeleteButton: {
+        backgroundColor: 'rgba(255, 255, 255, 0)',
+        padding: 8,
+        borderRadius: 4
+    },
+
+    noteDeleteButtonText: {
+        fontSize: 21,
+        color: COLORS.black
     }
 });
 

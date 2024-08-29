@@ -12,13 +12,20 @@
     "change_lang": "Change language",
     "back_home": "Back to home",
     "load_more": "Load more",
+    "page": "Page",
+    "notepad": {
+        "title": "Save summaries",
+        "page_number": "Page number",
+        "enter_note": "Enter your note"
+    },
     "video_ended": "The video is finished!",
     "success": {
         "whatsapp": "Whatsapp is open."
     },
     "error": "Error:",
     "error_message": {
-        "no_server_response": "No response received from the server."
+        "no_server_response": "No response received from the server.",
+        "cannot_be_empty": "This cannot be empty."
     },
     "empty_list": {
         "title": "The list is empty",
@@ -35,7 +42,7 @@
         "categories": "Categories: ",
         "category": "Category: ",
         "author": "Author: ",
-        "subscription_info": "Subscribe to be able to consult, or order a book or magazine."
+        "subscription_info": "Subscribe to be able to consult, or become partner to publish your own works."
     },
     "most_popular": "The most popular",
     "have_account": "Already have an account?",
@@ -52,6 +59,7 @@
     "expand": "Expand",
     "cut": "Cut",
     "confirm": "Confirm",
+    "save": "Save",
     "send": "Send",
     "cancel": "Cancel",
     "update": "Update",
@@ -69,6 +77,8 @@
     "navigation": {
         "home": "Home",
         "search": "Search a work",
+        "reading": "Reading",
+        "summary": "Summaries",
         "about": "About",
         "terms": "Terms",
         "privacy": "Privacy",
