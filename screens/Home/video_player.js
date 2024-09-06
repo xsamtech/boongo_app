@@ -44,7 +44,9 @@ const VideoPlayerScreen = ({ route, navigation }) => {
         <TouchableOpacity style={{ width: 40, height: 40, backgroundColor: 'rgba(219, 51, 55, 0.5)', margin: 10, paddingVertical: 7, paddingHorizontal: 11, borderRadius: 40 / 2 }} onPress={() => navigation.goBack()}>
           <FontAwesome6 style={{ fontSize: 25, color: COLORS.black }} name='angle-left' />
         </TouchableOpacity>
-        <TextBrand width={140} height={55} style={{ marginLeft: 50 }} />
+      </View>
+      <View style={{ position: 'absolute', top: 0, left: 0, width: Dimensions.get('window').width, paddingVertical: 7 }}>
+        <TextBrand width={140} height={55} style={{ alignSelf: 'center' }} />
       </View>
 
       {/* Content */}

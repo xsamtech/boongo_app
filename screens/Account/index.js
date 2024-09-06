@@ -52,6 +52,11 @@ const AccountScreenContent = () => {
     }).then(image => {
       updateAvatar(userInfo.id, `data:${image.mime};base64,${image.data}`);
       // console.log(`data:${image.mime};base64,${image.data}`);
+    }).catch(error => {
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        console.log(`${error.response.status} -> ${error.response.data.message || error.response.data}`);
+      }
     });
   };
 

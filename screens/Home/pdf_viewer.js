@@ -2,7 +2,7 @@
  * @author Xanders
  * @see https://team.xsamtech.com/xanderssamoth
  */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, TouchableOpacity, Dimensions, Alert, Text, TextInput, FlatList, SafeAreaView } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -11,10 +11,11 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import Octicons from 'react-native-vector-icons/Octicons';
 import Pdf from 'react-native-pdf';
+import Spinner from 'react-native-loading-spinner-overlay';
+import SQLite from 'react-native-sqlite-storage';
 import { COLORS, ICON_SIZE } from '../../tools/constants';
 import TextBrand from '../../assets/img/text.svg';
 import homeStyles from './style';
-import Spinner from 'react-native-loading-spinner-overlay';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -31,26 +32,87 @@ const SummaryScreenContent = ({ route, navigation }) => {
   const [noteText, setNoteText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const goToPage = (pageNumber) => {
-    setIsLoading(true);
-    navigation.navigate('PDFViewerContent', { isLoading: isLoading, docUri: docUri, curPage: parseInt(pageNumber) });
-    console.log('goToPage => ' + pageNumber);
-    setIsLoading(false);
-  };
+  // =============== Database handling ===============
+  const db = SQLite.openDatabase({ name: 'notes.db', location: 'default' });
+
+  useEffect(() => {
+    // Create table if it does not exist
+    db.transaction(tx => {
+      tx.executeSql('CREATE TABLE IF NOT EXISTS notes (id INTEGER PRIMARY KEY AUTOINCREMENT, page INTEGER, noteText TEXT)',
+        [], () => console.log('Table created successfully'),
+        (tx, error) => console.log('Error creating table', error)
+      );
+    });
+
+    // Load existing notes
+    loadNotes();
+  }, []);
 
   const addNote = () => {
     if (noteText.trim()) {
-      setNotes([...notes, { id: Date.now().toString(), page: page, text: noteText }]);
-      setNoteText('');
-      setPage('');
+      // setNotes([...notes, { id: Date.now().toString(), page: page, text: noteText }]);
+
+      db.transaction(tx => {
+        tx.executeSql('INSERT INTO Notes (page, noteText) VALUES (?, ?)',
+          [page, noteText],
+          () => {
+            console.log('Note saved successfully');
+            setPage('');
+            setNoteText('');
+
+            loadNotes();
+          },
+          (tx, error) => console.log('Error saving note', error)
+        );
+      });
 
     } else {
       Alert.alert(t('error'), t('error_message.cannot_be_empty'));
     }
   };
 
+  const loadNotes = () => {
+    db.transaction(tx => {
+      tx.executeSql('SELECT * FROM Notes', [],
+        (tx, results) => {
+          let notesList = [];
+
+          for (let i = 0; i < results.rows.length; i++) {
+            notesList.push(results.rows.item(i));
+          }
+
+          setNotes(notesList);
+        },
+        (tx, error) => {
+          Alert.alert(t('error'), 'Error loading notes', error);
+          console.log('Error loading notes', error)
+        }
+      );
+    });
+  };
+
   const deleteNote = (id) => {
-    setNotes(notes.filter(note => note.id !== id));
+    db.transaction(tx => {
+      tx.executeSql('DELETE FROM Notes WHERE id = ?', [id],
+        (tx, results) => {
+          // setNotes(notes.filter(note => note.id !== id));
+          // Load existing notes
+          loadNotes();
+        },
+        (tx, error) => {
+          Alert.alert(t('error'), 'Error while deleting note', error);
+          console.log('Error while deleting note', error)
+        }
+      );
+    });
+  };
+
+  // =============== Go to page ===============
+  const goToPage = (pageNumber) => {
+    setIsLoading(true);
+    navigation.navigate('PDFViewerContent', { isLoading: isLoading, docUri: docUri, curPage: parseInt(pageNumber) });
+    console.log('goToPage => ' + pageNumber);
+    setIsLoading(false);
   };
 
   return (
@@ -60,7 +122,9 @@ const SummaryScreenContent = ({ route, navigation }) => {
         <TouchableOpacity style={{ width: 40, height: 40, backgroundColor: 'rgba(219, 51, 55, 0.5)', margin: 10, paddingVertical: 7, paddingHorizontal: 11, borderRadius: 40 / 2 }} onPress={() => navigation.goBack()}>
           <FontAwesome6 style={{ fontSize: 25, color: COLORS.black }} name='angle-left' />
         </TouchableOpacity>
-        <TextBrand width={140} height={55} style={{ marginLeft: 50 }} />
+      </View>
+      <View style={{ position: 'absolute', top: 0, left: 0, width: Dimensions.get('window').width, paddingVertical: 7 }}>
+        <TextBrand width={140} height={55} style={{ alignSelf: 'center' }} />
       </View>
 
       {/* Content */}
@@ -81,7 +145,7 @@ const SummaryScreenContent = ({ route, navigation }) => {
           renderItem={({ item }) => (
             <View style={homeStyles.noteContainer}>
               <TouchableOpacity onPress={() => goToPage(item.page)} style={homeStyles.noteDeleteButton}>
-                <Text style={homeStyles.noteText}>{item.text}</Text>
+                <Text style={homeStyles.noteText}>{item.noteText}</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => deleteNote(item.id)} style={homeStyles.noteDeleteButton}>
                 <Octicons style={homeStyles.noteDeleteButtonText} name='x' />
@@ -108,7 +172,9 @@ const PDFViewerScreenContent = ({ route, navigation }) => {
         <TouchableOpacity style={{ width: 40, height: 40, backgroundColor: 'rgba(219, 51, 55, 0.5)', margin: 10, paddingVertical: 7, paddingHorizontal: 11, borderRadius: 40 / 2 }} onPress={() => navigation.goBack()}>
           <FontAwesome6 style={{ fontSize: 25, color: COLORS.black }} name='angle-left' />
         </TouchableOpacity>
-        <TextBrand width={140} height={55} style={{ marginLeft: 50 }} />
+      </View>
+      <View style={{ position: 'absolute', top: 0, left: 0, width: Dimensions.get('window').width, paddingVertical: 7 }}>
+        <TextBrand width={140} height={55} style={{ alignSelf: 'center' }} />
       </View>
 
       {/* Content */}

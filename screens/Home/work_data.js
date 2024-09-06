@@ -5,15 +5,15 @@
 import { View, Text, RefreshControl, Image, TouchableOpacity, FlatList } from 'react-native';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
-import { AuthContext } from '../../contexts/AuthContext';
 import { useTranslation } from 'react-i18next';
-import { API, COLORS, WEB } from '../../tools/constants';
-import axios from 'axios';
-import homeStyles from './style';
-import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import { Divider } from 'react-native-paper';
 import { NetworkInfo } from 'react-native-network-info';
+import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import UserAgent from 'react-native-user-agent';
+import axios from 'axios';
+import { AuthContext } from '../../contexts/AuthContext';
+import { API, COLORS, WEB } from '../../tools/constants';
+import homeStyles from './style';
 
 const WorkDataScreen = ({ route, navigation }) => {
   // =============== Language ===============
@@ -85,20 +85,20 @@ const WorkDataScreen = ({ route, navigation }) => {
               <Text style={homeStyles.workTitle}>{work.work_title}</Text>
               <Text style={homeStyles.workContent}>{work.work_content}</Text>
               <Divider />
-              <View style={[homeStyles.workIconBtns, { justifyContent: 'space-between', paddingHorizontal: 20 }]}>
+              <View style={[homeStyles.workIconBtns, { justifyContent: 'center', paddingHorizontal: 20 }]}>
                 <TouchableOpacity onPress={() => navigation.navigate('PDFViewer', { docTitle: work.workTitle, docUri: work.document_url, curPage: 1 })}>
                   <FontAwesome6 style={[homeStyles.workIconBtn, { color: COLORS.danger }]} name='file-lines' />
                 </TouchableOpacity>
                 {work.video_url ? (
                   <>
-                    <TouchableOpacity onPress={() => navigation.navigate('VideoPlayer', { videoTitle: work.workTitle, videoUri: work.video_url })}>
+                    <TouchableOpacity style={{ marginLeft: 20 }} onPress={() => navigation.navigate('VideoPlayer', { videoTitle: work.workTitle, videoUri: work.video_url })}>
                       <FontAwesome6 style={[homeStyles.workIconBtn, { color: COLORS.primary }]} name='play-circle' />
                     </TouchableOpacity>
                   </>
                 ) : ''}
-                <TouchableOpacity>
+                {/* <TouchableOpacity>
                   <FontAwesome6 style={[homeStyles.workIconBtn, { color: COLORS.success }]} name='headphones' />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
               </View>
             </View>
           </View>
