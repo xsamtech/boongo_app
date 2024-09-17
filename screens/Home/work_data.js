@@ -53,8 +53,6 @@ const WorkDataScreen = ({ route, navigation }) => {
   // =============== Get data ===============
   const [work, setWork] = useState({});
   const [categoryCount, setCategoryCount] = useState(0);
-  const [isSubscribed, setIsSubscribed] = useState(0);
-  const [isPartner, setIsPartner] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
   // =============== Refresh control ===============
@@ -66,14 +64,6 @@ const WorkDataScreen = ({ route, navigation }) => {
   // =============== Get item API with effect hook ===============
   useEffect(() => {
     getWork();
-  }, []);
-
-  useEffect(() => {
-    checkSubscription();
-  }, []);
-
-  useEffect(() => {
-    checkPartner();
   }, []);
 
   const getWork = () => {
@@ -106,42 +96,6 @@ const WorkDataScreen = ({ route, navigation }) => {
     })
   };
 
-  const checkSubscription = () => {
-    const config = { method: 'GET', url: `${API.url}/subscription/is_subscribed/${userInfo.id}`, headers: { 'X-localization': 'fr' } };
-
-    axios(config)
-      .then(res => {
-        const subscribedData = res.data.data;
-
-        console.log(subscribedData);
-
-        setIsSubscribed(subscribedData);
-        setIsLoading(false);
-
-        return subscribedData;
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  };
-
-  const checkPartner = () => {
-    const config = { method: 'GET', url: `${API.url}/user/is_partner/${userInfo.id}`, headers: { 'X-localization': 'fr' } };
-
-    axios(config)
-      .then(res => {
-        const partnerData = res.data.data;
-
-        setIsPartner(partnerData);
-        setIsLoading(false);
-
-        return partnerData;
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  };
-
   return (
     <ScrollView
       contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}
@@ -156,7 +110,9 @@ const WorkDataScreen = ({ route, navigation }) => {
               <Text style={homeStyles.workTitle}>{work.work_title}</Text>
               <Text style={homeStyles.workContent}>{work.work_content}</Text>
               {userInfo.id ? (
-                isSubscribed == 1 ? 
+                userInfo.is_subscribed == false ? 
+                ''
+                : 
                   <>
                     <Divider />
                     <View style={[homeStyles.workIconBtns, { justifyContent: 'center', paddingHorizontal: 20 }]}>
@@ -174,9 +130,7 @@ const WorkDataScreen = ({ route, navigation }) => {
                         <FontAwesome6 style={[homeStyles.workIconBtn, { color: COLORS.success }]} name='headphones' />
                       </TouchableOpacity> */}
                     </View>
-                  </> 
-                : 
-                '')
+                  </>)
               : 
               ''}
             </View>
@@ -215,18 +169,16 @@ const WorkDataScreen = ({ route, navigation }) => {
         <View style={homeStyles.workCard}>
           <View style={homeStyles.workCmds}>
             {userInfo.id ? (
-              isSubscribed == 1 ? 
-                ''
-              : 
+              userInfo.is_subscribed == false ? 
                 <>
                   <Text style={{ marginBottom: 10, textAlign: 'center', color: COLORS.black }}>{t('work_details.subscription_info')}</Text>
                   <TouchableOpacity style={[homeStyles.workCmd, { backgroundColor: COLORS.primary, marginBottom: 10 }]} onPress={() => { navigation.navigate('Subscription') }}>
                     <FontAwesome6 style={[homeStyles.workCmdIcon, { color: COLORS.white }]} name='money-check-dollar' />
                     <Text style={{ color: COLORS.white }}>{t('subscribe')}</Text>
                   </TouchableOpacity>
-                </> 
-            )
-            :
+                </> : 
+                ''
+              ) :
                 <>
                   <Text style={{ marginBottom: 10, textAlign: 'center', color: COLORS.black }}>{t('work_details.subscription_info')}</Text>
                   <TouchableOpacity style={[homeStyles.workCmd, { backgroundColor: COLORS.primary, marginBottom: 10 }]} onPress={() => { navigation.navigate('Login') }}>
@@ -236,15 +188,15 @@ const WorkDataScreen = ({ route, navigation }) => {
                 </> 
             }
             {userInfo.id ? (
-              isPartner == 1 ? 
-                ''
-              : 
+              userInfo.is_partner == false ? 
                 <>
                   <TouchableOpacity style={[homeStyles.workCmd, { backgroundColor: COLORS.warning }]} onPress={sendWhatsAppMessage}>
                     <FontAwesome6 style={[homeStyles.workCmdIcon, { color: COLORS.black }]} name='handshake-angle' />
                     <Text style={{ color: COLORS.black }}>{t('auth.my_works.start_button')}</Text>
                   </TouchableOpacity>
                 </> 
+              : 
+              ''
             )
             :
                 <>
