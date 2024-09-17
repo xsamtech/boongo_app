@@ -113,6 +113,8 @@ const WorkDataScreen = ({ route, navigation }) => {
       .then(res => {
         const subscribedData = res.data.data;
 
+        console.log(subscribedData);
+
         setIsSubscribed(subscribedData);
         setIsLoading(false);
 
