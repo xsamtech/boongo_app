@@ -2,13 +2,15 @@
  * @author Xanders
  * @see https://team.xsamtech.com/xanderssamoth
  */
-import { View, Alert, Button, TouchableOpacity, Dimensions, ScrollView, Image } from 'react-native';
-import React, { useCallback, useState } from 'react';
+import { View, Alert, Button, TouchableOpacity, Dimensions, ScrollView, Image, Linking } from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import YoutubePlayer from "react-native-youtube-iframe";
+import YoutubePlayer from 'react-native-youtube-iframe';
 import getVideoId from 'get-video-id';
-import { COLORS } from '../../tools/constants';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
+import axios from 'axios';
+import Carousel from 'pinar';
+import { API, COLORS, WEB } from '../../tools/constants';
 import homeStyles from './style';
 import TextBrand from '../../assets/img/text.svg';
 
@@ -22,8 +24,33 @@ const VideoPlayerScreen = ({ route, navigation }) => {
   const video_uri = JSON.stringify(videoUri);
 
   // =============== Get data ===============
+  const [sponsors, setSponsors] = useState([]);
   const [playing, setPlaying] = useState(false);
   const { id } = getVideoId(video_uri);
+
+  // SPONSORS
+  useEffect(() => {
+    getSponsors();
+  }, []);
+
+  // =============== Some functions ===============
+  // SPONSORS
+  const getSponsors = () => {
+    const config = { method: 'GET', url: `${API.url}/partner/find_by_active/1`, headers: { 'X-localization': 'fr' } };
+
+    axios(config)
+      .then(res => {
+        const sponsorsData = res.data.data;
+
+        setSponsors(sponsorsData);
+        setIsLoading(false);
+
+        return sponsorsData;
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
 
   const onStateChange = useCallback((state) => {
     if (state === 'ended') {
@@ -56,9 +83,17 @@ const VideoPlayerScreen = ({ route, navigation }) => {
         videoId={id}
         onChangeState={onStateChange} />
       <Button title={playing ? 'pause' : 'play'} onPress={togglePlaying} />
-      <View style={[homeStyles.cardEmpty, { width: Dimensions.get('window').width - 10, marginTop: 50, padding: 10 }]}>
-        <Image source={require('../../assets/img/ad.png')} style={{ width: '100%', height: Dimensions.get('screen').width / 1.2, borderRadius: 20 }} />
-      </View>
+
+      {/* ADS */}
+      {sponsors.length > 0 ? 
+        <View style={[homeStyles.cardEmpty, { width: Dimensions.get('window').width - 20, height: (Dimensions.get('window').width - 20) / 1.7, marginVertical: 50, padding: 10 }]}>
+          <Carousel style={{ width: Dimensions.get('window').width - 50 }} autoplay={true} autoplayInterval={5000} loop={true} showsControls={false} showsDots={false}>
+            {sponsors.map(item =>
+              <Image key={item.id} source={{ uri: item.image_url ? item.image_url : `${WEB.url}/assets/img/ad.png` }} style={{ width: '100%', height: '100%' }} onPress={() => Linking.openURL(item.website_url)}/>
+            )}
+          </Carousel>
+        </View>
+      : ''}
     </ScrollView>
   );
 };

@@ -97,6 +97,7 @@ const HomeScreen = () => {
         console.log(error);
       });
   };
+
   // BOOKS
   const getBooks = () => {
     const config = { method: 'GET', url: `${API.url}/work/find_all_by_type_status/fr/Ouvrage/Pertinente`, headers: { 'X-localization': 'fr' } };
@@ -114,6 +115,7 @@ const HomeScreen = () => {
         console.log(error);
       });
   };
+
   // MAGAZINES
   const getMags = () => {
     const config = { method: 'GET', url: `${API.url}/work/find_all_by_type_status/fr/Article/Pertinente`, headers: { 'X-localization': 'fr' } };
@@ -131,6 +133,7 @@ const HomeScreen = () => {
         console.log(error);
       });
   };
+
   // SPONSORS
   const getSponsors = () => {
     const config = { method: 'GET', url: `${API.url}/partner/find_by_active/1`, headers: { 'X-localization': 'fr' } };
@@ -207,15 +210,15 @@ const HomeScreen = () => {
               }} />
 
             {/* ADS */}
-            <View style={[homeStyles.cardEmpty, { width: Dimensions.get('window').width - 10, marginVertical: 50, padding: 10 }]}>
-              <Carousel style={homeStyles.workImage}>
-                {sponsors.map(item =>
-                  <TouchableOpacity onPress={() => Linking.openURL(item.website_url)}>
-                    <Image source={{ uri: item.image_url ? item.image_url : `${WEB.url}/assets/img/ad.png` }} style={{ width: Dimensions.get('window').width }} />
-                  </TouchableOpacity>
-                )}
-              </Carousel>
-            </View>
+            {sponsors.length > 0 ? 
+              <View style={[homeStyles.cardEmpty, { width: Dimensions.get('window').width - 20, height: (Dimensions.get('window').width - 20) / 2, marginVertical: 50, padding: 10 }]}>
+                <Carousel style={{ width: Dimensions.get('window').width - 50 }} autoplay={true} loop={true} showsControls={false} showsDots={false}>
+                  {sponsors.map(item =>
+                    <Image key={item.id} source={{ uri: item.image_url ? item.image_url : `${WEB.url}/assets/img/ad.png` }} style={{ width: '100%', height: '100%' }} onPress={() => Linking.openURL(item.website_url)}/>
+                  )}
+                </Carousel>
+              </View>
+            : ''}
 
             {/* BOOKS */}
             <View style={homeStyles.listTitleArea}>
