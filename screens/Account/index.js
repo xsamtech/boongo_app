@@ -68,12 +68,6 @@ const AccountScreenContent = () => {
           <FontAwesome6 style={[homeStyles.headerButtonIcon, { fontSize: 20 }]} name='arrow-left' />
         </TouchableOpacity>
         <Text style={[homeStyles.headerTitle, { width: Dimensions.get('window').width - 140, textAlign: 'left' }]}>{t('navigation.account')}</Text>
-        <TouchableOpacity style={[homeStyles.headerButton, { marginLeft: 0 }]} onPress={() => navigation.navigate('Cart')}>
-          <MaterialCommunityIcons name='cart-outline' color={COLORS.white} size={23} />
-        </TouchableOpacity>
-        <TouchableOpacity style={[homeStyles.headerButton, { marginLeft: 0 }]} onPress={() => navigation.navigate('Notification')}>
-          <MaterialCommunityIcons name='bell-outline' color={COLORS.white} size={23} />
-        </TouchableOpacity>
       </View>
 
       {/* Content */}

@@ -110,9 +110,9 @@ const WorkDataScreen = ({ route, navigation }) => {
               <Text style={homeStyles.workTitle}>{work.work_title}</Text>
               <Text style={homeStyles.workContent}>{work.work_content}</Text>
               {userInfo.id ? (
-                userInfo.is_subscribed == false ? 
-                ''
-                : 
+                userInfo.is_subscribed == false ?
+                  ''
+                  :
                   <>
                     <Divider />
                     <View style={[homeStyles.workIconBtns, { justifyContent: 'center', paddingHorizontal: 20 }]}>
@@ -131,8 +131,8 @@ const WorkDataScreen = ({ route, navigation }) => {
                       </TouchableOpacity> */}
                     </View>
                   </>)
-              : 
-              ''}
+                :
+                ''}
             </View>
           </View>
 
@@ -169,42 +169,47 @@ const WorkDataScreen = ({ route, navigation }) => {
         <View style={homeStyles.workCard}>
           <View style={homeStyles.workCmds}>
             {userInfo.id ? (
-              userInfo.is_subscribed == false ? 
+              userInfo.is_subscribed == false ?
                 <>
                   <Text style={{ marginBottom: 10, textAlign: 'center', color: COLORS.black }}>{t('work_details.subscription_info')}</Text>
                   <TouchableOpacity style={[homeStyles.workCmd, { backgroundColor: COLORS.primary, marginBottom: 10 }]} onPress={() => { navigation.navigate('Subscription') }}>
                     <FontAwesome6 style={[homeStyles.workCmdIcon, { color: COLORS.white }]} name='money-check-dollar' />
                     <Text style={{ color: COLORS.white }}>{t('subscribe')}</Text>
                   </TouchableOpacity>
-                </> : 
+                </> :
                 ''
-              ) :
-                <>
-                  <Text style={{ marginBottom: 10, textAlign: 'center', color: COLORS.black }}>{t('work_details.subscription_info')}</Text>
-                  <TouchableOpacity style={[homeStyles.workCmd, { backgroundColor: COLORS.primary, marginBottom: 10 }]} onPress={() => { navigation.navigate('Login') }}>
-                    <FontAwesome6 style={[homeStyles.workCmdIcon, { color: COLORS.white }]} name='money-check-dollar' />
-                    <Text style={{ color: COLORS.white }}>{t('subscribe')}</Text>
-                  </TouchableOpacity>
-                </> 
+            ) :
+              <>
+                <Text style={{ marginBottom: 10, textAlign: 'center', color: COLORS.black }}>{t('work_details.subscription_info')}</Text>
+                <TouchableOpacity style={[homeStyles.workCmd, { backgroundColor: COLORS.primary, marginBottom: 10 }]} onPress={() => { navigation.navigate('Login') }}>
+                  <FontAwesome6 style={[homeStyles.workCmdIcon, { color: COLORS.white }]} name='money-check-dollar' />
+                  <Text style={{ color: COLORS.white }}>{t('subscribe')}</Text>
+                </TouchableOpacity>
+              </>
             }
             {userInfo.id ? (
-              userInfo.is_partner == false ? 
+              userInfo.is_partner == false ?
                 <>
                   <TouchableOpacity style={[homeStyles.workCmd, { backgroundColor: COLORS.warning }]} onPress={sendWhatsAppMessage}>
                     <FontAwesome6 style={[homeStyles.workCmdIcon, { color: COLORS.black }]} name='handshake-angle' />
                     <Text style={{ color: COLORS.black }}>{t('auth.my_works.start_button')}</Text>
                   </TouchableOpacity>
-                </> 
-              : 
-              ''
+                </>
+                :
+                <>
+                  <TouchableOpacity style={[homeStyles.workCmd, { backgroundColor: COLORS.success }]} onPress={() => { navigation.navigate('Account', { screen: 'MyWork' }) }}>
+                    <FontAwesome6 style={[homeStyles.workCmdIcon, { color: COLORS.white }]} name='book' />
+                    <Text style={{ color: COLORS.white }}>{t('navigation.work')}</Text>
+                  </TouchableOpacity>
+                </>
             )
-            :
-                <>
-                  <TouchableOpacity style={[homeStyles.workCmd, { backgroundColor: COLORS.warning }]} onPress={sendWhatsAppMessage}>
-                    <FontAwesome6 style={[homeStyles.workCmdIcon, { color: COLORS.black }]} name='handshake-angle' />
-                    <Text style={{ color: COLORS.black }}>{t('auth.my_works.start_button')}</Text>
-                  </TouchableOpacity>
-                </> 
+              :
+              <>
+                <TouchableOpacity style={[homeStyles.workCmd, { backgroundColor: COLORS.warning }]} onPress={sendWhatsAppMessage}>
+                  <FontAwesome6 style={[homeStyles.workCmdIcon, { color: COLORS.black }]} name='handshake-angle' />
+                  <Text style={{ color: COLORS.black }}>{t('auth.my_works.start_button')}</Text>
+                </TouchableOpacity>
+              </>
             }
           </View>
         </View>
