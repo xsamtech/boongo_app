@@ -6,6 +6,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, FlatList, ScrollView, ActivityIndicator, RefreshControl, Dimensions, Image, ToastAndroid, Linking } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import Carousel from 'pinar';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import axios from 'axios';
 import homeStyles from './style';
@@ -46,6 +47,7 @@ const HomeScreen = () => {
   const [popular, setPopular] = useState([]);
   const [books, setBooks] = useState([]);
   const [mags, setMags] = useState([]);
+  const [sponsors, setSponsors] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   // =============== Refresh control ===============
@@ -68,6 +70,11 @@ const HomeScreen = () => {
   // MAGAZINES
   useEffect(() => {
     getMags();
+  }, []);
+
+  // SPONSORS
+  useEffect(() => {
+    getSponsors();
   }, []);
 
   // =============== Some work functions ===============
@@ -124,6 +131,23 @@ const HomeScreen = () => {
         console.log(error);
       });
   };
+  // SPONSORS
+  const getSponsors = () => {
+    const config = { method: 'GET', url: `${API.url}/partner/find_by_active/1`, headers: { 'X-localization': 'fr' } };
+
+    axios(config)
+      .then(res => {
+        const sponsorsData = res.data.data;
+
+        setSponsors(sponsorsData);
+        setIsLoading(false);
+
+        return sponsorsData;
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
 
   const WorkItem = ({ item }) => {
     // =============== Navigation ===============
@@ -163,6 +187,7 @@ const HomeScreen = () => {
             <View style={homeStyles.listTitleArea}>
               <Text style={homeStyles.listTitle}>{t('most_popular')}</Text>
             </View>
+            {/* POPULAR */}
             <FlatList
               data={popular}
               keyExtractor={item => item.id}
@@ -181,10 +206,18 @@ const HomeScreen = () => {
                 return (<WorkItem item={item} />);
               }} />
 
+            {/* ADS */}
             <View style={[homeStyles.cardEmpty, { width: Dimensions.get('window').width - 10, marginVertical: 50, padding: 10 }]}>
-              <Image source={require('../../assets/img/ad.png')} style={{ width: '100%', height: Dimensions.get('screen').width / 2, borderRadius: 10 }} />
+              <Carousel style={homeStyles.workImage}>
+                {sponsors.map(item =>
+                  <TouchableOpacity onPress={() => Linking.openURL(item.website_url)}>
+                    <Image source={{ uri: item.image_url ? item.image_url : `${WEB.url}/assets/img/ad.png` }} style={{ width: Dimensions.get('window').width }} />
+                  </TouchableOpacity>
+                )}
+              </Carousel>
             </View>
 
+            {/* BOOKS */}
             <View style={homeStyles.listTitleArea}>
               <Text style={homeStyles.listTitle}>{t('navigation.book')}</Text>
               <TouchableOpacity style={homeStyles.linkIcon} onPress={() => { navigation.navigate('Book') }}>
@@ -210,6 +243,7 @@ const HomeScreen = () => {
                 return (<WorkItem item={item} />);
               }} />
 
+            {/* MAGAZINES */}
             <View style={homeStyles.listTitleArea}>
               <Text style={homeStyles.listTitle}>{t('navigation.magazine')}</Text>
               <TouchableOpacity style={homeStyles.linkIcon} onPress={() => { navigation.navigate('Journal') }}>
