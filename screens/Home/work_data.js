@@ -2,7 +2,7 @@
  * @author Xanders
  * @see https://team.xsamtech.com/xanderssamoth
  */
-import { View, Text, RefreshControl, Image, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, RefreshControl, Image, TouchableOpacity, FlatList, Linking, ToastAndroid } from 'react-native';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useTranslation } from 'react-i18next';
@@ -14,6 +14,31 @@ import axios from 'axios';
 import { AuthContext } from '../../contexts/AuthContext';
 import { API, COLORS, WEB } from '../../tools/constants';
 import homeStyles from './style';
+
+const sendWhatsAppMessage = async () => {
+  const phoneNumber = '+243815737600';
+  const message = "Bonjour Boongo.\n\nJe voudrais devenir partenaire pour être en mesure de publier mes ouvrages.\n\nQue dois-je faire ?";
+  const text = encodeURIComponent(message);
+  const url = `whatsapp://send?phone=${phoneNumber}&text=${text}`;
+
+  try {
+    await Linking.openURL(url);
+
+  } catch (error) {
+    if (error.response) {
+      // The request was made and the server responded with a status code
+      ToastAndroid.show(`${error.response.status} -> ${error.response.data.message || error.response.data}`, ToastAndroid.LONG);
+
+    } else if (error.request) {
+      // The request was made but no response was received
+      ToastAndroid.show(t('error') + ' ' + t('error_message.no_server_response'), ToastAndroid.LONG);
+
+    } else {
+      // An error occurred while configuring the query
+      ToastAndroid.show(`${error}`, ToastAndroid.LONG);
+    }
+  }
+};
 
 const WorkDataScreen = ({ route, navigation }) => {
   // =============== Language ===============
@@ -28,6 +53,8 @@ const WorkDataScreen = ({ route, navigation }) => {
   // =============== Get data ===============
   const [work, setWork] = useState({});
   const [categoryCount, setCategoryCount] = useState(0);
+  const [isSubscribed, setIsSubscribed] = useState(0);
+  const [isPartner, setIsPartner] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
   // =============== Refresh control ===============
@@ -39,6 +66,14 @@ const WorkDataScreen = ({ route, navigation }) => {
   // =============== Get item API with effect hook ===============
   useEffect(() => {
     getWork();
+  }, []);
+
+  useEffect(() => {
+    checkSubscription();
+  }, []);
+
+  useEffect(() => {
+    checkPartner();
   }, []);
 
   const getWork = () => {
@@ -71,6 +106,40 @@ const WorkDataScreen = ({ route, navigation }) => {
     })
   };
 
+  const checkSubscription = () => {
+    const config = { method: 'GET', url: `${API.url}/subscription/is_subscribed/${userInfo.id}`, headers: { 'X-localization': 'fr' } };
+
+    axios(config)
+      .then(res => {
+        const subscribedData = res.data.data;
+
+        setIsSubscribed(subscribedData);
+        setIsLoading(false);
+
+        return subscribedData;
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
+  const checkPartner = () => {
+    const config = { method: 'GET', url: `${API.url}/user/is_partner/${userInfo.id}`, headers: { 'X-localization': 'fr' } };
+
+    axios(config)
+      .then(res => {
+        const partnerData = res.data.data;
+
+        setIsPartner(partnerData);
+        setIsLoading(false);
+
+        return partnerData;
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
   return (
     <ScrollView
       contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}
@@ -84,22 +153,30 @@ const WorkDataScreen = ({ route, navigation }) => {
             <View style={homeStyles.workDescTop}>
               <Text style={homeStyles.workTitle}>{work.work_title}</Text>
               <Text style={homeStyles.workContent}>{work.work_content}</Text>
-              <Divider />
-              <View style={[homeStyles.workIconBtns, { justifyContent: 'center', paddingHorizontal: 20 }]}>
-                <TouchableOpacity onPress={() => navigation.navigate('PDFViewer', { docTitle: work.workTitle, docUri: work.document_url, curPage: 1 })}>
-                  <FontAwesome6 style={[homeStyles.workIconBtn, { color: COLORS.danger }]} name='file-lines' />
-                </TouchableOpacity>
-                {work.video_url ? (
+              {userInfo.id ? (
+                isSubscribed == 1 ? 
                   <>
-                    <TouchableOpacity style={{ marginLeft: 20 }} onPress={() => navigation.navigate('VideoPlayer', { videoTitle: work.workTitle, videoUri: work.video_url })}>
-                      <FontAwesome6 style={[homeStyles.workIconBtn, { color: COLORS.primary }]} name='play-circle' />
-                    </TouchableOpacity>
-                  </>
-                ) : ''}
-                {/* <TouchableOpacity>
-                  <FontAwesome6 style={[homeStyles.workIconBtn, { color: COLORS.success }]} name='headphones' />
-                </TouchableOpacity> */}
-              </View>
+                    <Divider />
+                    <View style={[homeStyles.workIconBtns, { justifyContent: 'center', paddingHorizontal: 20 }]}>
+                      <TouchableOpacity onPress={() => navigation.navigate('PDFViewer', { docTitle: work.workTitle, docUri: work.document_url, curPage: 1 })}>
+                        <FontAwesome6 style={[homeStyles.workIconBtn, { color: COLORS.danger }]} name='file-lines' />
+                      </TouchableOpacity>
+                      {work.video_url ? (
+                        <>
+                          <TouchableOpacity style={{ marginLeft: 20 }} onPress={() => navigation.navigate('VideoPlayer', { videoTitle: work.workTitle, videoUri: work.video_url })}>
+                            <FontAwesome6 style={[homeStyles.workIconBtn, { color: COLORS.primary }]} name='play-circle' />
+                          </TouchableOpacity>
+                        </>
+                      ) : ''}
+                      {/* <TouchableOpacity>
+                        <FontAwesome6 style={[homeStyles.workIconBtn, { color: COLORS.success }]} name='headphones' />
+                      </TouchableOpacity> */}
+                    </View>
+                  </> 
+                : 
+                '')
+              : 
+              ''}
             </View>
           </View>
 
@@ -134,16 +211,47 @@ const WorkDataScreen = ({ route, navigation }) => {
           </View>
         </View>
         <View style={homeStyles.workCard}>
-          <Text style={{ marginBottom: 10, textAlign: 'center', color: COLORS.black }}>{t('work_details.subscription_info')}</Text>
           <View style={homeStyles.workCmds}>
-            <TouchableOpacity style={[homeStyles.workCmd, { backgroundColor: COLORS.primary, marginBottom: 10 }]} onPress={() => { userInfo.id ? navigation.navigate('Account') : navigation.navigate('Login') }}>
-              <FontAwesome6 style={[homeStyles.workCmdIcon, { color: COLORS.white }]} name='money-check-dollar' />
-              <Text style={{ color: COLORS.white }}>{t('subscribe')}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={[homeStyles.workCmd, { backgroundColor: COLORS.warning }]} onPress={() => { userInfo.id ? navigation.navigate('Cart') : navigation.navigate('Login') }}>
-              <FontAwesome6 style={[homeStyles.workCmdIcon, { color: COLORS.black }]} name='handshake-angle' />
-              <Text style={{ color: COLORS.black }}>{t('auth.my_works.start_button')}</Text>
-            </TouchableOpacity>
+            {userInfo.id ? (
+              isSubscribed == 1 ? 
+                ''
+              : 
+                <>
+                  <Text style={{ marginBottom: 10, textAlign: 'center', color: COLORS.black }}>{t('work_details.subscription_info')}</Text>
+                  <TouchableOpacity style={[homeStyles.workCmd, { backgroundColor: COLORS.primary, marginBottom: 10 }]} onPress={() => { navigation.navigate('Subscription') }}>
+                    <FontAwesome6 style={[homeStyles.workCmdIcon, { color: COLORS.white }]} name='money-check-dollar' />
+                    <Text style={{ color: COLORS.white }}>{t('subscribe')}</Text>
+                  </TouchableOpacity>
+                </> 
+            )
+            :
+                <>
+                  <Text style={{ marginBottom: 10, textAlign: 'center', color: COLORS.black }}>{t('work_details.subscription_info')}</Text>
+                  <TouchableOpacity style={[homeStyles.workCmd, { backgroundColor: COLORS.primary, marginBottom: 10 }]} onPress={() => { navigation.navigate('Login') }}>
+                    <FontAwesome6 style={[homeStyles.workCmdIcon, { color: COLORS.white }]} name='money-check-dollar' />
+                    <Text style={{ color: COLORS.white }}>{t('subscribe')}</Text>
+                  </TouchableOpacity>
+                </> 
+            }
+            {userInfo.id ? (
+              isPartner == 1 ? 
+                ''
+              : 
+                <>
+                  <TouchableOpacity style={[homeStyles.workCmd, { backgroundColor: COLORS.warning }]} onPress={sendWhatsAppMessage}>
+                    <FontAwesome6 style={[homeStyles.workCmdIcon, { color: COLORS.black }]} name='handshake-angle' />
+                    <Text style={{ color: COLORS.black }}>{t('auth.my_works.start_button')}</Text>
+                  </TouchableOpacity>
+                </> 
+            )
+            :
+                <>
+                  <TouchableOpacity style={[homeStyles.workCmd, { backgroundColor: COLORS.warning }]} onPress={sendWhatsAppMessage}>
+                    <FontAwesome6 style={[homeStyles.workCmdIcon, { color: COLORS.black }]} name='handshake-angle' />
+                    <Text style={{ color: COLORS.black }}>{t('auth.my_works.start_button')}</Text>
+                  </TouchableOpacity>
+                </> 
+            }
           </View>
         </View>
       </View>
