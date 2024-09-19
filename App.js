@@ -31,6 +31,8 @@ import SplashScreen from './screens/Home/splash_screen';
 import SearchScreen from './screens/Search';
 import VideoPlayerScreen from './screens/Home/video_player';
 import WorkDataScreen from './screens/Home/work_data';
+import SubscriptionScreen from './screens/Home/subscriptions';
+import SubscribeScreen from './screens/Home/subscribe';
 
 const StackNav = () => {
     const Stack = createNativeStackNavigator();
@@ -110,6 +112,7 @@ const StackNav = () => {
                             );
                         }
                     }} />
+                    <Stack.Screen name='Subscription' component={SubscriptionScreen} options={{ title: t('subscription.title') }} />
                     <Stack.Screen name='Search' component={SearchScreen} options={{ title: t('navigation.search') }} />
                     <Stack.Screen name='WorkData' component={WorkDataScreen} options={{ title: t('work_details.title') }} />
                     <Stack.Screen name='PDFViewer' component={PDFViewerScreen} options={{ headerShown: false }} />
@@ -120,6 +123,7 @@ const StackNav = () => {
                             <Stack.Screen name='Account' component={AccountScreen} options={{ headerShown: false, title: t('navigation.account') }} />
                             <Stack.Screen name='Notification' component={NotificationScreen} options={{ title: t('navigation.notification') }} />
                             <Stack.Screen name='Cart' component={CartScreen} options={{ title: t('navigation.cart') }} />
+                            <Stack.Screen name='Subscribe' component={SubscribeScreen} options={{ headerShown: false }} />
                         </>
                     ) : (
                         <>

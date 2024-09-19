@@ -14,6 +14,7 @@ import axios from 'axios';
 import { AuthContext } from '../../contexts/AuthContext';
 import { API, COLORS, WEB } from '../../tools/constants';
 import homeStyles from './style';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const sendWhatsAppMessage = async () => {
   const phoneNumber = '+243815737600';
@@ -66,6 +67,13 @@ const WorkDataScreen = ({ route, navigation }) => {
     getWork();
   }, []);
 
+  // =============== Get item API with effect hook ===============
+  useEffect(() => {
+    if (userInfo.valid_subscription) {
+      updateSessionData({ is_subscribed: true });
+    }
+  }, []);
+
   const getWork = () => {
     NetworkInfo.getIPAddress().then(ip_address => {
       const config = {
@@ -94,6 +102,39 @@ const WorkDataScreen = ({ route, navigation }) => {
           console.log(error);
         });
     })
+  };
+
+  // =============== Update session data ===============
+  const updateSessionData = async (newData) => {
+    try {
+      // Recover existing data
+      const jsonValue = await AsyncStorage.getItem('userInfo');
+      const currentData = jsonValue != null ? JSON.parse(jsonValue) : {};
+
+      // Update data
+      const updatedData = { ...currentData, ...newData };
+
+      console.log(updatedData);
+      
+      // Save updated data
+      await AsyncStorage.setItem('userInfo', JSON.stringify(updatedData));
+
+    } catch (error) {
+      // Handling errors
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        ToastAndroid.show(`${error.response.data.message || error.response.data}`, ToastAndroid.LONG);
+        console.log(`${error.response.status} -> ${error.response.data.message || error.response.data}`);
+
+      } else if (error.request) {
+        // The request was made but no response was received
+        ToastAndroid.show(t('error') + ' ' + t('error_message.no_server_response'), ToastAndroid.LONG);
+
+      } else {
+        // An error occurred while configuring the query
+        ToastAndroid.show(`${error}`, ToastAndroid.LONG);
+      }
+    }
   };
 
   return (
@@ -172,18 +213,18 @@ const WorkDataScreen = ({ route, navigation }) => {
               userInfo.is_subscribed == false ?
                 <>
                   <Text style={{ marginBottom: 10, textAlign: 'center', color: COLORS.black }}>{t('work_details.subscription_info')}</Text>
-                  <TouchableOpacity style={[homeStyles.workCmd, { backgroundColor: COLORS.primary, marginBottom: 10 }]} onPress={() => { navigation.navigate('Subscription') }}>
+                  <TouchableOpacity style={[homeStyles.workCmd, { backgroundColor: COLORS.primary, marginBottom: 10 }]} onPress={() => { navigation.navigate('Subscription', { message: t('error_message.pending_after_payment') }) }}>
                     <FontAwesome6 style={[homeStyles.workCmdIcon, { color: COLORS.white }]} name='money-check-dollar' />
-                    <Text style={{ color: COLORS.white }}>{t('subscribe')}</Text>
+                    <Text style={{ color: COLORS.white }}>{t('subscription.link')}</Text>
                   </TouchableOpacity>
                 </> :
                 ''
             ) :
               <>
                 <Text style={{ marginBottom: 10, textAlign: 'center', color: COLORS.black }}>{t('work_details.subscription_info')}</Text>
-                <TouchableOpacity style={[homeStyles.workCmd, { backgroundColor: COLORS.primary, marginBottom: 10 }]} onPress={() => { navigation.navigate('Login') }}>
+                <TouchableOpacity style={[homeStyles.workCmd, { backgroundColor: COLORS.primary, marginBottom: 10 }]} onPress={() => { navigation.navigate('Subscription', { message: t('error_message.pending_after_payment') }) }}>
                   <FontAwesome6 style={[homeStyles.workCmdIcon, { color: COLORS.white }]} name='money-check-dollar' />
-                  <Text style={{ color: COLORS.white }}>{t('subscribe')}</Text>
+                  <Text style={{ color: COLORS.white }}>{t('subscription.link')}</Text>
                 </TouchableOpacity>
               </>
             }

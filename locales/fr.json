@@ -8,6 +8,7 @@
     "privacy_title": "Politique de confidentialité",
     "terms_title": "Conditions d’utilisation",
     "terms_accept1": "En créant votre compte, vous acceptez nos ",
+    "terms_accept1_": "En vous abonnant, vous acceptez nos ",
     "terms_accept2": " et notre politique de ",
     "change_lang": "Changer de langue",
     "back_home": "Retour à l’accueil",
@@ -24,6 +25,8 @@
     },
     "error": "Erreur :",
     "error_message": {
+        "login_before_operation": "Vous devez avant tout vous identifier pour effectuer cette opération.",
+        "pending_after_payment": "Lorsque vous effectuerez votre paiement, votre abonnement sera validé dans les minutes qui suivent.",
         "no_server_response": "Aucune réponse reçue du serveur.",
         "cannot_be_empty": "Ceci ne peut pas être vide."
     },
@@ -69,7 +72,12 @@
     "logout": "Déconnexion",
     "personal_infos": "Infos personnelles",
     "change_password": "Modifier mot de passe",
-    "subscribe": "S’abonner",
+    "subscription":  {
+        "title": "Choisir un abonnement",
+        "type": "Type d’abonnement",
+        "price": "Prix",
+        "link": "S’abonner"
+    },
     "addToCart": "Ajouter au panier",
     "withdrawFromCart": "Retirer du panier",
     "pay": "Payer maintenant",

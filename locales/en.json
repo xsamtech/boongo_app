@@ -8,6 +8,7 @@
     "privacy_title": "Privacy policy",
     "terms_title": "Terms of use",
     "terms_accept1": "By creating your account, you accept our ",
+    "terms_accept1_": "By subscribing, you accept our ",
     "terms_accept2": " and our policy for ",
     "change_lang": "Change language",
     "back_home": "Back to home",
@@ -24,6 +25,8 @@
     },
     "error": "Error:",
     "error_message": {
+        "login_before_operation": "You must first identify yourself to carry out this operation.",
+        "pending_after_payment": "When you make your payment, your subscription will be validated within minutes.",
         "no_server_response": "No response received from the server.",
         "cannot_be_empty": "This cannot be empty."
     },
@@ -69,7 +72,12 @@
     "logout": "Log out",
     "personal_infos": "Personal infos",
     "change_password": "Change password",
-    "subscribe": "Subscribe",
+    "subscription":  {
+        "title": "Choose a subscription",
+        "type": "Subscription type",
+        "price": "Price",
+        "link": "Subscribe"
+    },
     "addToCart": "Add to cart",
     "withdrawFromCart": "Withdraw from cart",
     "pay": "Pay now",

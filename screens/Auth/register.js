@@ -101,7 +101,14 @@ const RegisterScreen = () => {
           <Text style={homeStyles.authButtonText}>{t('register')}</Text>
         </Button>
 
-        {/* Register link */}
+        {/* Terms accept */}
+        <Divider style={homeStyles.authDivider} />
+        <Text style={homeStyles.authTermsText}>
+          {t('terms_accept1')} <Text style={homeStyles.link} onPress={() => navigation.navigate('About', { screen: 'Terms' })}>{t('navigation.terms')}</Text>
+          {t('terms_accept2')} <Text style={homeStyles.link} onPress={() => navigation.navigate('About', { screen: 'Privacy' })}>{t('navigation.privacy')}</Text>
+        </Text>
+
+        {/* Login link */}
         <View>
           <Text style={homeStyles.authText}>{t('have_account')}</Text>
           <TouchableOpacity onPress={() => navigation.navigate('Login')}>
@@ -110,7 +117,6 @@ const RegisterScreen = () => {
         </View>
 
         {/* Copyright */}
-        <Divider style={homeStyles.authDivider} />
         <Text style={homeStyles.authBottomText}>{t('copyright')} | {t('all_rights_reserved')}</Text>
         <Text style={homeStyles.authBottomText}>
           Designed by <Text style={homeStyles.authBottomLink} onPress={() => Linking.openURL('https://xsamtech.com')}> Xsam Technologies</Text>
