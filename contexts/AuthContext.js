@@ -210,7 +210,6 @@ export const AuthProvider = ({ children }) => {
                 setUserInfo(userData);
 
                 AsyncStorage.setItem('userInfo', JSON.stringify(userData));
-                ToastAndroid.show(`${message}`, ToastAndroid.LONG);
                 console.log(`${message}`);
             }
 
@@ -243,7 +242,6 @@ export const AuthProvider = ({ children }) => {
                 setUserInfo(userData);
 
                 AsyncStorage.setItem('userInfo', JSON.stringify(userData));
-                ToastAndroid.show(`${message}`, ToastAndroid.LONG);
                 console.log(`${message}`);
             }
 
