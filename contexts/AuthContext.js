@@ -161,6 +161,42 @@ export const AuthProvider = ({ children }) => {
         });
     };
 
+    const validateSubscription = (user_id) => {
+        setIsLoading(true);
+
+        axios.put(`${API.url}/subscription/validate_subscription/${user_id}`, null, {
+            headers: { 'Authorization': `Bearer ${userInfo.api_token}` }
+        }).then(res => {
+            let success = res.data.success;
+            let message = res.data.message;
+
+            if (success) {
+                ToastAndroid.show(`${message}`, ToastAndroid.LONG);
+
+                console.log(`${message}`);
+            }
+
+            setIsLoading(false);
+
+        }).catch(error => {
+            if (error.response) {
+                // The request was made and the server responded with a status code
+                ToastAndroid.show(`${error.response.data.message || error.response.data}`, ToastAndroid.LONG);
+                console.log(`${error.response.status} -> ${error.response.data.message || error.response.data}`);
+
+            } else if (error.request) {
+                // The request was made but no response was received
+                ToastAndroid.show(t('error') + ' ' + t('error_message.no_server_response'), ToastAndroid.LONG);
+
+            } else {
+                // An error occurred while configuring the query
+                ToastAndroid.show(`${error}`, ToastAndroid.LONG);
+            }
+
+            setIsLoading(false);
+        });
+    };
+
     const login = (username, password) => {
         setIsLoading(true);
 
