@@ -15,7 +15,6 @@ import { AuthContext, AuthProvider } from './contexts/AuthContext';
 import AboutScreen from './screens/About';
 import AccountScreen from './screens/Account';
 import BookScreen from './screens/Book';
-import BlockedScreen from './screens/Account/blocked';
 import DrawerContent from './DrawerContent';
 import HomeScreen from './screens/Home';
 import JournalScreen from './screens/Journal';
