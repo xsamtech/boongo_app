@@ -282,7 +282,7 @@ export const AuthProvider = ({ children }) => {
 
     return (
         <AuthContext.Provider
-            value={{ isLoading, userInfo, splashLoading, register, update, updateAvatar, changePassword, login, logout }}>
+            value={{ isLoading, userInfo, splashLoading, register, update, updateAvatar, changePassword, validateSubscription, login, logout }}>
             {children}
         </AuthContext.Provider>
     );

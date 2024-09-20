@@ -106,6 +106,16 @@
         "firstname": "Prénom",
         "lastname": "Nom",
         "surname": "Post-nom",
+        "message": {
+            "disabled": {
+                "title": "Compte désactivé",
+                "description": "Vous avez désactivé votre compte. Veuillez le réactiver pour effectuer des opérations spécifique."
+            },
+            "blocked": {
+                "title": "Compte bloqué",
+                "description": "Votre compte est bloqué pour l'instant parce que vous ne respectez pas nos conditions d’utilisation. Veuillez nous contacter en cliquant sur le bouton ci-dessous."
+            }
+        },
         "gender": {
             "label": "Sexe",
             "male": "Masculin",

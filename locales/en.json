@@ -106,6 +106,16 @@
         "firstname": "First name",
         "lastname": "Last name",
         "surname": "Surname",
+        "message": {
+            "disabled": {
+                "title": "Account disabled",
+                "description": "You have deactivated your account. Please reactivate it to perform specific operations."
+            },
+            "blocked": {
+                "title": "Account blocked",
+                "description": "Your account is currently blocked because you do not comply with our terms of use. Please contact us by clicking the button below."
+            }
+        },
         "gender": {
             "label": "Gender",
             "male": "Male",

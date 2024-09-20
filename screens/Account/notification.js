@@ -4,12 +4,12 @@
  */
 import { View, Text } from 'react-native';
 import React from 'react';
-import accountStyles from './style';
+import homeStyles from '../Home/style';
 
 const NotificationScreen = () => {
   return (
-    <View style={accountStyles.view}>
-      <Text style={accountStyles.heading}>Notification</Text>
+    <View style={[homeStyles.cardEmpty, {flex: 1}]}>
+      <Text style={homeStyles.homeTitleOne}>Notification</Text>
     </View>
   );
 };

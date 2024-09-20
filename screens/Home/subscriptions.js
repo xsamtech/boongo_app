@@ -12,7 +12,6 @@ import axios from 'axios';
 import { AuthContext } from '../../contexts/AuthContext';
 import { API, COLORS, PADDING } from '../../tools/constants';
 import homeStyles from './style';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SubscriptionScreen = ({ route }) => {
   // =============== Language ===============
@@ -25,10 +24,9 @@ const SubscriptionScreen = ({ route }) => {
   const navigation = useNavigation();
 
   // =============== Authentication context ===============
-  const { userInfo, logout } = useContext(AuthContext);
+  const { userInfo, validateSubscription } = useContext(AuthContext);
 
   // =============== Get data ===============
-  const [userInfo2, setUserInfo2] = useState(userInfo);
   const [subscriptions, setSubscriptions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -39,6 +37,14 @@ const SubscriptionScreen = ({ route }) => {
   }, []);
 
   // =============== Get item API with effect hook ===============
+  useEffect(() => {
+    const validationInterval = setInterval(() => {
+      validateSubscription(userInfo.id);
+    }, 1000);
+
+    return () => clearInterval(validationInterval);
+  }, []);
+
   useEffect(() => {
     getSubscription();
   }, []);
@@ -62,8 +68,6 @@ const SubscriptionScreen = ({ route }) => {
 
   const redirectToSubscribe = (nav, subscr_id, user_id, api_token) => {
     nav.navigate('Subscribe', { subscrId: subscr_id, userId: user_id, apiToken: api_token });
-    AsyncStorage.removeItem('userInfo');
-    setUserInfo2({});
   };
 
   return (

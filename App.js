@@ -15,7 +15,7 @@ import { AuthContext, AuthProvider } from './contexts/AuthContext';
 import AboutScreen from './screens/About';
 import AccountScreen from './screens/Account';
 import BookScreen from './screens/Book';
-import CartScreen from './screens/Account/cart';
+import BlockedScreen from './screens/Account/blocked';
 import DrawerContent from './DrawerContent';
 import HomeScreen from './screens/Home';
 import JournalScreen from './screens/Journal';
@@ -119,12 +119,17 @@ const StackNav = () => {
                     <Stack.Screen name='VideoPlayer' component={VideoPlayerScreen} options={{ headerShown: false }} />
                     <Stack.Screen name='Language' component={LanguageScreen} options={{ title: t('change_lang') }} />
                     {userInfo.id ? (
-                        <>
-                            <Stack.Screen name='Account' component={AccountScreen} options={{ headerShown: false, title: t('navigation.account') }} />
-                            <Stack.Screen name='Notification' component={NotificationScreen} options={{ title: t('navigation.notification') }} />
-                            <Stack.Screen name='Cart' component={CartScreen} options={{ title: t('navigation.cart') }} />
-                            <Stack.Screen name='Subscribe' component={SubscribeScreen} options={{ headerShown: false }} />
-                        </>
+                        userInfo.status.status_name_fr == 'Bloqué' ? (
+                            <>
+                                <Stack.Screen name='Blocked' component={BlockedScreen} options={{ title: t('navigation.cart') }} />
+                            </>
+                        ) : (
+                            <>
+                                <Stack.Screen name='Account' component={AccountScreen} options={{ headerShown: false, title: t('navigation.account') }} />
+                                <Stack.Screen name='Notification' component={NotificationScreen} options={{ title: t('navigation.notification') }} />
+                                <Stack.Screen name='Subscribe' component={SubscribeScreen} options={{ headerShown: false }} />
+                            </>
+                        )
                     ) : (
                         <>
                             <Stack.Screen name='Register' component={RegisterScreen} options={{ headerShown: false, title: t('register') }} />
