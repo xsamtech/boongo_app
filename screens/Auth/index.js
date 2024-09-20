@@ -149,7 +149,7 @@ const LoginScreen = ({ route }) => {
           </Text>
 
           {/* Submit */}
-          <Button style={homeStyles.authCancel} onPress={() => navigation.navigate('Home_')}>
+          <Button style={[homeStyles.authCancel, { paddingVertical: 0 }]} onPress={() => navigation.navigate('Home_')}>
             <Text style={homeStyles.authCancelText}>{t('back_home')}</Text>
           </Button>
 

@@ -70,6 +70,7 @@
     "register": "Inscription",
     "login": "Connexion",
     "logout": "Déconnexion",
+    "i_login": "Je vais me connecter",
     "personal_infos": "Infos personnelles",
     "change_password": "Modifier mot de passe",
     "subscription":  {
@@ -130,7 +131,8 @@
             "new": "Nouveau mot de passe",
             "error": "Le mot de passe est incorrect",
             "forgotten": "Mot de passe oublié",
-            "reset": "Réinitialiser mot de passe"
+            "reset": "Réinitialiser mot de passe",
+            "reset_message": "Vous pouvez envoyer votre numéro de téléphone pour que nous modifiions votre mot de passe que nous vous enverrons par SMS et/ou WhatsApp."
         },
         "confirm_password": {
             "label": "Confirmer mot de passe",

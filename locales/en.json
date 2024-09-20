@@ -70,6 +70,7 @@
     "register": "Register",
     "login": "Log in",
     "logout": "Log out",
+    "i_login": "I will log in",
     "personal_infos": "Personal infos",
     "change_password": "Change password",
     "subscription":  {
@@ -130,7 +131,8 @@
             "new": "New password",
             "error": "The password is incorrect",
             "forgotten": "Forgotten password",
-            "reset": "Reset password"
+            "reset": "Reset password",
+            "reset_message": "You can send your phone number so that we can change your password which we will send to you by SMS and/or WhatsApp."
         },
         "confirm_password": {
             "label": "Confirm password",
