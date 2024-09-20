@@ -106,16 +106,6 @@
         "firstname": "Prénom",
         "lastname": "Nom",
         "surname": "Post-nom",
-        "message": {
-            "disabled": {
-                "title": "Compte désactivé",
-                "description": "Vous avez désactivé votre compte. Veuillez le réactiver pour effectuer des opérations spécifique."
-            },
-            "blocked": {
-                "title": "Compte bloqué",
-                "description": "Votre compte est bloqué pour l'instant parce que vous ne respectez pas nos conditions d’utilisation. Veuillez nous contacter en cliquant sur le bouton ci-dessous."
-            }
-        },
         "gender": {
             "label": "Sexe",
             "male": "Masculin",
@@ -153,8 +143,17 @@
             "camera": "Utiliser la caméra"
         },
         "status": {
-            "disable": "Désactiver mon compte",
-            "reactivate": "Réactivater mon compte"
+            "disabled": {
+                "title": "Compte désactivé",
+                "description": "Vous avez désactivé votre compte. Veuillez le réactiver pour effectuer des opérations spécifique.",
+                "link1": "Désactiver mon compte",
+                "link2": "Réactiver mon compte"
+            },
+            "blocked": {
+                "title": "Compte bloqué",
+                "description": "Votre compte est bloqué pour l'instant parce que vous ne respectez pas nos conditions d’utilisation. Veuillez nous contacter en cliquant sur le bouton ci-dessous.",
+                "link1": "Réclamer mon déblocage"
+            }
         },
         "my_works": {
             "description": "Devenez un de nos partenaires pour pouvoir publier vos ouvrages qui seront visibles par tous. Et cela vous donnera l'avantage d'acquérir de l'argent selon les consultations du public.",

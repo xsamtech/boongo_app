@@ -2,11 +2,10 @@
  * @author Xanders
  * @see https://team.xsamtech.com/xanderssamoth
  */
-import { SafeAreaView, Text, ToastAndroid, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
 import React, { useContext, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { WebView } from 'react-native-webview';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import homeStyles from './style';
 import { WEB } from '../../tools/constants';
@@ -17,14 +16,19 @@ const SubscribeScreen = ({ route, navigation }) => {
   const { t } = useTranslation();
 
   // =============== Authentication context ===============
-  const { logout } = useContext(AuthContext);
+  const { userInfo, validateSubscription, invalidateSubscription } = useContext(AuthContext);
 
   // =============== Get parameters ===============
   const { subscrId, userId, apiToken } = route.params;
 
   // =============== Get item API with effect hook ===============
   useEffect(() => {
-    logout
+    const validationInterval = setInterval(() => {
+      validateSubscription(userInfo.id);
+      invalidateSubscription(userInfo.id);
+    }, 1000);
+
+    return () => clearInterval(validationInterval);
   }, []);
 
   return (

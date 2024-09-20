@@ -24,6 +24,31 @@ import AvatarM from '../../assets/img/avatar-M.svg';
 
 const Tab = createMaterialBottomTabNavigator();
 
+const sendWhatsAppMessage = async () => {
+  const phoneNumber = '+243815737600';
+  const message = "Bonjour Boongo.\n\nJe voudrais devenir partenaire pour être en mesure de publier mes ouvrages.\n\nQue dois-je faire ?";
+  const text = encodeURIComponent(message);
+  const url = `whatsapp://send?phone=${phoneNumber}&text=${text}`;
+
+  try {
+    await Linking.openURL(url);
+
+  } catch (error) {
+    if (error.response) {
+      // The request was made and the server responded with a status code
+      ToastAndroid.show(`${error.response.status} -> ${error.response.data.message || error.response.data}`, ToastAndroid.LONG);
+
+    } else if (error.request) {
+      // The request was made but no response was received
+      ToastAndroid.show(t('error') + ' ' + t('error_message.no_server_response'), ToastAndroid.LONG);
+
+    } else {
+      // An error occurred while configuring the query
+      ToastAndroid.show(`${error}`, ToastAndroid.LONG);
+    }
+  }
+};
+
 const AccountScreenContent = () => {
   // =============== Language ===============
   const { t } = useTranslation();
@@ -35,7 +60,7 @@ const AccountScreenContent = () => {
   Moment.locale('fr');
 
   // =============== Authentication context ===============
-  const { userInfo, isLoading, updateAvatar, changePassword } = useContext(AuthContext);
+  const { userInfo, isLoading, updateAvatar, changePassword, changeStatus } = useContext(AuthContext);
 
   // =============== User data ===============
   const [former_password, setFormerPassword] = useState(null);
@@ -154,8 +179,8 @@ const AccountScreenContent = () => {
         </View>
 
         {/* Disable account */}
-        <TouchableOpacity style={[homeStyles.authButton, { backgroundColor: COLORS.light_danger, marginBottom: 30, paddingVertical: PADDING.vertical }]}>
-          <Text style={[homeStyles.authButtonText, { color: COLORS.black }]}>{t('auth.status.disable')}</Text>
+        <TouchableOpacity style={[homeStyles.authButton, { backgroundColor: COLORS.light_danger, marginBottom: 30, paddingVertical: PADDING.vertical }]} onPress={() => { changeStatus(userInfo.id, 4); navigation.navigate('Account'); }}>
+          <Text style={[homeStyles.authButtonText, { color: COLORS.black }]}>{t('auth.status.disabled.link1')}</Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
@@ -163,48 +188,91 @@ const AccountScreenContent = () => {
 };
 
 const AccountScreen = () => {
+  // =============== Navigation ===============
+  const navigation = useNavigation();
+
+  // =============== Language ===============
   const { t } = useTranslation();
 
-  return (
-    <Tab.Navigator
-      initialRouteName='AccountContent'
-      screenOptions={{
-        tabBarActiveTintColor: '#e91e63',
-      }}
-      barStyle={{ backgroundColor: '#ccccee' }}
-    >
-      <Tab.Screen
-        name='AccountContent' component={AccountScreenContent}
-        options={{
-          title: t('navigation.account'),
-          tabBarLabel: t('navigation.account'),
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name='account-outline' color={color} size={ICON_SIZE.s1} />
-          )
+  // =============== Authentication context ===============
+  const { userInfo, changeStatus } = useContext(AuthContext);
+
+  if (userInfo.status.status_name_fr == 'Bloqué' || userInfo.status.status_name_fr == 'Désactivé') {
+
+    if (userInfo.status.status_name_fr == 'Bloqué') {
+      return (
+        <ScrollView contentContainerStyle={[homeStyles.cardEmpty, { flexShrink: 0, alignItems: 'center', justifyContent: 'center' }]}>
+          <FontAwesome6 style={[homeStyles.workCmdIcon, { fontSize: 50, color: COLORS.danger, marginBottom: 30 }]} name='triangle-exclamation' />
+          <Text style={homeStyles.authTitle}>{t('auth.status.blocked.title')}</Text>
+          <Text style={homeStyles.authText}>{t('auth.status.blocked.description')}</Text>
+          <TouchableOpacity style={[homeStyles.button, { backgroundColor: COLORS.success, marginTop: 20 }]} onPress={sendWhatsAppMessage}>
+            <Text style={homeStyles.buttonText}>{t('auth.status.blocked.link1')}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={homeStyles.authCancel} onPress={() => navigation.navigate('Home_')}>
+            <Text style={homeStyles.authCancelText}>{t('back_home')}</Text>
+          </TouchableOpacity>
+        </ScrollView>
+      );
+    }
+
+    if (userInfo.status.status_name_fr == 'Désactivé') {
+      return (
+        <ScrollView contentContainerStyle={[homeStyles.cardEmpty, { flexShrink: 0, alignItems: 'center', justifyContent: 'center' }]}>
+          <FontAwesome6 style={[homeStyles.workCmdIcon, { fontSize: 50, color: COLORS.danger, marginBottom: 30 }]} name='triangle-exclamation' />
+          <Text style={homeStyles.authTitle}>{t('auth.status.disabled.title')}</Text>
+          <Text style={homeStyles.authText}>{t('auth.status.disabled.description')}</Text>
+          <TouchableOpacity style={[homeStyles.button, { backgroundColor: COLORS.success, marginTop: 20 }]} onPress={() => { changeStatus(userInfo.id, 3); navigation.navigate('Account'); }}>
+            <Text style={homeStyles.buttonText}>{t('auth.status.disabled.link2')}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={homeStyles.authCancel} onPress={() => navigation.navigate('Home_')}>
+            <Text style={homeStyles.authCancelText}>{t('back_home')}</Text>
+          </TouchableOpacity>
+        </ScrollView>
+      );
+    }
+
+  } else {
+    return (
+      <Tab.Navigator
+        initialRouteName='AccountContent'
+        screenOptions={{
+          tabBarActiveTintColor: '#e91e63',
         }}
-      />
-      <Tab.Screen
-        name='UpdateAccount' component={UpdateAccountScreen}
-        options={{
-          title: t('navigation.update_account'),
-          tabBarLabel: t('navigation.update_account'),
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name='cog-outline' color={color} size={ICON_SIZE.s1} />
-          )
-        }}
-      />
-      <Tab.Screen
-        name='MyWork' component={MyWorkScreen}
-        options={{
-          title: t('navigation.work'),
-          tabBarLabel: t('navigation.work'),
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name='book-multiple-outline' color={color} size={ICON_SIZE.s1} />
-          ),
-        }}
-      />
-    </Tab.Navigator>
-  );
+        barStyle={{ backgroundColor: '#ccccee' }}
+      >
+        <Tab.Screen
+          name='AccountContent' component={AccountScreenContent}
+          options={{
+            title: t('navigation.account'),
+            tabBarLabel: t('navigation.account'),
+            tabBarIcon: ({ color, size }) => (
+              <MaterialCommunityIcons name='account-outline' color={color} size={ICON_SIZE.s1} />
+            )
+          }}
+        />
+        <Tab.Screen
+          name='UpdateAccount' component={UpdateAccountScreen}
+          options={{
+            title: t('navigation.update_account'),
+            tabBarLabel: t('navigation.update_account'),
+            tabBarIcon: ({ color, size }) => (
+              <MaterialCommunityIcons name='cog-outline' color={color} size={ICON_SIZE.s1} />
+            )
+          }}
+        />
+        <Tab.Screen
+          name='MyWork' component={MyWorkScreen}
+          options={{
+            title: t('navigation.work'),
+            tabBarLabel: t('navigation.work'),
+            tabBarIcon: ({ color, size }) => (
+              <MaterialCommunityIcons name='book-multiple-outline' color={color} size={ICON_SIZE.s1} />
+            ),
+          }}
+        />
+      </Tab.Navigator>
+    );
+  }
 };
 
 export default AccountScreen;

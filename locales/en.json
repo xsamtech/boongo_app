@@ -106,16 +106,6 @@
         "firstname": "First name",
         "lastname": "Last name",
         "surname": "Surname",
-        "message": {
-            "disabled": {
-                "title": "Account disabled",
-                "description": "You have deactivated your account. Please reactivate it to perform specific operations."
-            },
-            "blocked": {
-                "title": "Account blocked",
-                "description": "Your account is currently blocked because you do not comply with our terms of use. Please contact us by clicking the button below."
-            }
-        },
         "gender": {
             "label": "Gender",
             "male": "Male",
@@ -153,8 +143,17 @@
             "camera": "Use the camera"
         },
         "status": {
-            "disable": "Disable my account",
-            "reactivate": "Reactivate my account"
+            "disabled": {
+                "title": "Account disabled",
+                "description": "You have deactivated your account. Please reactivate it to perform specific operations.",
+                "link1": "Disable my account",
+                "link2": "Reactivate my account"
+            },
+            "blocked": {
+                "title": "Account blocked",
+                "description": "Your account is currently blocked because you do not comply with our terms of use. Please contact us by clicking the button below.",
+                "link1": "Claim my unlocking"
+            }
         },
         "my_works": {
             "description": "Become one of our partners to be able to publish your works which will be visible to all. And this will give you the advantage of acquiring money according to public consultations.",

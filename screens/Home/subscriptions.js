@@ -24,7 +24,7 @@ const SubscriptionScreen = ({ route }) => {
   const navigation = useNavigation();
 
   // =============== Authentication context ===============
-  const { userInfo, validateSubscription } = useContext(AuthContext);
+  const { userInfo, validateSubscription, invalidateSubscription } = useContext(AuthContext);
 
   // =============== Get data ===============
   const [subscriptions, setSubscriptions] = useState([]);
@@ -40,6 +40,7 @@ const SubscriptionScreen = ({ route }) => {
   useEffect(() => {
     const validationInterval = setInterval(() => {
       validateSubscription(userInfo.id);
+      invalidateSubscription(userInfo.id);
     }, 1000);
 
     return () => clearInterval(validationInterval);
@@ -73,9 +74,9 @@ const SubscriptionScreen = ({ route }) => {
   return (
     <ScrollView style={{ flex: 1, height: Dimensions.get('window').height - 20 }}
       refreshControl={<RefreshControl refreshing={isLoading} onRefresh={onRefresh} />}>
-      <View style={[homeStyles.cardEmpty, { flexShrink: 0, height: Dimensions.get('window').height + 230, marginLeft: 0, paddingLeft: 5, paddingBottom: 30 }]}>
+      <View style={[homeStyles.cardEmpty, { flexShrink: 0, width: Dimensions.get('window').width, height: Dimensions.get('window').height + 200, marginLeft: 0, paddingBottom: 30 }]}>
         {subscriptions.length > 0 ?
-          <DataTable style={{ paddingVertical: 15, paddingHorizontal: PADDING.horizontal }}>
+          <DataTable style={{ paddingVertical: 15, paddingHorizontal: 0 }}>
             <DataTable.Header style={{ backgroundColor: COLORS.secondary }}>
               <DataTable.Title style={{ minWidth: 80 }}>{t('subscription.type')}</DataTable.Title>
               <DataTable.Title style={{ maxWidth: 40 }}>{t('subscription.price')}</DataTable.Title>

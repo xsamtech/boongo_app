@@ -22,7 +22,7 @@ const homeStyles = StyleSheet.create({
 
     cardEmpty: {
         flexShrink: 1,
-        width: Dimensions.get('window').width,
+        width: Dimensions.get('window').width - 20,
         paddingHorizontal: 15,
         paddingVertical: 10,
         marginTop: 10,
@@ -164,7 +164,8 @@ const homeStyles = StyleSheet.create({
 
     authCancel: {
         backgroundColor: COLORS.secondary,
-        marginVertical: 20
+        marginVertical: 20,
+        padding: PADDING.vertical
     },
 
     authButtonText: {
@@ -262,7 +263,7 @@ const homeStyles = StyleSheet.create({
     button: {
         backgroundColor: COLORS.primary,
         marginBottom: 10,
-        paddingVertical: 7,
+        paddingVertical: PADDING.vertical,
         paddingHorizontal: PADDING.horizontal
     },
 

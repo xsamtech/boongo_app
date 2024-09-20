@@ -3,10 +3,12 @@
  * @see https://team.xsamtech.com/xanderssamoth
  */
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Linking, ToastAndroid } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import homeStyles from '../Home/style';
+import { COLORS } from '../../tools/constants';
 
 const sendWhatsAppMessage = async () => {
   const phoneNumber = '+243815737600';
@@ -41,17 +43,38 @@ const BlockedScreen = () => {
   const { t } = useTranslation();
 
   // =============== Authentication context ===============
-  const { userInfo } = useContext(AuthContext);
+  const { userInfo, changeStatus } = useContext(AuthContext);
 
-  return (
-    <View style={[homeStyles.cardEmpty, { flex: 1 }]}>
-      <Text style={accountStyles.heading}>{t('auth.message.disabled.title')}</Text>
-      <Text style={accountStyles.text}>{t('auth.message.disabled.description')}</Text>
-      <TouchableOpacity style={homeStyles.button} onPress={() => navigation.navigate('Home_')}>
-        <Text style={homeStyles.buttonText}>{t('back_home')}</Text>
-      </TouchableOpacity>
-    </View>
-  );
+  if (userInfo.status.status_name_fr == 'Bloqué') {
+    return (
+      <View style={[homeStyles.cardEmpty, { flex: 1 }]}>
+        <Text style={homeStyles.authTitle}>{t('auth.status.blocked.title')}</Text>
+        <Text style={homeStyles.authText}>{t('auth.status.blocked.description')}</Text>
+        <TouchableOpacity style={[homeStyles.button, { backgroundColor: COLORS.success }]} onPress={sendWhatsAppMessage}>
+          <Text style={homeStyles.buttonText}>{t('auth.status.blocked.link1')}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={homeStyles.authCancel} onPress={() => navigation.navigate('Home_')}>
+          <Text style={homeStyles.authCancelText}>{t('back_home')}</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
+  if (userInfo.status.status_name_fr == 'Désactivé') {
+    return (
+      <View style={[homeStyles.cardEmpty, { flex: 1 }]}>
+        <FontAwesome6 style={[homeStyles.workCmdIcon, { fontSize: 20, alignSelf: 'center' }]} name='triangle-exclamation' />
+        <Text style={homeStyles.authTitle}>{t('auth.status.disabled.title')}</Text>
+        <Text style={homeStyles.authText}>{t('auth.status.disabled.description')}</Text>
+        <TouchableOpacity style={homeStyles.button} onPress={() => { changeStatus(userInfo.id, 3); navigation.navigate('Account'); }}>
+          <Text style={homeStyles.buttonText}>{t('auth.status.disabled.link1')}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={homeStyles.button} onPress={() => navigation.navigate('Home_')}>
+          <Text style={homeStyles.buttonText}>{t('back_home')}</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 };
 
 export default BlockedScreen;

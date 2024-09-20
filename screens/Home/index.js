@@ -211,7 +211,7 @@ const HomeScreen = () => {
 
             {/* ADS */}
             {sponsors.length > 0 ? 
-              <View style={[homeStyles.cardEmpty, { width: Dimensions.get('window').width - 20, height: (Dimensions.get('window').width - 20) / 2, marginVertical: 50, padding: 10 }]}>
+              <View style={[homeStyles.cardEmpty, { flexShrink: 0, width: Dimensions.get('window').width - 20, height: (Dimensions.get('window').width - 20) / 2, marginVertical: 50, padding: 10 }]}>
                 <Carousel style={{ width: Dimensions.get('window').width - 50 }} autoplay={true} loop={true} showsControls={false} showsDots={false}>
                   {sponsors.map(item =>
                     <Image key={item.id} source={{ uri: item.image_url ? item.image_url : `${WEB.url}/assets/img/ad.png` }} style={{ width: '100%', height: '100%' }} onPress={() => Linking.openURL(item.website_url)}/>
