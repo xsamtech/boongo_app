@@ -3,7 +3,7 @@
  * @see https://team.xsamtech.com/xanderssamoth
  */
 import React, { useContext, useState } from 'react';
-import { View, Text, TouchableOpacity, TextInput, Image, ScrollView, Linking } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, ScrollView, Linking } from 'react-native';
 import { Button, Divider } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
