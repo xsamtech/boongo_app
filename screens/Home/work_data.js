@@ -65,10 +65,10 @@ const WorkDataScreen = ({ route, navigation }) => {
   // =============== Get item API with effect hook ===============
   useEffect(() => {
     if (userInfo.id && userInfo.valid_subscription) {
-      const apiDate = new Date(userInfo.valid_subscription.created_at); // Supposons que la date est dans data.date
+      const apiDate = new Date(userInfo.valid_subscription.created_at);
       const now = new Date();
-      const diffInMs = now - apiDate; // Différence en millisecondes
-      const diffInHours = Math.round(diffInMs / (1000 * 60 * 60)); // Conversion en heures
+      const diffInMs = now - apiDate; // Difference in milliseconds
+      const diffInHours = Math.round(diffInMs / (1000 * 60 * 60)); // Conversion to hours
   
       setHoursDifference(diffInHours);
     }
