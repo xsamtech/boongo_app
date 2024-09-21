@@ -53,6 +53,7 @@ const WorkDataScreen = ({ route, navigation }) => {
   // =============== Get data ===============
   const [work, setWork] = useState({});
   const [categoryCount, setCategoryCount] = useState(0);
+  const [hoursDifference, setHoursDifference] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   // =============== Refresh control ===============
@@ -62,6 +63,18 @@ const WorkDataScreen = ({ route, navigation }) => {
   }, []);
 
   // =============== Get item API with effect hook ===============
+  useEffect(() => {
+    if (userInfo.id && userInfo.valid_subscription) {
+      const apiDate = new Date(userInfo.valid_subscription.created_at); // Supposons que la date est dans data.date
+      const now = new Date();
+      const diffInMs = now - apiDate; // Différence en millisecondes
+      const diffInHours = Math.round(diffInMs / (1000 * 60 * 60)); // Conversion en heures
+  
+      setHoursDifference(diffInHours);
+    }
+
+  }, []);
+
   useEffect(() => {
     if (userInfo.id) {
       if (userInfo.pending_subscription) {
@@ -74,6 +87,17 @@ const WorkDataScreen = ({ route, navigation }) => {
 
       if (userInfo.valid_subscription) {
         const validationInterval = setInterval(() => {
+          if (hoursDifference >= userInfo.valid_subscription.number_of_hours) {
+            const validationInterval = setInterval(() => {
+              invalidateSubscription(userInfo.id);
+            }, 1000);
+
+            return () => clearInterval(validationInterval);
+
+          } else {
+            console.log("Number of hours remaining:\n" + hoursDifference);
+          }
+
           invalidateSubscription(userInfo.id);
         }, 1000);
 
