@@ -15,6 +15,20 @@ export const AuthProvider = ({ children }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [splashLoading, setSplashLoading] = useState(false);
 
+    const getDaysDifference = () => {
+        // Supposons que la date soit dans data.date
+        const apiDate = new Date(userInfo.date);
+        const today = new Date();
+
+        // Calculer la différence en millisecondes
+        const differenceInTime = apiDate - today;
+
+        // Convertir en jours
+        const differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24));
+
+        setDaysDifference(differenceInDays);
+    };
+
     const register = (firstname, lastname, surname, gender, birthdate, city, country, address_1, address_2, p_o_box, email, phone, username, password, confirm_password, role_id) => {
         setIsLoading(true);
 
@@ -198,67 +212,92 @@ export const AuthProvider = ({ children }) => {
     };
 
     const validateSubscription = (user_id) => {
-        axios.put(`${API.url}/subscription/validate_subscription/${user_id}`, null, {
-            headers: { 'Authorization': `Bearer ${userInfo.api_token}` }
-        }).then(res => {
-            let success = res.data.success;
-            let message = res.data.message;
+        if (userInfo.pending_subscription != null) {
+            axios.put(`${API.url}/subscription/validate_subscription/${user_id}`, null, {
+                headers: { 'Authorization': `Bearer ${userInfo.api_token}` }
+            }).then(res => {
+                let success = res.data.success;
+                let message = res.data.message;
 
-            if (success) {
-                let userData = res.data.data;
+                if (success) {
+                    let userData = res.data.data;
 
-                setUserInfo(userData);
+                    setUserInfo(userData);
 
-                AsyncStorage.setItem('userInfo', JSON.stringify(userData));
-                console.log(`${message}`);
-            }
+                    AsyncStorage.setItem('userInfo', JSON.stringify(userData));
+                    console.log(`${message}`);
+                }
 
-        }).catch(error => {
-            if (error.response) {
-                // The request was made and the server responded with a status code
-                console.log(`${error.response.status} -> ${error.response.data.message || error.response.data}`);
+            }).catch(error => {
+                if (error.response) {
+                    // The request was made and the server responded with a status code
+                    console.log(`${error.response.status} -> ${error.response.data.message || error.response.data}`);
 
-            } else if (error.request) {
-                // The request was made but no response was received
-                console.log(t('error') + ' ' + t('error_message.no_server_response'));
+                } else if (error.request) {
+                    // The request was made but no response was received
+                    console.log(t('error') + ' ' + t('error_message.no_server_response'));
 
-            } else {
-                // An error occurred while configuring the query
-                console.log(`${error}`);
-            }
-        });
+                } else {
+                    // An error occurred while configuring the query
+                    console.log(`${error}`);
+                }
+            });
+
+        } else {
+            console.log("Valid subscription:\n" + userInfo.valid_subscription + "\n\nIs subscribed:" + "\n" + userInfo.is_subscribed);
+        }
     };
 
     const invalidateSubscription = (user_id) => {
-        axios.put(`${API.url}/subscription/invalidate_subscription/${user_id}`, null, {
-            headers: { 'Authorization': `Bearer ${userInfo.api_token}` }
-        }).then(res => {
-            let success = res.data.success;
-            let message = res.data.message;
+        if (userInfo.valid_subscription != null) {
+            // Today's date and subscription date
+            const api_date = new Date(userInfo.valid_subscription.created_at);
+            const today = new Date();
 
-            if (success) {
-                let userData = res.data.data;
+            // Calculate the difference in milliseconds
+            const difference_in_time = api_date - today;
 
-                setUserInfo(userData);
+            // Convert in days
+            const difference_in_days = Math.ceil(difference_in_time / (1000 * 3600 * 24));
 
-                AsyncStorage.setItem('userInfo', JSON.stringify(userData));
-                console.log(`${message}`);
-            }
+            if (difference_in_days >= userInfo.valid_subscription.number_of_hours) {
+                axios.put(`${API.url}/subscription/invalidate_subscription/${user_id}`, null, {
+                    headers: { 'Authorization': `Bearer ${userInfo.api_token}` }
+                }).then(res => {
+                    let success = res.data.success;
+                    let message = res.data.message;
 
-        }).catch(error => {
-            if (error.response) {
-                // The request was made and the server responded with a status code
-                console.log(`${error.response.status} -> ${error.response.data.message || error.response.data}`);
+                    if (success) {
+                        let userData = res.data.data;
 
-            } else if (error.request) {
-                // The request was made but no response was received
-                console.log(t('error') + ' ' + t('error_message.no_server_response'));
+                        setUserInfo(userData);
+
+                        AsyncStorage.setItem('userInfo', JSON.stringify(userData));
+                        console.log(`${message}`);
+                    }
+
+                }).catch(error => {
+                    if (error.response) {
+                        // The request was made and the server responded with a status code
+                        console.log(`${error.response.status} -> ${error.response.data.message || error.response.data}`);
+
+                    } else if (error.request) {
+                        // The request was made but no response was received
+                        console.log(t('error') + ' ' + t('error_message.no_server_response'));
+
+                    } else {
+                        // An error occurred while configuring the query
+                        console.log(`${error}`);
+                    }
+                });
 
             } else {
-                // An error occurred while configuring the query
-                console.log(`${error}`);
+                console.log("Number of days remaining:\n" + difference_in_days);
             }
-        });
+
+        } else {
+            console.log("Pending subscription:\n" + userInfo.pending_subscription + "\n\nIs subscribed:" + "\n" + userInfo.is_subscribed);
+        }
     };
 
     const login = (username, password) => {
