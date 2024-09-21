@@ -213,38 +213,39 @@ export const AuthProvider = ({ children }) => {
 
     const validateSubscription = (user_id) => {
         if (userInfo.pending_subscription != null) {
-            axios.put(`${API.url}/subscription/validate_subscription/${user_id}`, null, {
-                headers: { 'Authorization': `Bearer ${userInfo.api_token}` }
-            }).then(res => {
-                let success = res.data.success;
-                let message = res.data.message;
+            console.log(userInfo.recent_payment.status.status_name_fr);
 
-                if (success) {
-                    let userData = res.data.data;
+            if (userInfo.recent_payment.status.status_name_fr == 'Effectué') {
+                axios.put(`${API.url}/subscription/validate_subscription/${user_id}`, null, {
+                    headers: { 'Authorization': `Bearer ${userInfo.api_token}` }
+                }).then(res => {
+                    let success = res.data.success;
+                    let message = res.data.message;
 
-                    setUserInfo(userData);
+                    if (success) {
+                        let userData = res.data.data;
 
-                    AsyncStorage.setItem('userInfo', JSON.stringify(userData));
-                    console.log(`${message}`);
-                }
+                        setUserInfo(userData);
 
-            }).catch(error => {
-                if (error.response) {
-                    // The request was made and the server responded with a status code
-                    console.log(`${error.response.status} -> ${error.response.data.message || error.response.data}`);
+                        AsyncStorage.setItem('userInfo', JSON.stringify(userData));
+                        console.log(`${message}`);
+                    }
 
-                } else if (error.request) {
-                    // The request was made but no response was received
-                    console.log(t('error') + ' ' + t('error_message.no_server_response'));
+                }).catch(error => {
+                    if (error.response) {
+                        // The request was made and the server responded with a status code
+                        console.log(`${error.response.status} -> ${error.response.data.message || error.response.data}`);
 
-                } else {
-                    // An error occurred while configuring the query
-                    console.log(`${error}`);
-                }
-            });
+                    } else if (error.request) {
+                        // The request was made but no response was received
+                        console.log(t('error') + ' ' + t('error_message.no_server_response'));
 
-        } else {
-            console.log("Valid subscription:\n" + userInfo.valid_subscription + "\n\nIs subscribed:" + "\n" + userInfo.is_subscribed);
+                    } else {
+                        // An error occurred while configuring the query
+                        console.log(`${error}`);
+                    }
+                });
+            }
         }
     };
 
@@ -255,10 +256,12 @@ export const AuthProvider = ({ children }) => {
             const today = new Date();
 
             // Calculate the difference in milliseconds
-            const difference_in_time = api_date - today;
+            const difference_in_time = today - api_date;
 
             // Convert in days
             const difference_in_days = Math.ceil(difference_in_time / (1000 * 3600 * 24));
+
+            console.log(difference_in_days);
 
             if (difference_in_days >= userInfo.valid_subscription.number_of_hours) {
                 axios.put(`${API.url}/subscription/invalidate_subscription/${user_id}`, null, {
@@ -294,9 +297,6 @@ export const AuthProvider = ({ children }) => {
             } else {
                 console.log("Number of days remaining:\n" + difference_in_days);
             }
-
-        } else {
-            console.log("Pending subscription:\n" + userInfo.pending_subscription + "\n\nIs subscribed:" + "\n" + userInfo.is_subscribed);
         }
     };
 

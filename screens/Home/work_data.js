@@ -46,7 +46,7 @@ const WorkDataScreen = ({ route, navigation }) => {
   const { t } = useTranslation();
 
   // =============== Authentication context ===============
-  const { userInfo } = useContext(AuthContext);
+  const { userInfo, validateSubscription, invalidateSubscription } = useContext(AuthContext);
 
   // =============== Get parameters ===============
   const { itemId } = route.params;
@@ -63,6 +63,20 @@ const WorkDataScreen = ({ route, navigation }) => {
   }, []);
 
   // =============== Get item API with effect hook ===============
+  useEffect(() => {
+    if (userInfo.id) {
+      const validationInterval = setInterval(() => {
+        validateSubscription(userInfo.id);
+        invalidateSubscription(userInfo.id);
+      }, 1000);
+
+      return () => clearInterval(validationInterval);
+
+    } else {
+      console.log('Utilisateur non connecté');
+    }
+  }, []);
+
   useEffect(() => {
     getWork();
   }, []);
