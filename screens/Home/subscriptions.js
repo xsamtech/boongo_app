@@ -39,12 +39,21 @@ const SubscriptionScreen = ({ route }) => {
   // =============== Get item API with effect hook ===============
   useEffect(() => {
     if (userInfo.id) {
-      const validationInterval = setInterval(() => {
-        validateSubscription(userInfo.id);
-        invalidateSubscription(userInfo.id);
-      }, 1000);
+      if (userInfo.pending_subscription) {
+        const validationInterval = setInterval(() => {
+          validateSubscription(userInfo.id);
+        }, 1000);
 
-      return () => clearInterval(validationInterval);
+        return () => clearInterval(validationInterval);
+      }
+
+      if (userInfo.valid_subscription) {
+        const validationInterval = setInterval(() => {
+          invalidateSubscription(userInfo.id);
+        }, 1000);
+
+        return () => clearInterval(validationInterval);
+      }
 
     } else {
       console.log('Utilisateur non connecté');
