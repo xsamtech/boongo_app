@@ -3,7 +3,7 @@
  * @see https://team.xsamtech.com/xanderssamoth
  */
 import React, { useEffect, useState } from 'react';
-import { View, TouchableOpacity, Dimensions, Alert, Text, TextInput, FlatList, SafeAreaView } from 'react-native';
+import { View, TouchableOpacity, Dimensions, Alert, Text, TextInput, FlatList, SafeAreaView, Modal } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { ScrollView } from 'react-native-gesture-handler';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
@@ -21,7 +21,7 @@ const Tab = createMaterialBottomTabNavigator();
 
 const SummaryScreenContent = ({ route, navigation }) => {
   // =============== Get parameters ===============
-  const { docUri } = route.params;
+  const { docTitle, docUri,  } = route.params;
 
   // =============== Language ===============
   const { t } = useTranslation();
@@ -30,6 +30,7 @@ const SummaryScreenContent = ({ route, navigation }) => {
   const [notes, setNotes] = useState([]);
   const [page, setPage] = useState(null);
   const [noteText, setNoteText] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   // =============== Database handling ===============
@@ -38,7 +39,7 @@ const SummaryScreenContent = ({ route, navigation }) => {
   useEffect(() => {
     // Create table if it does not exist
     db.transaction(tx => {
-      tx.executeSql('CREATE TABLE IF NOT EXISTS notes (id INTEGER PRIMARY KEY AUTOINCREMENT, page INTEGER, noteText TEXT)',
+      tx.executeSql('CREATE TABLE IF NOT EXISTS notes (id INTEGER PRIMARY KEY AUTOINCREMENT, page INTEGER, noteText TEXT, doc_uri TEXT)',
         [], () => console.log('Table created successfully'),
         (tx, error) => console.log('Error creating table', error)
       );
@@ -53,10 +54,31 @@ const SummaryScreenContent = ({ route, navigation }) => {
       // setNotes([...notes, { id: Date.now().toString(), page: page, text: noteText }]);
 
       db.transaction(tx => {
-        tx.executeSql('INSERT INTO Notes (page, noteText) VALUES (?, ?)',
-          [page, noteText],
+        tx.executeSql('INSERT INTO Notes (page, noteText, doc_uri) VALUES (?, ?, ?)',
+          [page, noteText, docUri],
           () => {
             console.log('Note saved successfully');
+            setPage('');
+            setNoteText('');
+
+            loadNotes();
+          },
+          (tx, error) => console.log('Error saving note', error)
+        );
+      });
+
+    } else {
+      Alert.alert(t('error'), t('error_message.cannot_be_empty'));
+    }
+  };
+
+  const editNote = (id) => {
+    if (noteText.trim()) {
+      db.transaction(tx => {
+        tx.executeSql('UPDATE Notes SET page = ?, noteText = ? WHERE id = ? ',
+          [page, noteText, id],
+          () => {
+            console.log('Note edited successfully');
             setPage('');
             setNoteText('');
 
@@ -138,6 +160,17 @@ const SummaryScreenContent = ({ route, navigation }) => {
           </TouchableOpacity>
         </View>
 
+        <Modal animationType='slide' transparent={true} visible={modalVisible} onRequestClose={() => { setModalVisible(!modalVisible); }}>
+          <View style={homeStyles.modalBackground}>
+            <View style={homeStyles.modalContainer}>
+              <Text style={homeStyles.modalText}>Hello! This is a simple modal.</Text>
+              <TouchableOpacity style={homeStyles.closeButton} onPress={() => setModalVisible(false)}>
+                <Text style={homeStyles.closeButtonText}>Close</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+
         <FlatList
           data={notes}
           keyExtractor={item => item.id}
@@ -148,6 +181,9 @@ const SummaryScreenContent = ({ route, navigation }) => {
                 <Text style={homeStyles.noteText}>{item.noteText}</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => deleteNote(item.id)} style={homeStyles.noteDeleteButton}>
+                <Octicons style={homeStyles.noteDeleteButtonText} name='x' />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => setModalVisible(true)} style={homeStyles.noteDeleteButton}>
                 <Octicons style={homeStyles.noteDeleteButtonText} name='x' />
               </TouchableOpacity>
             </View>
@@ -204,6 +240,10 @@ const PDFViewerScreenContent = ({ route, navigation }) => {
 };
 
 const PDFViewerScreen = ({ route }) => {
+  // =============== Get parameters ===============
+  const { docTitle, docUri } = route.params;
+
+  // =============== Language ===============
   const { t } = useTranslation();
 
   return (
@@ -216,7 +256,7 @@ const PDFViewerScreen = ({ route }) => {
     >
       <Tab.Screen
         name='PDFViewerContent' component={PDFViewerScreenContent}
-        initialParams={{ docTitle: route.params.docTitle, docUri: route.params.docUri }}
+        initialParams={{ docTitle: docTitle, docUri: docUri }}
         options={{
           title: t('navigation.reading'),
           tabBarLabel: t('navigation.reading'),
@@ -227,7 +267,7 @@ const PDFViewerScreen = ({ route }) => {
       />
       <Tab.Screen
         name='Summary' component={SummaryScreenContent}
-        initialParams={{ docTitle: route.params.docTitle, docUri: route.params.docUri }}
+        initialParams={{ docTitle: docTitle, docUri: docUri }}
         options={{
           title: t('navigation.summary'),
           tabBarLabel: t('navigation.summary'),

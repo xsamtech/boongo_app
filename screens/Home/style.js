@@ -577,9 +577,9 @@ const homeStyles = StyleSheet.create({
 
     // Notepad
     noteTitle: {
-        marginVertical: PADDING.vertical, 
-        fontSize: 18, 
-        textAlign: 'center', 
+        marginVertical: PADDING.vertical,
+        fontSize: 18,
+        textAlign: 'center',
         color: COLORS.black
     },
 
@@ -631,6 +631,37 @@ const homeStyles = StyleSheet.create({
     noteDeleteButtonText: {
         fontSize: 21,
         color: COLORS.black
+    },
+
+    // Modal
+    modalBackground: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)', // semi-transparent background
+    },
+
+    modalContainer: {
+        width: 300,
+        padding: 20,
+        backgroundColor: 'white',
+        borderRadius: 10,
+        alignItems: 'center',
+    },
+
+    modalText: {
+        marginBottom: 20,
+        textAlign: 'center',
+    },
+
+    closeButton: {
+        backgroundColor: '#2196F3',
+        padding: 10,
+        borderRadius: 5,
+    },
+
+    closeButtonText: {
+        color: 'white',
     }
 });
 
