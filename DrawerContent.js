@@ -69,11 +69,11 @@ const DrawerContent = (props) => {
                     <View style={{ flexDirection: 'column', alignItems: 'center', marginVertical: 12 }}>
                         <TextBrand width={154} height={50} />
                     </View>
-                    <TouchableOpacity activeOpacity={0.8} onPress={() => { userInfo.id ? navigation.navigate('Account') : navigation.navigate('Login') }}>
-                        <View style={homeStyles.drawerUserInfoSection}>
-                            <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 5, marginBottom: 10, marginLeft: 16 }}>
-                                {userInfo.id ? (
-                                    <>
+                    <View style={homeStyles.drawerUserInfoSection}>
+                        {userInfo.id ? (
+                            <>
+                                <TouchableOpacity activeOpacity={0.8} onPress={() => { navigation.navigate('Account') }}>
+                                    <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 5, marginBottom: 10, marginLeft: 20 }}>
                                         <View style={{ marginTop: 5 }}>
                                             {userInfo.avatar_url != null
                                                 ?
@@ -86,15 +86,15 @@ const DrawerContent = (props) => {
                                             <Title style={homeStyles.drawerTitle}>{userInfo.firstname}</Title>
                                             <Text style={homeStyles.drawerCaption}>{userInfo.username ? '@' + userInfo.username : (userInfo.email ? userInfo.email : userInfo.phone)}</Text>
                                         </View>
-                                    </>
-                                ) : (
-                                    <Button style={homeStyles.drawerButton} onPress={() => { navigation.navigate('Login'); }}>
-                                        <Text style={homeStyles.drawerButtonText}>{t('login')}</Text>
-                                    </Button>
-                                )}
-                            </View>
-                        </View>
-                    </TouchableOpacity>
+                                    </View>
+                                </TouchableOpacity>
+                            </>
+                        ) : (
+                            <Button style={homeStyles.drawerButton} onPress={() => { navigation.navigate('Login'); }}>
+                                <Text style={homeStyles.drawerButtonText}>{t('login')}</Text>
+                            </Button>
+                        )}
+                    </View>
                     <View style={homeStyles.drawerSection}>
                         <DrawerItems />
                         {userInfo.id ? (
