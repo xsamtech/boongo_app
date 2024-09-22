@@ -72,7 +72,7 @@ const DrawerContent = (props) => {
                     <View style={homeStyles.drawerUserInfoSection}>
                         {userInfo.id ? (
                             <>
-                                <TouchableOpacity activeOpacity={0.8} onPress={() => { navigation.navigate('Account') }}>
+                                <TouchableOpacity onPress={() => { navigation.navigate('Account') }}>
                                     <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 5, marginBottom: 10, marginLeft: 20 }}>
                                         <View style={{ marginTop: 5 }}>
                                             {userInfo.avatar_url != null
