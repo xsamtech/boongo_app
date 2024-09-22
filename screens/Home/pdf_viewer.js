@@ -29,11 +29,10 @@ const SummaryScreenContent = ({ route, navigation }) => {
   // =============== Get data ===============
   const [notes, setNotes] = useState([]);
   const [noteItem, setNoteItem] = useState({});
-  const [modalButtonId, setModalButtonId] = useState(null);
+  const [expandedId, setExpandedId] = useState(null);
   const [page, setPage] = useState(null);
   const [noteText, setNoteText] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
-  const [showAllText, setShowAllText] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   // =============== Database handling ===============
@@ -141,8 +140,6 @@ const SummaryScreenContent = ({ route, navigation }) => {
           if (results.rows.length > 0) {
             const data = results.rows.item(0);
 
-            console.log(JSON.stringify(data));
-
             setNoteItem(data);
             setModalVisible(true);
           }
@@ -155,8 +152,8 @@ const SummaryScreenContent = ({ route, navigation }) => {
     });
   };
 
+  // =============== When the "Edit" button is pressed ===============
   const editButtonPress = (id) => {
-    setModalButtonId(id);
     openModal(id);
   };
 
@@ -166,6 +163,40 @@ const SummaryScreenContent = ({ route, navigation }) => {
     navigation.navigate('PDFViewerContent', { isLoading: isLoading, docUri: doc_uri, curPage: parseInt(pageNumber) });
     console.log('goToPage => ' + pageNumber);
     setIsLoading(false);
+  };
+
+  // =============== Go to page ===============
+  const renderNoteItem = ({ item }) => {
+    const isExpanded = item.id === expandedId;
+    const maxLength = 37; // Max length before cutting
+
+    // Cut the text if necessary
+    const displayTitle = isExpanded ? item.doc_title : (((item.doc_title).length > maxLength) ? `${item.doc_title.substring(0, maxLength)}...` : item.doc_title);
+    const displayText = isExpanded ? item.noteText : (((item.noteText).length > maxLength) ? `${item.noteText.substring(0, maxLength)}...` : item.noteText);
+
+    return (
+      <View style={homeStyles.noteContainer}>
+        <TouchableOpacity onPress={() => goToPage(item.page, item.doc_uri)} style={homeStyles.noteTextContainer}>
+          <Text style={homeStyles.noteWorkTitle}>{displayTitle}</Text>
+          <Text style={homeStyles.noteText}>{displayText}</Text>
+          {item.noteText.length > maxLength ?
+            <>
+              <TouchableOpacity onPress={() => setExpandedId(isExpanded ? null : item.id)} style={[homeStyles.noteSeeTextButton]}>
+                <Text style={homeStyles.noteSeeText}>{isExpanded ? t('see_less') : t('see_more')}</Text>
+              </TouchableOpacity>
+            </>
+            : ''
+          }
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => editButtonPress(item.id)} style={[homeStyles.noteEditButton]}>
+          <Octicons style={homeStyles.noteButtonIcon} name='pencil' />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => deleteNote(item.id)} style={homeStyles.noteDeleteButton}>
+          <Octicons style={homeStyles.noteButtonIcon} name='x' />
+        </TouchableOpacity>
+      </View>
+
+    );
   };
 
   return (
@@ -217,28 +248,7 @@ const SummaryScreenContent = ({ route, navigation }) => {
           data={notes}
           keyExtractor={item => item.id}
           style={{ marginTop: 16 }}
-          renderItem={({ item }) => (
-            <View style={homeStyles.noteContainer}>
-              <TouchableOpacity onPress={() => goToPage(item.page, item.doc_uri)} style={homeStyles.noteTextContainer}>
-                <Text style={homeStyles.noteWorkTitle}>{showAllText ? item.doc_title : (((item.doc_title).substring(0, 40 - 3)) + (item.doc_title.length > 40 ? '...' : ''))}</Text>
-                <Text style={homeStyles.noteText}>{showAllText ? item.noteText : (((item.noteText).substring(0, 40 - 3)) + (item.noteText.length > 40 ? '...' : ''))}</Text>
-                {item.noteText.length > 40 ?
-                  <>
-                    <TouchableOpacity onPress={() => setShowAllText(!showAllText ?? item.id)} style={[homeStyles.noteSeeTextButton]}>
-                      <Text style={homeStyles.noteSeeText}>{showAllText ? t('see_less') : t('see_more')}</Text>
-                    </TouchableOpacity>
-                  </>
-                  : ''
-                }
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => editButtonPress(item.id)} style={[homeStyles.noteEditButton]}>
-                <Octicons style={homeStyles.noteButtonIcon} name='pencil' />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => deleteNote(item.id)} style={homeStyles.noteDeleteButton}>
-                <Octicons style={homeStyles.noteButtonIcon} name='x' />
-              </TouchableOpacity>
-            </View>
-          )}
+          renderItem={renderNoteItem}
         />
       </View>
     </SafeAreaView>

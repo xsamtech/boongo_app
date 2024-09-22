@@ -64,21 +64,12 @@ const WorkDataScreen = ({ route, navigation }) => {
   // =============== Get item API with effect hook ===============
   useEffect(() => {
     if (userInfo.id) {
-      if (userInfo.pending_subscription) {
-        const validationInterval = setInterval(() => {
-          validateSubscription(userInfo.id);
-        }, 1000);
+      const validationInterval = setInterval(() => {
+        validateSubscription(userInfo.id);
+        invalidateSubscription(userInfo.id);
+      }, 1000);
 
-        return () => clearInterval(validationInterval);
-      }
-
-      if (userInfo.valid_subscription) {
-        const validationInterval = setInterval(() => {
-          invalidateSubscription(userInfo.id);
-        }, 1000);
-
-        return () => clearInterval(validationInterval);
-      }
+      return () => clearInterval(validationInterval);
 
     } else {
       console.log('Utilisateur non connecté');
