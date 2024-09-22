@@ -213,78 +213,46 @@ export const AuthProvider = ({ children }) => {
 
     const validateSubscription = (user_id) => {
         if (userInfo.pending_subscription != null) {
-            axios.get(`${API.url}/user/${user_id}`, { headers: { 'Authorization': `Bearer ${userInfo.api_token}`, 'X-localization': 'fr' } })
-                .then(rs => {
-                    const currentUser = rs.data.data.user;
+            axios.get(`${API.url}/user/${user_id}`, {
+                headers: { 'Authorization': `Bearer ${userInfo.api_token}`, 'X-localization': 'fr' }
+            }).then(rs => {
+                const currentUser = rs.data.data.user;
 
-                    if (currentUser.recent_payment.status.status_name_fr == 'Effectué') {
-                        axios.put(`${API.url}/subscription/validate_subscription/${user_id}`, null, {
-                            headers: { 'Authorization': `Bearer ${userInfo.api_token}` }
-                        }).then(res => {
-                            let success = res.data.success;
+                if (currentUser.recent_payment.status.status_name_fr == 'Effectué') {
+                    axios.put(`${API.url}/subscription/validate_subscription/${user_id}`, null, {
+                        headers: { 'Authorization': `Bearer ${userInfo.api_token}` }
+                    }).then(res => {
+                        let success = res.data.success;
 
-                            if (success) {
-                                let userData = res.data.data;
+                        if (success) {
+                            let userData = res.data.data;
 
-                                setUserInfo(userData);
+                            setUserInfo(userData);
 
-                                AsyncStorage.setItem('userInfo', JSON.stringify(userData));
-                            }
+                            AsyncStorage.setItem('userInfo', JSON.stringify(userData));
+                        }
 
-                        }).catch(error => {
-                            if (error.response) {
-                                // The request was made and the server responded with a status code
-                                // console.log(`${error.response.status} -> ${error.response.data.message || error.response.data}`);
+                    }).catch(error => {
+                        if (error.response) {
+                            // The request was made and the server responded with a status code
+                            // console.log(`${error.response.status} -> ${error.response.data.message || error.response.data}`);
 
-                            } else if (error.request) {
-                                // The request was made but no response was received
-                                console.log(t('error') + ' ' + t('error_message.no_server_response'));
+                        } else if (error.request) {
+                            // The request was made but no response was received
+                            console.log(t('error') + ' ' + t('error_message.no_server_response'));
 
-                            } else {
-                                // An error occurred while configuring the query
-                                // console.log(`${error}`);
-                            }
-                        });
-                    }
-                })
-                .catch(err => {
-                    if (err.response) {
-                        // The request was made and the server responded with a status code
-                        // console.log(`${error.response.status} -> ${error.response.data.message || error.response.data}`);
-
-                    } else if (err.request) {
-                        // The request was made but no response was received
-                        console.log(t('error') + ' ' + t('error_message.no_server_response'));
-
-                    } else {
-                        // An error occurred while configuring the query
-                        // console.log(`${error}`);
-                    }
-                });
-        }
-    };
-
-    const invalidateSubscription = (user_id) => {
-        if (userInfo.valid_subscription != null) {
-            axios.put(`${API.url}/subscription/invalidate_subscription/${user_id}`, null, {
-                headers: { 'Authorization': `Bearer ${userInfo.api_token}` }
-            }).then(res => {
-                let success = res.data.success;
-
-                if (success) {
-                    let userData = res.data.data;
-
-                    setUserInfo(userData);
-
-                    AsyncStorage.setItem('userInfo', JSON.stringify(userData));
+                        } else {
+                            // An error occurred while configuring the query
+                            // console.log(`${error}`);
+                        }
+                    });
                 }
-
-            }).catch(error => {
-                if (error.response) {
+            }).catch(err => {
+                if (err.response) {
                     // The request was made and the server responded with a status code
                     // console.log(`${error.response.status} -> ${error.response.data.message || error.response.data}`);
 
-                } else if (error.request) {
+                } else if (err.request) {
                     // The request was made but no response was received
                     console.log(t('error') + ' ' + t('error_message.no_server_response'));
 
@@ -294,6 +262,36 @@ export const AuthProvider = ({ children }) => {
                 }
             });
         }
+    };
+
+    const invalidateSubscription = (user_id) => {
+        axios.put(`${API.url}/subscription/invalidate_subscription/${user_id}`, null, {
+            headers: { 'Authorization': `Bearer ${userInfo.api_token}` }
+        }).then(res => {
+            let success = res.data.success;
+
+            if (success) {
+                let userData = res.data.data;
+
+                setUserInfo(userData);
+
+                AsyncStorage.setItem('userInfo', JSON.stringify(userData));
+            }
+
+        }).catch(error => {
+            if (error.response) {
+                // The request was made and the server responded with a status code
+                // console.log(`${error.response.status} -> ${error.response.data.message || error.response.data}`);
+
+            } else if (error.request) {
+                // The request was made but no response was received
+                console.log(t('error') + ' ' + t('error_message.no_server_response'));
+
+            } else {
+                // An error occurred while configuring the query
+                // console.log(`${error}`);
+            }
+        });
     };
 
     const login = (username, password) => {
