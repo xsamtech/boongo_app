@@ -13,9 +13,12 @@
     "change_lang": "Changer de langue",
     "back_home": "Retour à l’accueil",
     "load_more": "Charger plus",
+    "see_more": "Voir plus",
+    "see_less": "Voir moins",
     "page": "Page",
     "notepad": {
         "title": "Enregistrez des résumés",
+        "title_edit": "Editer le résumé",
         "page_number": "Numéro page",
         "enter_note": "Entrer votre note"
     },

@@ -139,7 +139,7 @@ const WorkDataScreen = ({ route, navigation }) => {
                   <>
                     <Divider />
                     <View style={[homeStyles.workIconBtns, { justifyContent: 'center', paddingHorizontal: 20 }]}>
-                      <TouchableOpacity onPress={() => navigation.navigate('PDFViewer', { docTitle: work.workTitle, docUri: work.document_url, curPage: 1 })}>
+                      <TouchableOpacity onPress={() => navigation.navigate('PDFViewer', { docTitle: work.work_title, docUri: work.document_url, curPage: 1 })}>
                         <FontAwesome6 style={[homeStyles.workIconBtn, { color: COLORS.danger }]} name='file-lines' />
                       </TouchableOpacity>
                       {work.video_url ? (

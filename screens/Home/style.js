@@ -617,18 +617,59 @@ const homeStyles = StyleSheet.create({
         borderBottomWidth: 1
     },
 
-    noteText: {
+    noteWorkTitle: {
         width: Dimensions.get('window').width - 70,
-        fontSize: 16
+        marginBottom: 10,
+        fontSize: 14,
+        fontWeight: '700'
     },
 
-    noteDeleteButton: {
+    noteTextContainer: {
         backgroundColor: 'rgba(255, 255, 255, 0)',
         padding: 8,
         borderRadius: 4
     },
 
-    noteDeleteButtonText: {
+    noteText: {
+        width: Dimensions.get('window').width - 70,
+        fontSize: 16
+    },
+
+    noteSeeTextButton: {
+        width: 100,
+        backgroundColor: 'rgba(0, 0, 0, 0.05)',
+        marginTop: PADDING.vertical,
+        paddingTop: 3,
+        paddingBottom: 4,
+        paddingHorizontal: 8,
+        borderRadius: 4
+    },
+
+    noteSeeText: {
+        fontSize: 14,
+        fontStyle: 'italic',
+        textAlign: 'center'
+    },
+
+    noteEditButton: {
+        position: 'absolute',
+        right: 0,
+        top: 40,
+        backgroundColor: 'rgba(255, 255, 255, 0)',
+        padding: 8,
+        borderRadius: 4
+    },
+
+    noteDeleteButton: {
+        position: 'absolute',
+        right: 3,
+        top: 15,
+        backgroundColor: 'rgba(255, 255, 255, 0)',
+        padding: 8,
+        borderRadius: 4
+    },
+
+    noteButtonIcon: {
         fontSize: 21,
         color: COLORS.black
     },
@@ -654,14 +695,18 @@ const homeStyles = StyleSheet.create({
         textAlign: 'center',
     },
 
-    closeButton: {
-        backgroundColor: '#2196F3',
-        padding: 10,
-        borderRadius: 5,
+    modalCloseButton: {
+        position: 'absolute',
+        right: 3,
+        top: 0,
+        backgroundColor: 'rgba(255, 255, 255, 0)',
+        padding: 8,
+        borderRadius: 4
     },
 
-    closeButtonText: {
-        color: 'white',
+    modalCloseIcon: {
+        fontSize: 21,
+        color: COLORS.black
     }
 });
 

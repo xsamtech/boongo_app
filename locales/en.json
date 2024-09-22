@@ -13,9 +13,12 @@
     "change_lang": "Change language",
     "back_home": "Back to home",
     "load_more": "Load more",
+    "see_more": "See more",
+    "see_less": "See less",
     "page": "Page",
     "notepad": {
         "title": "Save summaries",
+        "title_edit": "Edit the summary",
         "page_number": "Page number",
         "enter_note": "Enter your note"
     },

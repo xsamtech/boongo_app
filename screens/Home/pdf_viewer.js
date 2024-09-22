@@ -21,16 +21,19 @@ const Tab = createMaterialBottomTabNavigator();
 
 const SummaryScreenContent = ({ route, navigation }) => {
   // =============== Get parameters ===============
-  const { docTitle, docUri,  } = route.params;
+  const { docTitle, docUri } = route.params;
 
   // =============== Language ===============
   const { t } = useTranslation();
 
   // =============== Get data ===============
   const [notes, setNotes] = useState([]);
+  const [noteItem, setNoteItem] = useState({});
+  const [modalButtonId, setModalButtonId] = useState(null);
   const [page, setPage] = useState(null);
   const [noteText, setNoteText] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
+  const [showAllText, setShowAllText] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   // =============== Database handling ===============
@@ -39,8 +42,8 @@ const SummaryScreenContent = ({ route, navigation }) => {
   useEffect(() => {
     // Create table if it does not exist
     db.transaction(tx => {
-      tx.executeSql('CREATE TABLE IF NOT EXISTS notes (id INTEGER PRIMARY KEY AUTOINCREMENT, page INTEGER, noteText TEXT, doc_uri TEXT)',
-        [], () => console.log('Table created successfully'),
+      tx.executeSql('CREATE TABLE IF NOT EXISTS BlocNotes (id INTEGER PRIMARY KEY AUTOINCREMENT, page INTEGER, noteText TEXT, doc_title TEXT, doc_uri TEXT)',
+        [], () => console.log('Table BlocNotes created successfully'),
         (tx, error) => console.log('Error creating table', error)
       );
     });
@@ -54,8 +57,8 @@ const SummaryScreenContent = ({ route, navigation }) => {
       // setNotes([...notes, { id: Date.now().toString(), page: page, text: noteText }]);
 
       db.transaction(tx => {
-        tx.executeSql('INSERT INTO Notes (page, noteText, doc_uri) VALUES (?, ?, ?)',
-          [page, noteText, docUri],
+        tx.executeSql('INSERT INTO BlocNotes (page, noteText, doc_title, doc_uri) VALUES (?, ?, ?, ?)',
+          [page, noteText, docTitle, docUri],
           () => {
             console.log('Note saved successfully');
             setPage('');
@@ -63,7 +66,7 @@ const SummaryScreenContent = ({ route, navigation }) => {
 
             loadNotes();
           },
-          (tx, error) => console.log('Error saving note', error)
+          (tx, error) => console.log('Error saving note', tx)
         );
       });
 
@@ -73,16 +76,17 @@ const SummaryScreenContent = ({ route, navigation }) => {
   };
 
   const editNote = (id) => {
-    if (noteText.trim()) {
+    if (noteItem.noteText.trim()) {
       db.transaction(tx => {
-        tx.executeSql('UPDATE Notes SET page = ?, noteText = ? WHERE id = ? ',
-          [page, noteText, id],
+        tx.executeSql('UPDATE BlocNotes SET page = ?, noteText = ? WHERE id = ? ',
+          [noteItem.page, noteItem.noteText, id],
           () => {
             console.log('Note edited successfully');
             setPage('');
             setNoteText('');
 
             loadNotes();
+            setModalVisible(false);
           },
           (tx, error) => console.log('Error saving note', error)
         );
@@ -95,7 +99,7 @@ const SummaryScreenContent = ({ route, navigation }) => {
 
   const loadNotes = () => {
     db.transaction(tx => {
-      tx.executeSql('SELECT * FROM Notes', [],
+      tx.executeSql('SELECT * FROM BlocNotes', [],
         (tx, results) => {
           let notesList = [];
 
@@ -115,7 +119,7 @@ const SummaryScreenContent = ({ route, navigation }) => {
 
   const deleteNote = (id) => {
     db.transaction(tx => {
-      tx.executeSql('DELETE FROM Notes WHERE id = ?', [id],
+      tx.executeSql('DELETE FROM BlocNotes WHERE id = ?', [id],
         (tx, results) => {
           // setNotes(notes.filter(note => note.id !== id));
           // Load existing notes
@@ -129,10 +133,37 @@ const SummaryScreenContent = ({ route, navigation }) => {
     });
   };
 
+  // =============== Open modal ===============
+  const openModal = (id) => {
+    db.transaction(tx => {
+      tx.executeSql('SELECT * FROM BlocNotes WHERE id = ?', [id],
+        (tx, results) => {
+          if (results.rows.length > 0) {
+            const data = results.rows.item(0);
+
+            console.log(JSON.stringify(data));
+
+            setNoteItem(data);
+            setModalVisible(true);
+          }
+        },
+        (tx, error) => {
+          Alert.alert(t('error'), 'Error loading note', error);
+          console.log('Error loading note', error)
+        }
+      );
+    });
+  };
+
+  const editButtonPress = (id) => {
+    setModalButtonId(id);
+    openModal(id);
+  };
+
   // =============== Go to page ===============
-  const goToPage = (pageNumber) => {
+  const goToPage = (pageNumber, doc_uri) => {
     setIsLoading(true);
-    navigation.navigate('PDFViewerContent', { isLoading: isLoading, docUri: docUri, curPage: parseInt(pageNumber) });
+    navigation.navigate('PDFViewerContent', { isLoading: isLoading, docUri: doc_uri, curPage: parseInt(pageNumber) });
     console.log('goToPage => ' + pageNumber);
     setIsLoading(false);
   };
@@ -160,16 +191,27 @@ const SummaryScreenContent = ({ route, navigation }) => {
           </TouchableOpacity>
         </View>
 
-        <Modal animationType='slide' transparent={true} visible={modalVisible} onRequestClose={() => { setModalVisible(!modalVisible); }}>
-          <View style={homeStyles.modalBackground}>
-            <View style={homeStyles.modalContainer}>
-              <Text style={homeStyles.modalText}>Hello! This is a simple modal.</Text>
-              <TouchableOpacity style={homeStyles.closeButton} onPress={() => setModalVisible(false)}>
-                <Text style={homeStyles.closeButtonText}>Close</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
+        {noteItem.id ? (
+          <>
+            <Modal animationType='slide' transparent={true} visible={modalVisible} onRequestClose={() => { setModalVisible(!modalVisible); }}>
+              <View style={homeStyles.modalBackground}>
+                <View style={homeStyles.modalContainer}>
+                  <TouchableOpacity style={homeStyles.modalCloseButton} onPress={() => setModalVisible(false)}>
+                    <Octicons style={homeStyles.noteButtonIcon} name='x' />
+                  </TouchableOpacity>
+                  <Text style={homeStyles.noteTitle}>{t('notepad.title_edit')}</Text>
+                  <View style={homeStyles.noteForm}>
+                    <TextInput keyboardType="numeric" style={[homeStyles.noteInput, { width: Dimensions.get('window').width - 100 }]} placeholder={t('notepad.page_number')} value={noteItem.page.toString()} onChangeText={(text) => setNoteItem({ ...noteItem, page: text })} />
+                    <TextInput multiline={true} numberOfLines={5} style={[homeStyles.noteInput, { width: Dimensions.get('window').width - 100, height: 80, textAlignVertical: 'top' }]} placeholder={t('notepad.enter_note')} value={noteItem.noteText} onChangeText={(text) => setNoteItem({ ...noteItem, noteText: text })} />
+                    <TouchableOpacity style={[homeStyles.noteSubmit, { width: Dimensions.get('window').width - 100, backgroundColor: COLORS.warning }]} onPress={() => editNote(noteItem.id)}>
+                      <Text style={{ textAlign: 'center', fontSize: 15, color: COLORS.black }}>{t('update')}</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+            </Modal>
+          </>
+        ) : ''}
 
         <FlatList
           data={notes}
@@ -177,14 +219,23 @@ const SummaryScreenContent = ({ route, navigation }) => {
           style={{ marginTop: 16 }}
           renderItem={({ item }) => (
             <View style={homeStyles.noteContainer}>
-              <TouchableOpacity onPress={() => goToPage(item.page)} style={homeStyles.noteDeleteButton}>
-                <Text style={homeStyles.noteText}>{item.noteText}</Text>
+              <TouchableOpacity onPress={() => goToPage(item.page, item.doc_uri)} style={homeStyles.noteTextContainer}>
+                <Text style={homeStyles.noteWorkTitle}>{showAllText ? item.doc_title : (((item.doc_title).substring(0, 40 - 3)) + (item.doc_title.length > 40 ? '...' : ''))}</Text>
+                <Text style={homeStyles.noteText}>{showAllText ? item.noteText : (((item.noteText).substring(0, 40 - 3)) + (item.noteText.length > 40 ? '...' : ''))}</Text>
+                {item.noteText.length > 40 ?
+                  <>
+                    <TouchableOpacity onPress={() => setShowAllText(!showAllText ?? item.id)} style={[homeStyles.noteSeeTextButton]}>
+                      <Text style={homeStyles.noteSeeText}>{showAllText ? t('see_less') : t('see_more')}</Text>
+                    </TouchableOpacity>
+                  </>
+                  : ''
+                }
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => editButtonPress(item.id)} style={[homeStyles.noteEditButton]}>
+                <Octicons style={homeStyles.noteButtonIcon} name='pencil' />
               </TouchableOpacity>
               <TouchableOpacity onPress={() => deleteNote(item.id)} style={homeStyles.noteDeleteButton}>
-                <Octicons style={homeStyles.noteDeleteButtonText} name='x' />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => setModalVisible(true)} style={homeStyles.noteDeleteButton}>
-                <Octicons style={homeStyles.noteDeleteButtonText} name='x' />
+                <Octicons style={homeStyles.noteButtonIcon} name='x' />
               </TouchableOpacity>
             </View>
           )}
