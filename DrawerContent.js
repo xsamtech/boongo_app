@@ -53,6 +53,15 @@ const DrawerItems = props => {
     });
 };
 
+const AvatarGender = ({ gender }) => {
+    if (gender === 'F') {
+        return (<AvatarF width={60} height={60} />);
+
+    } else {
+        return (<AvatarM width={60} height={60} />);
+    }
+};
+
 const DrawerContent = (props) => {
     const navigation = useNavigation();
     const { t } = useTranslation();
@@ -79,7 +88,7 @@ const DrawerContent = (props) => {
                                                 ?
                                                 <Image style={{ width: 60, height: 60, borderRadius: 60 / 2 }} source={{ uri: userInfo.avatar_url }} />
                                                 :
-                                                (userInfo.gender === 'F' ? <AvatarF width={60} height={60} /> : <AvatarM width={60} height={60} />)
+                                                <AvatarGender gender={userInfo.gender} />
                                             }
                                         </View>
                                         <View style={{ marginLeft: 10, flexDirection: 'column' }}>
