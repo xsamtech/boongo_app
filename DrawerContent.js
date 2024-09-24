@@ -75,15 +75,15 @@ const DrawerContent = (props) => {
                                 <TouchableOpacity onPress={() => { navigation.navigate('Account') }}>
                                     <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 5, marginBottom: 10, marginLeft: 20 }}>
                                         <View style={{ marginTop: 5 }}>
-                                            {userInfo.avatar_url != null
+                                            {userInfo.avatar_url
                                                 ?
                                                 <Image style={{ width: 60, height: 60, borderRadius: 60 / 2 }} source={{ uri: userInfo.avatar_url }} />
                                                 :
-                                                (userInfo.gender == 'F' ? <AvatarF width={60} height={60} /> : <AvatarM width={60} height={60} />)
+                                                (userInfo.gender === 'F' ? <AvatarF width={60} height={60} /> : <AvatarM width={60} height={60} />)
                                             }
                                         </View>
                                         <View style={{ marginLeft: 10, flexDirection: 'column' }}>
-                                            <Title style={homeStyles.drawerTitle}>{userInfo.firstname}</Title>
+                                            <Title style={homeStyles.drawerTitle}>{userInfo.firstname + ' ' + userInfo.lastname}</Title>
                                             <Text style={homeStyles.drawerCaption}>{userInfo.username ? '@' + userInfo.username : (userInfo.email ? userInfo.email : userInfo.phone)}</Text>
                                         </View>
                                     </View>
