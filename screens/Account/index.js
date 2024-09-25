@@ -3,7 +3,7 @@
  * @see https://team.xsamtech.com/xanderssamoth
  */
 import React, { useContext, useState } from 'react';
-import { Dimensions, Image, SafeAreaView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Image, SafeAreaView, Text, TextInput, TouchableOpacity, View, ToastAndroid, Linking } from 'react-native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
@@ -19,8 +19,6 @@ import { COLORS, ICON_SIZE, PADDING } from '../../tools/constants';
 import homeStyles from '../Home/style';
 import UpdateAccountScreen from './update_account';
 import MyWorkScreen from './my_work';
-import AvatarF from '../../assets/img/avatar-F.svg';
-import AvatarM from '../../assets/img/avatar-M.svg';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -101,14 +99,8 @@ const AccountScreenContent = () => {
 
         {/* Profil photo */}
         <View style={{ alignItems: 'center', paddingTop: 30 }}>
-          {userInfo.avatar_url != null
-            ?
-            <Image style={{ width: 160, height: 160, borderRadius: 160 / 2 }} source={{ uri: userInfo.avatar_url }} />
-            :
-            (userInfo.gender == 'F' ? <AvatarF width={160} height={160} /> : <AvatarM width={160} height={160} />)
-          }
-          <TouchableOpacity style={[homeStyles.headerButton, { backgroundColor: COLORS.primary, marginTop: -30, marginLeft: 100, borderRadius: 40 / 2, paddingVertical: 10 }]}
-            onPress={imagePick}>
+          <Image style={{ width: 160, height: 160, borderRadius: 160 / 2 }} source={{ uri: userInfo.avatar_url }} />
+          <TouchableOpacity style={[homeStyles.headerButton, { backgroundColor: COLORS.primary, marginTop: -30, marginLeft: 100, borderRadius: 40 / 2, paddingVertical: 10 }]} onPress={imagePick}>
             <FontAwesome6 style={[homeStyles.headerButtonIcon, { fontSize: 20 }]} name='pen' />
           </TouchableOpacity>
         </View>
