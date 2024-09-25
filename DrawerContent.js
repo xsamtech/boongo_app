@@ -14,8 +14,6 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { AuthContext } from './contexts/AuthContext';
 import homeStyles from './screens/Home/style';
 import TextBrand from './assets/img/text.svg';
-import AvatarF from './assets/img/avatar-F.svg';
-import AvatarM from './assets/img/avatar-M.svg';
 
 const DrawerList = [
     { icon: 'home-outline', label: 'navigation.home', navigateTo: 'Home' },
@@ -82,7 +80,7 @@ const DrawerContent = (props) => {
                             <TouchableOpacity onPress={() => { goToAccount(navigation) }}>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 5, marginBottom: 10, marginLeft: 20 }}>
                                     <View style={{ marginTop: 5 }}>
-                                        <Image style={{ width: 60, height: 60, borderRadius: 30 }} source={{ uri: userInfo.avatar_url && userInfo.avatar_url.trim() !== '' ? userInfo.avatar_url : `./assets/img/avatar-${userInfo.gender}.svg` }} />
+                                        <Image style={{ width: 60, height: 60, borderRadius: 30 }} source={{ uri: userInfo.avatar_url }} />
                                     </View>
                                     <View style={{ marginLeft: 10, flexDirection: 'column' }}>
                                         <Title style={homeStyles.drawerTitle}>{userInfo.firstname}</Title>
