@@ -26,11 +26,11 @@ const MediaScreen = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   // =============== Get device language ===============
-  const getDeviceLang = () => {
-    const appLanguage = Platform.OS === 'ios' ? NativeModules.SettingsManager.settings.AppleLocale || NativeModules.SettingsManager.settings.AppleLanguages[0] : NativeModules.I18nManager.localeIdentifier;
+  // const getDeviceLang = () => {
+  //   const appLanguage = Platform.OS === 'ios' ? NativeModules.SettingsManager.settings.AppleLocale || NativeModules.SettingsManager.settings.AppleLanguages[0] : NativeModules.I18nManager.localeIdentifier;
 
-    return appLanguage.search(/-|_/g) !== -1 ? appLanguage.slice(0, 2) : appLanguage;
-  };
+  //   return appLanguage.search(/-|_/g) !== -1 ? appLanguage.slice(0, 2) : appLanguage;
+  // };
 
   // =============== Handle "scroll top" button ===============
   const handleScroll = (event) => {
@@ -77,7 +77,7 @@ const MediaScreen = () => {
   const getCategories = () => {
     setIsLoading(true);
 
-    const config = { method: 'GET', url: `${API.url}/category/find_by_group/Catégorie%20pour%20œuvre`, headers: { 'X-localization': getDeviceLang } };
+    const config = { method: 'GET', url: `${API.url}/category/find_by_group/Catégorie%20pour%20œuvre`, headers: { 'X-localization': 'fr' } };
     const item_all = { "id": 0, "category_name": t('all_f'), "category_name_fr": "Toutes", "category_name_en": "All", "category_description": null };
 
     axios(config)
@@ -103,7 +103,7 @@ const MediaScreen = () => {
     const url = `${API.url}/work/filter_by_categories_type_status/fr/Médias/Pertinente`;
     let mParams = { 'categories_ids[0]': idCat }
     const mHeaders = {
-      'X-localization': getDeviceLang
+      'X-localization': 'fr'
     };
 
     axios.post(url, qs.stringify(mParams), mHeaders).then(res => {
@@ -138,7 +138,7 @@ const MediaScreen = () => {
     const url = `${API.url}/work/filter_by_categories_type_status/fr/Médias/Pertinente`;
     let mParams = { 'categories_ids[0]': id }
     const mHeaders = {
-      'X-localization': getDeviceLang
+      'X-localization': 'fr'
     };
 
     axios.post(url, qs.stringify(mParams), mHeaders).then(res => {

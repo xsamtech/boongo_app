@@ -51,14 +51,6 @@ const DrawerItems = props => {
     });
 };
 
-const goToAccount = (nav) => {
-    try {
-        nav.navigate('Account')
-    } catch (error) {
-        console.log('Nini yango ? ' + error);
-    }
-};
-
 const DrawerContent = (props) => {
     const navigation = useNavigation();
     const { t } = useTranslation();
@@ -77,7 +69,7 @@ const DrawerContent = (props) => {
                     </View>
                     <View style={homeStyles.drawerUserInfoSection}>
                         {userInfo && userInfo.id ? (
-                            <TouchableOpacity onPress={() => { goToAccount(navigation) }}>
+                            <TouchableOpacity onPress={() => { navigation.navigate('Account') }}>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 5, marginBottom: 10, marginLeft: 20 }}>
                                     <View style={{ marginTop: 5 }}>
                                         <Image style={{ width: 60, height: 60, borderRadius: 30 }} source={{ uri: userInfo.avatar_url }} />

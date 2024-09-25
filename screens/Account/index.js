@@ -189,8 +189,7 @@ const AccountScreen = () => {
   // =============== Authentication context ===============
   const { userInfo, changeStatus } = useContext(AuthContext);
 
-  if (userInfo.status.status_name_fr == 'Bloqué' || userInfo.status.status_name_fr == 'Désactivé') {
-
+  if (userInfo && userInfo.status) {
     if (userInfo.status.status_name_fr == 'Bloqué') {
       return (
         <ScrollView contentContainerStyle={[homeStyles.cardEmpty, { flexShrink: 0, alignItems: 'center', justifyContent: 'center' }]}>
@@ -205,9 +204,7 @@ const AccountScreen = () => {
           </TouchableOpacity>
         </ScrollView>
       );
-    }
-
-    if (userInfo.status.status_name_fr == 'Désactivé') {
+    } else if (userInfo.status.status_name_fr == 'Désactivé') {
       return (
         <ScrollView contentContainerStyle={[homeStyles.cardEmpty, { flexShrink: 0, alignItems: 'center', justifyContent: 'center' }]}>
           <FontAwesome6 style={[homeStyles.workCmdIcon, { fontSize: 50, color: COLORS.danger, marginBottom: 30 }]} name='triangle-exclamation' />
@@ -221,49 +218,49 @@ const AccountScreen = () => {
           </TouchableOpacity>
         </ScrollView>
       );
-    }
 
-  } else {
-    return (
-      <Tab.Navigator
-        initialRouteName='AccountContent'
-        screenOptions={{
-          tabBarActiveTintColor: '#e91e63',
-        }}
-        barStyle={{ backgroundColor: '#ccccee' }}
-      >
-        <Tab.Screen
-          name='AccountContent' component={AccountScreenContent}
-          options={{
-            title: t('navigation.account'),
-            tabBarLabel: t('navigation.account'),
-            tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons name='account-outline' color={color} size={ICON_SIZE.s1} />
-            )
+    } else {
+      return (
+        <Tab.Navigator
+          initialRouteName='AccountContent'
+          screenOptions={{
+            tabBarActiveTintColor: '#e91e63',
           }}
-        />
-        <Tab.Screen
-          name='UpdateAccount' component={UpdateAccountScreen}
-          options={{
-            title: t('navigation.update_account'),
-            tabBarLabel: t('navigation.update_account'),
-            tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons name='cog-outline' color={color} size={ICON_SIZE.s1} />
-            )
-          }}
-        />
-        <Tab.Screen
-          name='MyWork' component={MyWorkScreen}
-          options={{
-            title: t('navigation.work'),
-            tabBarLabel: t('navigation.work'),
-            tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons name='book-multiple-outline' color={color} size={ICON_SIZE.s1} />
-            ),
-          }}
-        />
-      </Tab.Navigator>
-    );
+          barStyle={{ backgroundColor: '#ccccee' }}
+        >
+          <Tab.Screen
+            name='AccountContent' component={AccountScreenContent}
+            options={{
+              title: t('navigation.account'),
+              tabBarLabel: t('navigation.account'),
+              tabBarIcon: ({ color, size }) => (
+                <MaterialCommunityIcons name='account-outline' color={color} size={ICON_SIZE.s1} />
+              )
+            }}
+          />
+          <Tab.Screen
+            name='UpdateAccount' component={UpdateAccountScreen}
+            options={{
+              title: t('navigation.update_account'),
+              tabBarLabel: t('navigation.update_account'),
+              tabBarIcon: ({ color, size }) => (
+                <MaterialCommunityIcons name='cog-outline' color={color} size={ICON_SIZE.s1} />
+              )
+            }}
+          />
+          <Tab.Screen
+            name='MyWork' component={MyWorkScreen}
+            options={{
+              title: t('navigation.work'),
+              tabBarLabel: t('navigation.work'),
+              tabBarIcon: ({ color, size }) => (
+                <MaterialCommunityIcons name='book-multiple-outline' color={color} size={ICON_SIZE.s1} />
+              ),
+            }}
+          />
+        </Tab.Navigator>
+      );
+    }
   }
 };
 

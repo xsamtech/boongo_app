@@ -30,11 +30,11 @@ const SearchScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   // =============== Get device language ===============
-  const getDeviceLang = () => {
-    const appLanguage = Platform.OS === 'ios' ? NativeModules.SettingsManager.settings.AppleLocale || NativeModules.SettingsManager.settings.AppleLanguages[0] : NativeModules.I18nManager.localeIdentifier;
+  // const getDeviceLang = () => {
+  //   const appLanguage = Platform.OS === 'ios' ? NativeModules.SettingsManager.settings.AppleLocale || NativeModules.SettingsManager.settings.AppleLanguages[0] : NativeModules.I18nManager.localeIdentifier;
 
-    return appLanguage.search(/-|_/g) !== -1 ? appLanguage.slice(0, 2) : appLanguage;
-  };
+  //   return appLanguage.search(/-|_/g) !== -1 ? appLanguage.slice(0, 2) : appLanguage;
+  // };
 
   // =============== Handle "scroll top" button ===============
   const handleScroll = (event) => {
@@ -65,7 +65,7 @@ const SearchScreen = () => {
     setIsLoading(true);
     setInputValue(data);
 
-    const config = { method: 'GET', url: `${API.url}/work/search/${data}`, headers: { 'X-localization': getDeviceLang } };
+    const config = { method: 'GET', url: `${API.url}/work/search/${data}`, headers: { 'X-localization': 'fr' } };
 
     axios(config)
       .then(res => {
