@@ -53,12 +53,11 @@ const DrawerItems = props => {
     });
 };
 
-const AvatarGender = ({ gender }) => {
-    if (gender === 'F') {
-        return (<AvatarF width={60} height={60} />);
-
-    } else {
-        return (<AvatarM width={60} height={60} />);
+const goToAccount = (nav) => {
+    try {
+        nav.navigate('Account')
+    } catch (error) {
+        console.log('Nini yango ? ' + error);
     }
 };
 
@@ -79,25 +78,18 @@ const DrawerContent = (props) => {
                         <TextBrand width={154} height={50} />
                     </View>
                     <View style={homeStyles.drawerUserInfoSection}>
-                        {userInfo.id ? (
-                            <>
-                                <TouchableOpacity onPress={() => { navigation.navigate('Account') }}>
-                                    <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 5, marginBottom: 10, marginLeft: 20 }}>
-                                        <View style={{ marginTop: 5 }}>
-                                            {userInfo.avatar_url
-                                                ?
-                                                <Image style={{ width: 60, height: 60, borderRadius: 60 / 2 }} source={{ uri: userInfo.avatar_url }} />
-                                                :
-                                                <AvatarGender gender={userInfo.gender} />
-                                            }
-                                        </View>
-                                        <View style={{ marginLeft: 10, flexDirection: 'column' }}>
-                                            <Title style={homeStyles.drawerTitle}>{userInfo.firstname + ' ' + userInfo.lastname}</Title>
-                                            <Text style={homeStyles.drawerCaption}>{userInfo.username ? '@' + userInfo.username : (userInfo.email ? userInfo.email : userInfo.phone)}</Text>
-                                        </View>
+                        {userInfo && userInfo.id ? (
+                            <TouchableOpacity onPress={() => { goToAccount(navigation) }}>
+                                <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 5, marginBottom: 10, marginLeft: 20 }}>
+                                    <View style={{ marginTop: 5 }}>
+                                        <Image style={{ width: 60, height: 60, borderRadius: 30 }} source={{ uri: userInfo.avatar_url && userInfo.avatar_url.trim() !== '' ? userInfo.avatar_url : `./assets/img/avatar-${userInfo.gender}.svg` }} />
                                     </View>
-                                </TouchableOpacity>
-                            </>
+                                    <View style={{ marginLeft: 10, flexDirection: 'column' }}>
+                                        <Title style={homeStyles.drawerTitle}>{userInfo.firstname}</Title>
+                                        <Text style={homeStyles.drawerCaption}>{userInfo.username ? '@' + userInfo.username : (userInfo.email ? userInfo.email : userInfo.phone)}</Text>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
                         ) : (
                             <Button style={homeStyles.drawerButton} onPress={() => { navigation.navigate('Login'); }}>
                                 <Text style={homeStyles.drawerButtonText}>{t('login')}</Text>
