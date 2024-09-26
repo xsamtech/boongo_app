@@ -24,7 +24,7 @@ const Tab = createMaterialBottomTabNavigator();
 
 const sendWhatsAppMessage = async () => {
   const phoneNumber = '+243815737600';
-  const message = "Bonjour Boongo.\n\nJe voudrais devenir partenaire pour être en mesure de publier mes ouvrages.\n\nQue dois-je faire ?";
+  const message = "Bonjour Boongo.\n\nJe voudrais réactiver mon compte qui a été bloqué";
   const text = encodeURIComponent(message);
   const url = `whatsapp://send?phone=${phoneNumber}&text=${text}`;
 
@@ -204,6 +204,7 @@ const AccountScreen = () => {
           </TouchableOpacity>
         </ScrollView>
       );
+
     } else if (userInfo.status.status_name_fr == 'Désactivé') {
       return (
         <ScrollView contentContainerStyle={[homeStyles.cardEmpty, { flexShrink: 0, alignItems: 'center', justifyContent: 'center' }]}>
@@ -226,8 +227,7 @@ const AccountScreen = () => {
           screenOptions={{
             tabBarActiveTintColor: '#e91e63',
           }}
-          barStyle={{ backgroundColor: '#ccccee' }}
-        >
+          barStyle={{ backgroundColor: '#ccccee' }}>
           <Tab.Screen
             name='AccountContent' component={AccountScreenContent}
             options={{
@@ -236,8 +236,7 @@ const AccountScreen = () => {
               tabBarIcon: ({ color, size }) => (
                 <MaterialCommunityIcons name='account-outline' color={color} size={ICON_SIZE.s1} />
               )
-            }}
-          />
+            }} />
           <Tab.Screen
             name='UpdateAccount' component={UpdateAccountScreen}
             options={{
@@ -246,8 +245,7 @@ const AccountScreen = () => {
               tabBarIcon: ({ color, size }) => (
                 <MaterialCommunityIcons name='cog-outline' color={color} size={ICON_SIZE.s1} />
               )
-            }}
-          />
+            }} />
           <Tab.Screen
             name='MyWork' component={MyWorkScreen}
             options={{
@@ -256,8 +254,7 @@ const AccountScreen = () => {
               tabBarIcon: ({ color, size }) => (
                 <MaterialCommunityIcons name='book-multiple-outline' color={color} size={ICON_SIZE.s1} />
               ),
-            }}
-          />
+            }} />
         </Tab.Navigator>
       );
     }
