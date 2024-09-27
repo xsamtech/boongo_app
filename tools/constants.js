@@ -52,3 +52,7 @@ export const WEB = {
     // url: 'http://192.168.43.78/boongo/public'
     url: 'https://boongo7.com'
 };
+
+export const PHONE = {
+    admin: '+243815737600'
+};

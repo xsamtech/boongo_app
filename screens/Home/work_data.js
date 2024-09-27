@@ -12,11 +12,11 @@ import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import UserAgent from 'react-native-user-agent';
 import axios from 'axios';
 import { AuthContext } from '../../contexts/AuthContext';
-import { API, COLORS, WEB } from '../../tools/constants';
+import { API, COLORS, PHONE, WEB } from '../../tools/constants';
 import homeStyles from './style';
 
 const sendWhatsAppMessage = async () => {
-  const phoneNumber = '+243815737600';
+  const phoneNumber = PHONE.admin;
   const message = "Bonjour Boongo.\n\nJe voudrais devenir partenaire pour être en mesure de publier mes ouvrages.\n\nQue dois-je faire ?";
   const text = encodeURIComponent(message);
   const url = `whatsapp://send?phone=${phoneNumber}&text=${text}`;
@@ -25,18 +25,8 @@ const sendWhatsAppMessage = async () => {
     await Linking.openURL(url);
 
   } catch (error) {
-    if (error.response) {
-      // The request was made and the server responded with a status code
-      ToastAndroid.show(`${error.response.status} -> ${error.response.data.message || error.response.data}`, ToastAndroid.LONG);
-
-    } else if (error.request) {
-      // The request was made but no response was received
-      ToastAndroid.show(t('error') + ' ' + t('error_message.no_server_response'), ToastAndroid.LONG);
-
-    } else {
       // An error occurred while configuring the query
-      ToastAndroid.show(`${error}`, ToastAndroid.LONG);
-    }
+      ToastAndroid.show(`${error.message}`, ToastAndroid.LONG);
   }
 };
 

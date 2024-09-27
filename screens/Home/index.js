@@ -10,10 +10,10 @@ import Carousel from 'pinar';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import axios from 'axios';
 import homeStyles from './style';
-import { API, COLORS, ICON_SIZE } from '../../tools/constants';
+import { API, COLORS, ICON_SIZE, PHONE } from '../../tools/constants';
 
 const sendWhatsAppMessage = async () => {
-  const phoneNumber = '+243815737600';
+  const phoneNumber = PHONE.admin;
   // const text = encodeURIComponent(message);
   const url = `whatsapp://send?phone=${phoneNumber}&text=`;
 
@@ -21,18 +21,8 @@ const sendWhatsAppMessage = async () => {
     await Linking.openURL(url);
 
   } catch (error) {
-    if (error.response) {
-      // The request was made and the server responded with a status code
-      ToastAndroid.show(`${error.response.status} -> ${error.response.data.message || error.response.data}`, ToastAndroid.LONG);
-
-    } else if (error.request) {
-      // The request was made but no response was received
-      ToastAndroid.show(t('error') + ' ' + t('error_message.no_server_response'), ToastAndroid.LONG);
-
-    } else {
       // An error occurred while configuring the query
-      ToastAndroid.show(`${error}`, ToastAndroid.LONG);
-    }
+      ToastAndroid.show(`${error.message}`, ToastAndroid.LONG);
   }
 };
 
