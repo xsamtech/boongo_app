@@ -28,6 +28,28 @@ const AccountScreenContent = () => {
   // =============== Navigation ===============
   const navigation = useNavigation();
 
+  // =============== Authentication context ===============
+  const { userInfo, isLoading, updateAvatar, changePassword } = useContext(AuthContext);
+
+  // =============== User data ===============
+  const [former_password, setFormerPassword] = useState(null);
+  const [new_password, setNewPassword] = useState(null);
+  const [confirm_new_password, setConfirmNewPassword] = useState(null);
+
+  // =============== Image crop picker ===============
+  const imagePick = () => {
+    ImagePicker.openPicker({
+      width: 700,
+      height: 700,
+      cropping: true,
+      includeBase64: true
+    }).then(image => {
+      updateAvatar(userInfo.id, `data:${image.mime};base64,${image.data}`);
+    }).catch(error => {
+      console.log(`${error}`);
+    });
+  };
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       {/* Custom header */}
@@ -43,10 +65,76 @@ const AccountScreenContent = () => {
         <Spinner visible={isLoading} />
 
         {/* Profil photo */}
-        <View style={[homeStyles.cardEmpty, { alignItems: 'center', paddingTop: 30 }]}>
+        <View style={{ alignItems: 'center', paddingTop: 30 }}>
+          <Image style={{ width: 160, height: 160, borderRadius: 160 / 2 }} source={{ uri: userInfo.avatar_url }} />
+          <TouchableOpacity style={[homeStyles.headerButton, { backgroundColor: COLORS.primary, marginTop: -30, marginLeft: 100, borderRadius: 40 / 2, paddingVertical: 10 }]} onPress={imagePick}>
+            <FontAwesome6 style={[homeStyles.headerButtonIcon, { fontSize: 20 }]} name='pen' />
+          </TouchableOpacity>
+        </View>
+
+        {/* Personal infos */}
+        <View style={[homeStyles.cardEmpty, { backgroundColor: COLORS.light, marginBottom: PADDING.vertical, marginLeft: 0 }]}>
           <Text style={[homeStyles.cardEmptyTitle, { width: Dimensions.get('window').width - 90, fontSize: 17, fontWeight: 500, textAlign: 'center', color: COLORS.dark_danger }]}>
             {t('personal_infos')}
           </Text>
+
+          <Divider style={[homeStyles.authDivider, { width: Dimensions.get('window').width - 90, marginTop: 0, marginBottom: 15 }]} />
+          {/* First name */}
+          <Text style={{ fontWeight: 300, color: COLORS.dark_secondary }}>{t('auth.firstname')}</Text>
+          <Text style={{ marginBottom: 10, fontSize: 17, color: COLORS.black }}>{userInfo.firstname != null ? userInfo.firstname : '. . . . .'}</Text>
+          {/* Last name */}
+          <Text style={{ fontWeight: 300, color: COLORS.dark_secondary }}>{t('auth.lastname')}</Text>
+          <Text style={{ marginBottom: 10, fontSize: 17, color: COLORS.black }}>{userInfo.lastname != null ? userInfo.lastname : '. . . . .'}</Text>
+          {/* Last name */}
+          <Text style={{ fontWeight: 300, color: COLORS.dark_secondary }}>{t('auth.surname')}</Text>
+          <Text style={{ marginBottom: 10, fontSize: 17, color: COLORS.black }}>{userInfo.surname != null ? userInfo.surname : '. . . . .'}</Text>
+          {/* Date of birth */}
+          <Text style={{ fontWeight: 300, color: COLORS.dark_secondary }}>{t('auth.birthdate')}</Text>
+          <Text style={{ marginBottom: 10, fontSize: 17, color: COLORS.black }}>{userInfo.birthdate != null ? userInfo.birthdate : '. . . . .'}</Text>
+          {/* Phone */}
+          <Text style={{ fontWeight: 300, color: COLORS.dark_secondary }}>{t('auth.phone')}</Text>
+          <Text style={{ marginBottom: 10, fontSize: 17, color: COLORS.black }}>{userInfo.phone != null ? userInfo.phone : '. . . . .'}</Text>
+          {/* E-mail */}
+          <Text style={{ fontWeight: 300, color: COLORS.dark_secondary }}>{t('auth.email')}</Text>
+          <Text style={{ marginBottom: 10, fontSize: 17, color: COLORS.black }}>{userInfo.email != null ? userInfo.email : '. . . . .'}</Text>
+        </View>
+
+        {/* Change password */}
+        <View style={[homeStyles.cardEmpty, { backgroundColor: COLORS.light, marginLeft: 0, marginBottom: 20 }]}>
+          <Text style={[homeStyles.cardEmptyTitle, { width: Dimensions.get('window').width - 90, fontSize: 17, fontWeight: 500, textAlign: 'center', color: COLORS.dark_danger }]}>
+            {t('change_password')}
+          </Text>
+          <Divider style={[homeStyles.authDivider, { width: Dimensions.get('window').width - 90, marginTop: 0, marginBottom: 15 }]} />
+
+          {/* Former password */}
+          <TextInput
+            style={[homeStyles.authInput, { width: Dimensions.get('window').width - 90 }]}
+            value={former_password}
+            placeholder={t('auth.password.former')}
+            onChangeText={text => setFormerPassword(text)} secureTextEntry />
+
+          {/* New password */}
+          <TextInput
+            style={[homeStyles.authInput, { width: Dimensions.get('window').width - 90 }]}
+            value={new_password}
+            placeholder={t('auth.password.new')}
+            onChangeText={text => setNewPassword(text)} secureTextEntry />
+
+          {/* Confirm new password */}
+          <TextInput
+            style={[homeStyles.authInput, { width: Dimensions.get('window').width - 90 }]}
+            value={confirm_new_password}
+            placeholder={t('auth.confirm_password.new')}
+            onChangeText={text => setConfirmNewPassword(text)} secureTextEntry />
+
+          {/* Submit */}
+          <Button style={[homeStyles.authButton, { width: Dimensions.get('window').width - 90, backgroundColor: COLORS.success, marginBottom: 5 }]}
+            onPress={() => {
+              changePassword(userInfo.id, former_password, new_password, confirm_new_password);
+              setFormerPassword(null); setNewPassword(null); setConfirmNewPassword(null);
+            }}>
+            <Text style={homeStyles.authButtonText}>{t('update')}</Text>
+          </Button>
         </View>
       </ScrollView>
     </SafeAreaView>
